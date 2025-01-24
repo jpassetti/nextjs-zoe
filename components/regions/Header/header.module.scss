@@ -1,0 +1,27 @@
+@use "../../../sass/abstracts/mixins";
+
+.header {
+ background-color: var(--secondary-color);
+ padding: 2rem;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+.wordmark {
+ color: var(--text-color);
+ font-family: var(--font-primary);
+ font-weight: bold;
+ font-size: 1.5rem;
+ span {
+  font-family: var(--font-secondary);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -1px;
+ }
+ &_desktop_nav {
+  display: none;
+  @include mixins.breakpoint("md") {
+   display: block;
+  }
+ }
+}

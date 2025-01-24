@@ -1,0 +1,313 @@
+@use "./variables";
+
+@use "sass:math";
+
+@mixin breakpoint($value) {
+ // need to validate $value
+
+ // if a string use standard breakpoints
+ @if type-of($value) == "string" {
+  @if ($value == "xs" or $value == "phone") {
+   @media (max-width: 699px) {
+    @content;
+   }
+  } @else if ($value == "sm" or $value == "tablet") {
+   @media (min-width: 700px) {
+    @content;
+   }
+  } @else if ($value == "md" or $value == "laptop") {
+   @media (min-width: 980px) {
+    @content;
+   }
+  } @else if($value == "lg" or $value == "desktop") {
+   @media (min-width: 1140px) {
+    @content;
+   }
+  } @else if($value == "xl" or $value == "tvscreen") {
+   @media (min-width: 1260px) {
+    @content;
+   }
+  } @else {
+   @warn "Breakpoint mixin supports: xs or phone, sm or tablet, md or laptop, lg or desktop, xl or tvscreen as string variables";
+  }
+ }
+
+ // if value then use value as minimum width.
+ @else if is-length($value) {
+  @media (min-width: #{$value}) {
+   @content;
+  }
+ } @else {
+  @warn "Breakpoint mixin supports: string variables or relative units";
+ }
+
+ // if a length value than use that
+
+ // error warn if string does not match or it is not a length
+}
+
+@mixin marginAndPadding() {
+ $sizes: xs, sm, md, lg;
+ $sides: top, right, bottom, left, all;
+
+ @each $side in $sides {
+  @each $size in $sizes {
+   @for $i from 0 through 32 {
+    $newValue: math.div($i, 2);
+
+    @if $side ==all {
+     &.margin-#{$side}-#{$i} {
+      margin: #{$newValue}rem;
+     }
+
+     @include breakpoint($size) {
+      &.#{$size}-margin-#{$side}-#{$i} {
+       margin: #{$newValue}rem;
+      }
+     }
+
+     &.padding-#{$side}-#{$i} {
+      padding: #{$newValue}rem;
+     }
+
+     @include breakpoint($size) {
+      &.#{$size}-padding-#{$side}-#{$i} {
+       padding: #{$newValue}rem;
+      }
+     }
+    } @else {
+     &.margin-#{$side}-#{$i} {
+      margin-#{$side}: #{$newValue}rem;
+     }
+
+     @include breakpoint($size) {
+      &.#{$size}-margin-#{$side}-#{$i} {
+       margin-#{$side}: #{$newValue}rem;
+      }
+     }
+
+     &.padding-#{$side}-#{$i} {
+      padding-#{$side}: #{$newValue}rem;
+     }
+
+     @include breakpoint($size) {
+      &.#{$size}-padding-#{$side}-#{$i} {
+       padding-#{$side}: #{$newValue}rem;
+      }
+     }
+    }
+   }
+  }
+ }
+}
+
+@mixin alignItems() {
+ $values: stretch, center, flex-start, flex-end, baseline, initial, inherit;
+
+ @each $value in $values {
+  &.align-items-#{$value} {
+   display: flex;
+   align-items: #{$value};
+  }
+ }
+}
+@mixin flexOrders() {
+ $sizes: xs, sm, md, lg, xl;
+
+ $values: 1, 2, 3, 4, 5, 6;
+
+ @each $size in $sizes {
+  @include breakpoint($size) {
+   @each $value in $values {
+    &.flex-order-#{$size}-#{$value} {
+     order: #{$value};
+    }
+   }
+  }
+ }
+}
+
+@mixin textTransform() {
+ $values: uppercase, lowercase, none;
+
+ @each $value in $values {
+  &.text-transform-#{$value} {
+   text-transform: #{$value};
+  }
+ }
+}
+
+@mixin fontWeight() {
+ $values: 500, 700, normal, bold;
+
+ @each $value in $values {
+  &.font-weight-#{$value} {
+   font-weight: #{$value};
+  }
+ }
+}
+
+@mixin fontStyle() {
+ $values: normal, italic;
+
+ @each $value in $values {
+  &.font-style-#{$value} {
+   font-style: #{$value};
+  }
+ }
+}
+
+@mixin lineHeight() {
+ $values: (
+  "normal": 1.1,
+  "tight": 1,
+  "spaced": 1.5,
+  "more": 1.35,
+  "double": 2,
+ );
+
+ @each $key, $value in $values {
+  &.line-height-#{$key} {
+   line-height: #{$value};
+  }
+ }
+}
+
+@mixin fontFamily() {
+ $values: (
+  "primary": variables.$font__sherman_sans,
+  "secondary": variables.$font__sherman_serif,
+ );
+
+ @each $key, $value in $values {
+  &.font-family-#{$key} {
+   font-family: #{$value};
+  }
+ }
+}
+
+@mixin justifyContent() {
+ $values: flex-start, flex-end, center, space-between, space-around,
+  space-evenly, initial, inherit;
+
+ @each $value in $values {
+  &.justify-content-#{$value} {
+   display: flex;
+   justify-content: #{$value};
+  }
+ }
+}
+
+@mixin fontColor() {
+ $colors: (
+  "black": "#000000",
+  "white": "#ffffff",
+  "blue": variables.$color__blue,
+  "orange": variables.$color__orange,
+ );
+
+ @each $color, $value in $colors {
+  &.font-color-#{$color} {
+   color: #{$value};
+   a {
+    color: #{$value};
+    &:hover,
+    &:focus {
+     color: #{$value};
+    }
+   }
+  }
+ }
+}
+@mixin backgroundColors() {
+ $colors: (
+  "black": "#000000",
+  "white": "#ffffff",
+  "blue": variables.$color__blue,
+  "blue_10": variables.$color__blue_10,
+  "orange": variables.$color__orange,
+  "orange_10": variables.$color__orange_10,
+ );
+
+ @each $color, $value in $colors {
+  &.background-color-#{$color} {
+   background-color: #{$value};
+  }
+ }
+}
+
+@mixin flexDirection() {
+ $values: row, row-reverse, column, column-reverse, initial, inherit;
+
+ @each $value in $values {
+  &.flex-direction-#{$value} {
+   display: flex;
+   flex-direction: #{$value};
+  }
+ }
+}
+
+@mixin fontSizes() {
+ $values: (
+  "sm": 1rem,
+  "md": 1.5rem,
+  "lg": 2rem,
+  "xl": 2.5rem,
+ );
+
+ @each $size, $value in $values {
+  &.font-size-#{$size} {
+   font-size: $value;
+  }
+ }
+}
+
+@mixin textAlign() {
+ $sizes: xs, sm, md, lg;
+ $values: left, right, center, justify, initial, inherit;
+
+ @each $value in $values {
+  @each $size in $sizes {
+   &.text-align-#{$value} {
+    text-align: #{$value};
+   }
+
+   @include breakpoint($size) {
+    &.#{$size}-text-align-#{$value} {
+     text-align: #{$value};
+    }
+   }
+  }
+ }
+}
+
+@mixin minHeights() {
+ @for $i from 1 through 16 {
+  &.height-#{$i}x {
+   min-height: ($i * 25) + vh;
+  }
+ }
+}
+
+@mixin flexGap() {
+ $sizes: xs, sm, md, lg;
+
+ // Loop through values 1-8
+ @for $i from 1 through 8 {
+  // Divide the value by 2 and append "rem"
+  $gap: $i / 2 + rem;
+
+  &.gap--#{$i} {
+   gap: #{$gap};
+  }
+
+  // Loop through sizes
+  @each $size in $sizes {
+   @include breakpoint($size) {
+    &.#{$size}-gap-#{$i} {
+     gap: #{$gap};
+    }
+   }
+  }
+ }
+}

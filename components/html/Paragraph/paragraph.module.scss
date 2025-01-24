@@ -1,0 +1,52 @@
+@use "../../../sass/abstracts/mixins";
+@use "../../../sass/abstracts/variables";
+
+.paragraph {
+ font-size: 1.1rem;
+ line-height: 1.4;
+ font-family: var(--font-primary);
+ color: var(--text-color);
+
+ &.intro {
+  font-size: 1.3rem;
+  font-family: var(--secondary-font);
+  max-width: 35em;
+
+  @include mixins.breakpoint(sm) {
+   font-size: 1.5rem;
+  }
+
+  @include mixins.breakpoint(md) {
+   font-size: 2rem;
+  }
+
+  &:after {
+   content: "";
+   display: block;
+   width: 5rem;
+   height: 0.5rem;
+   background-color: variables.$color__gray__light;
+   margin-top: 3rem;
+   margin-bottom: 3rem;
+  }
+ }
+ &.caption {
+  color: #666;
+  font-size: 0.9rem;
+ }
+
+ &.diminish {
+  opacity: 0.7;
+ }
+ &.condensed {
+  font-family: variables.$font__roboto_condensed;
+ }
+ &.caps {
+  text-transform: uppercase;
+ }
+
+ @include mixins.marginAndPadding();
+ @include mixins.textAlign();
+ @include mixins.fontWeight();
+ @include mixins.fontColor();
+}

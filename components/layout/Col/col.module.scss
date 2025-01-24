@@ -1,0 +1,44 @@
+@use "../../../sass/abstracts/mixins";
+@use "../../../sass/abstracts/variables";
+
+$sizes: xs, sm, md, lg;
+
+.col {
+ width: 100%;
+
+ @each $size in $sizes {
+  @include mixins.breakpoint(#{$size}) {
+   @for $i from 1 through 12 {
+    &.col__#{$size}__#{$i} {
+     width: calc(100% * (#{$i}/ 12));
+    }
+   }
+  }
+ }
+ // for each loop end
+ @include mixins.marginAndPadding();
+ @include mixins.textAlign();
+ @include mixins.fontSizes();
+ @include mixins.fontWeight();
+ @include mixins.flexOrders();
+ @include mixins.backgroundColors();
+ &.table-header {
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: variables.$color__blue;
+  font-family: variables.$font__sherman_sans;
+  //margin-bottom: 0;
+  padding-top: 2rem;
+ }
+ &.table-data-cell {
+  font-family: variables.$font__sherman_sans;
+  //margin-bottom: 0;
+  color: variables.$color__blue;
+ }
+ &.border-left-1 {
+  @include mixins.breakpoint(md) {
+   border-left: 1px solid variables.$color__blue_10;
+  }
+ }
+}

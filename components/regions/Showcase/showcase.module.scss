@@ -1,0 +1,19 @@
+.showcase {
+ background-color: var(--text-color);
+ height: 600px;
+ //padding: 2rem;
+ display: flex;
+ flex-wrap: nowrap;
+ align-items: stretch;
+ gap: 1px;
+ &__item {
+  background-color: var(--primary-color);
+  width: calc(100% / 3);
+  height: 100%;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: white;
+ }
+}

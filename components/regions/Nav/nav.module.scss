@@ -1,0 +1,27 @@
+.nav {
+ //background-color: red;
+ .nav__list {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  //background-color: lightblue;
+  height: 100%;
+  &.flex-direction--column {
+   flex-direction: column;
+  }
+  &.flex-direction--row {
+   flex-direction: row;
+  }
+  li {
+   a {
+    font-family: var(--font-primary);
+    color: var(--text-color);
+    font-weight: bold;
+    text-decoration: none;
+    &:hover {
+     color: var(--accent-color);
+    }
+   }
+  }
+ }
+}

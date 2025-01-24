@@ -1,0 +1,12 @@
+@use "../../../sass/abstracts/mixins";
+
+.row {
+ display: flex;
+ flex-wrap: wrap;
+ margin: 0 -0.5rem;
+ @include mixins.marginAndPadding();
+ @include mixins.alignItems();
+ @include mixins.justifyContent();
+ @include mixins.flexDirection();
+ @include mixins.flexGap();
+}

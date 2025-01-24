@@ -1,0 +1,45 @@
+@use "../../../sass/abstracts/mixins";
+@use "../../../sass/abstracts/variables";
+
+.heading {
+ font-family: var(--font-primary);
+ font-weight: bold;
+ color: var(--text-color);
+ &.color--primary {
+  color: var(--primary-color);
+ }
+ &--level-1 {
+  font-size: 3rem;
+ }
+ &--level-2 {
+  font-size: 2rem;
+ }
+ &--level-3 {
+  font-size: 1.5rem;
+  letter-spacing: -1px;
+  font-family: var(--font-secondary);
+  font-weight: 400;
+  font-style: italic;
+ }
+ &--level-4 {
+  font-size: 1.1rem;
+ }
+ &--level-5 {
+  font-size: 0.875rem;
+ }
+ &--level-6 {
+  font-size: 0.75rem;
+ }
+ &.label {
+  text-transform: uppercase;
+  color: var(--primary-color);
+ }
+ @include mixins.fontFamily();
+ @include mixins.marginAndPadding();
+ @include mixins.textAlign();
+ @include mixins.textTransform();
+ @include mixins.fontWeight();
+ @include mixins.fontColor();
+ @include mixins.fontStyle();
+ @include mixins.lineHeight();
+}

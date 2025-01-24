@@ -1,0 +1,22 @@
+.section {
+ background-color: gray;
+ padding: 2rem 0;
+ &.background-color--pink {
+  background-color: pink;
+ }
+ &.background-color--primary-light {
+  background-color: var(--color-primary--light);
+ }
+ &.background-color--primary {
+  background-color: var(--color-primary);
+ }
+ &.background-color--secondary {
+  background-color: var(--color-secondary);
+ }
+ &.background-color--white {
+  background-color: white;
+ }
+ &.background-color--black {
+  background-color: #2c2c2c;
+ }
+}

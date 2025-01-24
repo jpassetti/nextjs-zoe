@@ -1,0 +1,27 @@
+@use "../../../sass/abstracts/mixins";
+
+.container {
+ padding: 0 1rem;
+ margin: 0 auto;
+ position: relative;
+ width: 100%;
+ @include mixins.breakpoint(sm) {
+  width: 700px;
+ }
+ @include mixins.breakpoint(md) {
+  width: 980px;
+ }
+ @include mixins.breakpoint(lg) {
+  width: 1140px;
+ }
+ &__content {
+  /* Control the maximum width for large screens */
+  max-width: 100%;
+  @include mixins.breakpoint(sm) {
+   max-width: 700px;
+  }
+  @include mixins.breakpoint(md) {
+   max-width: 90ch;
+  }
+ }
+}

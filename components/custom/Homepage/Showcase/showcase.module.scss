@@ -1,0 +1,46 @@
+@use "../../../../sass/abstracts/mixins";
+
+.showcase {
+ background-color: var(--color-primary);
+ aspect-ratio: 1/1;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ overflow: hidden;
+ position: relative;
+ @include mixins.breakpoint("sm") {
+  aspect-ratio: 16/7;
+ }
+ &_image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: blur(5px);
+  opacity: 0.2;
+ }
+ &_content {
+  //background-color: red;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  h1 {
+   font-size: 3rem;
+   font-family: var(--font-secondary);
+   font-weight: 400;
+   letter-spacing: -1px;
+   font-style: italic;
+   color: white;
+   margin-bottom: 1rem;
+   text-align: center;
+   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
+  }
+ }
+}
