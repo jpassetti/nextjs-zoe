@@ -25,7 +25,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ closeHandler }) => {
     backgroundColor="black"
    />
    <div className={styles.mobile_nav_content}>
-    <Nav flexDirection="column" />
+    <Nav flexDirection="column" closeHandler={closeHandler} size="large" />
    </div>
   </motion.div>
  );
