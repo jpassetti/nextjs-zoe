@@ -19,8 +19,12 @@ const CTA = () => {
       resilience, and drive meaningful transformation in your organization.
      </Paragraph>
      <Button.Group justifyContent="center">
-      <Button label="Schedule a free consultation" type="primary" />
-      <Button label="Learn more" type="inverted" />
+      <Button
+       href="/contact"
+       label="Schedule a free consultation"
+       type="primary"
+      />
+      <Button href="/services" label="Learn more" type="inverted" />
      </Button.Group>
     </div>
    </Container>

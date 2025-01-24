@@ -11,13 +11,23 @@
  border-width: 2px;
  border-style: solid;
  border-color: transparent;
+ a {
+  color: #2c2c2c;
+  text-decoration: none;
+ }
  &.type--primary {
   background-color: #2c2c2c;
   color: white;
+  a {
+   color: white;
+  }
  }
  &.type--accent {
   background-color: var(--color-accent);
   color: white;
+  a {
+   color: white;
+  }
  }
  &.type--inverted {
   background-color: transparent;

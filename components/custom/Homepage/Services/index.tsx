@@ -64,7 +64,7 @@ const HomepageServices = () => {
    </Container>
    <Container type="content">
     <Button.Group justifyContent="center">
-     <Button href="/contact" type="accent" label="View all services" />
+     <Button href="/services" type="accent" label="View all services" />
     </Button.Group>
    </Container>
   </Section>
