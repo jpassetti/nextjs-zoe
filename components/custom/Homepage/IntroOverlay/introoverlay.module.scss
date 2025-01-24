@@ -1,0 +1,13 @@
+.intro_overlay {
+ position: absolute;
+ top: 0;
+ left: 0;
+ width: 100vw;
+ height: 100vh;
+ background-color: var(--color-primary);
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ flex-direction: column;
+ z-index: 1000; /* Ensure it's above other content */
+}

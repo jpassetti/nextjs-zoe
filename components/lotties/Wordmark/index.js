@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import animationData from "/public/animations/wordmark.json"; // Adjust the path as needed
+import animationData from "./wordmark.json"; // Adjust the path as needed
 
 const Wordmark = ({ play }) => {
  return (
