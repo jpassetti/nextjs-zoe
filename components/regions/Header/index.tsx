@@ -7,6 +7,7 @@ import Button from "@/components/html/Button";
 import MobileNav from "@/components/regions/MobileNav";
 import Nav from "@/components/regions/Nav";
 import Row from "@/components/layout/Row";
+import Wordmark from "@/components/brand/Wordmark";
 
 import styles from "./header.module.scss";
 
@@ -20,9 +21,7 @@ const Header: React.FC = () => {
 
  return (
   <header className={styles.header}>
-   <h1 className={styles.wordmark}>
-    Transform <span>with Irini</span>
-   </h1>
+   <Wordmark />
 
    {isDesktop && (
     <Row alignItems="center" gap={3} className={styles.header_desktop_nav}>
