@@ -1,4 +1,12 @@
+@use "../../../sass/abstracts/mixins";
+
 .brand_wordmark {
  width: auto;
- height: 4rem;
+ height: 2.5rem;
+ @include mixins.breakpoint("sm") {
+  height: 3rem;
+ }
+ @include mixins.breakpoint("md") {
+  height: 4rem;
+ }
 }
