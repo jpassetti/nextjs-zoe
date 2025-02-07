@@ -30,6 +30,7 @@ interface ColProps {
  td?: boolean; // If it's a table cell
  textAlign?: "left" | "center" | "right" | "justify"; // Text alignment
  flexOrder?: string; // Flex order, e.g. "xs:1 sm:2"
+ verticalLine?: boolean; // If it's a vertical line
 }
 
 const Col: React.FC<ColProps> = ({
@@ -57,6 +58,7 @@ const Col: React.FC<ColProps> = ({
  td,
  textAlign,
  flexOrder,
+ verticalLine,
 }) => {
  // Process the flex order if it's provided
  const responsiveOrderArr = flexOrder ? flexOrder.split(" ") : null;
@@ -101,6 +103,7 @@ const Col: React.FC<ColProps> = ({
    responsiveOrderObj.hasOwnProperty("xl"),
   [`background-color-${backgroundColor}`]: backgroundColor,
   [`border-left-${borderLeft}`]: borderLeft,
+  [`vertical-line`]: verticalLine,
  });
 
  return <div className={colClasses}>{children}</div>;

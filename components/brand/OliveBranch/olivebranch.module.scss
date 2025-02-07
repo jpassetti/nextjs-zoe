@@ -1,0 +1,8 @@
+.olivebranch {
+ &.fill--white {
+  fill: white;
+ }
+ &.fill--primary {
+  fill: var(--color-primary);
+ }
+}

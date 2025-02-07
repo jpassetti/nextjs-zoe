@@ -12,6 +12,7 @@ interface RowProps {
  className?: string; // Optional additional class names
  flexDirection?: "row" | "column"; // Possible values for flexDirection
  gap?: number; // Optional gap value, e.g., "1rem"
+ height?: string; // Optional height value, e.g., "auto", "100vh"
  justifyContent?:
   | "flex-start"
   | "flex-end"
@@ -27,6 +28,7 @@ const Row: React.FC<RowProps> = ({
  className,
  flexDirection,
  gap,
+ height,
  justifyContent,
 }) => {
  // Generate the dynamic class names based on the props
@@ -36,6 +38,7 @@ const Row: React.FC<RowProps> = ({
   [`align-items--${alignItems}`]: alignItems,
   [`flex-direction--${flexDirection}`]: flexDirection,
   [`gap--${gap}`]: gap,
+  [`height--${height}`]: height,
   className, // Allows additional custom classes
  });
 

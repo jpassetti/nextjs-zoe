@@ -15,7 +15,7 @@ const Showcase = () => {
    <div className={styles.showcase_content}>
     <h1>Empowering Leaders, Inspiring Change</h1>
     <Button.Group justifyContent="center">
-     <Button href="/about" label="About me" />
+     <Button href="/transformation" label="My Transformation" />
      <Button href="/services" label="Services" />
     </Button.Group>
    </div>

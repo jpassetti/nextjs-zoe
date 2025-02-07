@@ -4,6 +4,9 @@
  display: flex;
  flex-wrap: wrap;
  margin: 0 -0.5rem;
+ &.height--full {
+  min-height: 100vh;
+ }
  @include mixins.marginAndPadding();
  @include mixins.alignItems();
  @include mixins.justifyContent();

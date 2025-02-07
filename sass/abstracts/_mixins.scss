@@ -105,7 +105,7 @@
  $values: stretch, center, flex-start, flex-end, baseline, initial, inherit;
 
  @each $value in $values {
-  &.align-items-#{$value} {
+  &.align-items--#{$value} {
    display: flex;
    align-items: #{$value};
   }

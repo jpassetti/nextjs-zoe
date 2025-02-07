@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "dev:3005": "PORT=3005 next dev"
+    "dev:port": "PORT=3005 next dev"
   },
   "dependencies": {
     "classnames": "^2.5.1",

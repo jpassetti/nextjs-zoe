@@ -14,12 +14,22 @@ const IntroOverlay = () => {
     transition: { duration: 1 }, // Animation duration for scaling
    }}
    exit={{
-    y: "-100%", // Move to -100% on the y-axis to hide
-    transition: { duration: 1 }, // Animation duration for exit
+    opacity: 0, // Fade out when exiting
    }}
   >
    <OliveBranch />
-   <Wordmark />
+   <motion.div
+    initial={{ opacity: 0 }} // Start from 0 opacity
+    animate={{
+     opacity: 1, // Animate to full opacity
+     transition: {
+      duration: 1,
+      delay: 1, // Delay the animation
+     }, // Animation duration for opacity
+    }}
+   >
+    <Wordmark />
+   </motion.div>
   </motion.div>
  );
 };

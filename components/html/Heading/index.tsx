@@ -65,7 +65,7 @@ const Heading: React.FC<HeadingProps> = ({
   [`border-top-${borderTop}`]: borderTop,
   [`text-transform-${textTransform}`]: textTransform,
   [`font-weight-${fontWeight}`]: fontWeight,
-  [`font-color-${color}`]: color,
+  [`color--${color}`]: color,
   [`font-style-${fontStyle}`]: fontStyle,
   [`line-height-${lineHeight}`]: lineHeight,
   [`font-family-${fontFamily}`]: fontFamily,

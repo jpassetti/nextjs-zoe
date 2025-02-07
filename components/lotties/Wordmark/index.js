@@ -1,10 +1,10 @@
 import Lottie from "lottie-react";
 import animationData from "./wordmark.json"; // Adjust the path as needed
 
-const Wordmark = ({ play }) => {
+const Wordmark = () => {
  return (
   <div style={{ width: 620, height: 75 }}>
-   {play && <Lottie animationData={animationData} loop={false} />}
+   <Lottie animationData={animationData} loop={false} />
   </div>
  );
 };

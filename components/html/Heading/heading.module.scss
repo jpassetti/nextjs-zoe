@@ -4,9 +4,9 @@
 .heading {
  font-family: var(--font-primary);
  font-weight: bold;
- color: var(--text-color);
+ color: var(--color-text);
  &.color--primary {
-  color: var(--primary-color);
+  color: var(--color-primary);
  }
  &--level-1 {
   font-size: 3rem;

@@ -24,4 +24,12 @@
    max-width: 90ch;
   }
  }
+ &.width--full {
+  width: 100%;
+ }
+ &.height--full {
+  min-height: 100vh;
+ }
+ @include mixins.alignItems();
+ @include mixins.justifyContent();
 }

@@ -19,6 +19,7 @@ interface GroupProps {
  children: React.ReactNode;
  className?: string;
  justifyContent?: string;
+ marginBottom?: number;
 }
 
 // Types for UI component props
@@ -49,10 +50,12 @@ const Group: React.FC<GroupProps> = ({
  children,
  className,
  justifyContent,
+ marginBottom,
 }) => {
  const groupClasses = cx({
   [`button--group`]: true,
   [`justify-content--${justifyContent}`]: justifyContent,
+  [`margin-bottom--${marginBottom}`]: marginBottom,
   className,
  });
  return <div className={groupClasses}>{children}</div>;

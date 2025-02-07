@@ -1,5 +1,6 @@
 import Image from "next/image";
 import styles from "./wordmark.module.scss";
+
 const Wordmark = () => {
  return (
   <Image
