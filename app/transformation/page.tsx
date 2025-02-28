@@ -1,10 +1,11 @@
-import TransSequence from "@/components/custom/TransSequence";
+import TransSequenceV2 from "@/components/custom/TransSequenceV2";
 
 const Transformation = () => {
  return (
   <div>
-   <TransSequence />
+   <TransSequenceV2 />
   </div>
  );
 };
+
 export default Transformation;

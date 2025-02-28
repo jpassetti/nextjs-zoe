@@ -1,12 +1,14 @@
 @use "./variables";
 
+@use "sass:meta";
 @use "sass:math";
 
 @mixin breakpoint($value) {
  // need to validate $value
 
  // if a string use standard breakpoints
- @if type-of($value) == "string" {
+ @if meta.type-of($value) == "string" {
+  // ✅ Use meta.type-of instead of type-of
   @if ($value == "xs" or $value == "phone") {
    @media (max-width: 699px) {
     @content;
@@ -19,11 +21,11 @@
    @media (min-width: 980px) {
     @content;
    }
-  } @else if($value == "lg" or $value == "desktop") {
+  } @else if ($value == "lg" or $value == "desktop") {
    @media (min-width: 1140px) {
     @content;
    }
-  } @else if($value == "xl" or $value == "tvscreen") {
+  } @else if ($value == "xl" or $value == "tvscreen") {
    @media (min-width: 1260px) {
     @content;
    }
@@ -33,17 +35,14 @@
  }
 
  // if value then use value as minimum width.
- @else if is-length($value) {
+ @else if meta.type-of($value) == "number" {
+  // ✅ Use meta.type-of
   @media (min-width: #{$value}) {
    @content;
   }
  } @else {
   @warn "Breakpoint mixin supports: string variables or relative units";
  }
-
- // if a length value than use that
-
- // error warn if string does not match or it is not a length
 }
 
 @mixin marginAndPadding() {
@@ -53,9 +52,9 @@
  @each $side in $sides {
   @each $size in $sizes {
    @for $i from 0 through 32 {
-    $newValue: math.div($i, 2);
+    $newValue: math.div($i, 2); // ✅ Use math.div() instead of /
 
-    @if $side ==all {
+    @if $side == all {
      &.margin-#{$side}-#{$i} {
       margin: #{$newValue}rem;
      }
@@ -92,7 +91,7 @@
 
      @include breakpoint($size) {
       &.#{$size}-padding-#{$side}-#{$i} {
-       padding-#{$side}: #{$newValue}rem;
+       padding: padding-#{$newValue}rem;
       }
      }
     }
@@ -187,11 +186,12 @@
 }
 
 @mixin justifyContent() {
- $values: flex-start, flex-end, center, space-between, space-around,
-  space-evenly, initial, inherit;
+ $values:
+  flex-start, flex-end, center, space-between, space-around, space-evenly,
+  initial, inherit;
 
  @each $value in $values {
-  &.justify-content-#{$value} {
+  &.justify-content--#{$value} {
    display: flex;
    justify-content: #{$value};
   }
@@ -292,16 +292,13 @@
 @mixin flexGap() {
  $sizes: xs, sm, md, lg;
 
- // Loop through values 1-8
  @for $i from 1 through 8 {
-  // Divide the value by 2 and append "rem"
-  $gap: $i / 2 + rem;
+  $gap: #{math.div($i, 2)}rem; // ✅ Use math.div() instead of /
 
   &.gap--#{$i} {
    gap: #{$gap};
   }
 
-  // Loop through sizes
   @each $size in $sizes {
    @include breakpoint($size) {
     &.#{$size}-gap-#{$i} {

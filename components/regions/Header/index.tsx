@@ -30,7 +30,11 @@ const Header: React.FC = () => {
     <Row alignItems="center" gap={3} className={styles.header_desktop_nav}>
      <Nav />
      <Button.Group>
-      <Button href="/contact" label="Schedule a consultation" type="accent" />
+      <Button
+       href="/consultation"
+       label="Schedule a consultation"
+       type="accent"
+      />
      </Button.Group>
     </Row>
    )}

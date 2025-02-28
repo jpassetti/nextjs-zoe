@@ -5,6 +5,7 @@
  margin: 0 auto;
  position: relative;
  width: 100%;
+ //background-color: orange;
  @include mixins.breakpoint(sm) {
   width: 700px;
  }
@@ -29,6 +30,9 @@
  }
  &.height--full {
   min-height: 100vh;
+ }
+ &.no-padding {
+  padding: 0;
  }
  @include mixins.alignItems();
  @include mixins.justifyContent();

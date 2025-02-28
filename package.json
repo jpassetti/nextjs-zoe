@@ -10,11 +10,14 @@
     "dev:port": "PORT=3005 next dev"
   },
   "dependencies": {
+    "@portabletext/react": "^3.2.1",
+    "@sanity/client": "^6.28.1",
     "classnames": "^2.5.1",
     "framer-motion": "^12.0.5",
     "lottie-react": "^2.4.0",
     "motion": "^11.16.4",
     "next": "15.1.4",
+    "next-sanity": "^9.8.60",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "sass": "^1.83.1"

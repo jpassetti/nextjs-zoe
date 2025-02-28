@@ -19,6 +19,7 @@ interface ContainerProps {
  type?: string; // The type of container, optional (e.g., 'content', 'sidebar')
  height?: string; // The height of the container, optional (e.g., 'auto', '100vh')
  width?: string; // The width of the container, optional (e.g., '100%', '50%')
+ noPadding?: boolean;
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -26,6 +27,7 @@ const Container: React.FC<ContainerProps> = ({
  children,
  height,
  justifyContent,
+ noPadding = false,
  type,
  width,
 }) => {
@@ -37,6 +39,7 @@ const Container: React.FC<ContainerProps> = ({
   [`width--${width}`]: width, // Add class based on the 'width' if provided
   [`justify-content--${justifyContent}`]: justifyContent, // Add class based on the 'justifyContent' prop
   [`align-items--${alignItems}`]: alignItems, // Add class based on the 'alignItems' prop
+  [`no-padding`]: noPadding,
  });
 
  return <div className={containerClasses}>{children}</div>;

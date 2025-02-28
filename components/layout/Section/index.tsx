@@ -7,7 +7,13 @@ const cx = classnames.bind(styles);
 
 // Define types for the component props
 interface SectionProps {
- backgroundColor?: "primary" | "secondary" | "tertiary" | string; // You can add more predefined colors or allow any string for backgroundColor
+ backgroundColor?:
+  | "primary"
+  | "primary-dark"
+  | "primary-light"
+  | "secondary"
+  | "tertiary"
+  | string; // You can add more predefined colors or allow any string for backgroundColor
  children: React.ReactNode; // The content inside the section (required)
 }
 

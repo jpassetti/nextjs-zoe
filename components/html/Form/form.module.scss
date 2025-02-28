@@ -1,0 +1,75 @@
+.form {
+ font-family: var(--font-primary);
+
+ &__group {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+ }
+
+ &__label {
+  //margin-bottom: 0.5rem;
+  display: block;
+  //background-color: yellow;
+  font-family: var(--font-primary);
+  //font-weight: bold;
+  color: white;
+ }
+
+ &__input {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  height: calc(2.25rem + 2px);
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  width: 100%;
+
+  // 🔹 Text Input
+  &--text,
+  &--email,
+  &--password {
+   width: 100%;
+  }
+
+  // 🔹 Radio Input - Inline Styling
+  &--radio {
+   width: auto;
+   height: 1.25rem;
+   margin-right: 0.5rem;
+   padding: 0;
+  }
+
+  // 🔹 Checkbox Input - Similar to radio styling
+  &--checkbox {
+   width: auto;
+   height: 1.25rem;
+   margin-right: 0.5rem;
+  }
+ }
+ &__textarea {
+  height: 10rem;
+  width: 100%;
+ }
+
+ // 🔹 Align Radio Buttons and Labels Side by Side
+ &__radio_group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+ }
+ &__checkbox_group {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+ }
+
+ &__radio-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+ }
+}

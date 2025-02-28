@@ -26,18 +26,28 @@ interface GroupProps {
 interface UIProps {
  backgroundColor?: "black" | "accent" | "white"; // Add more color options if needed
  type?: string;
+ label?: string;
  clickHandler: () => void;
+}
+
+// Types for Step component props
+interface StepProps {
+ label: string;
+ clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void; // ✅ Accepts event
+ type?: string;
 }
 
 // Button component
 const Button: React.FC<ButtonProps> & {
  Group: React.FC<GroupProps>;
  UI: React.FC<UIProps>;
+ Step: React.FC<StepProps>; // ✅ Add Step to the type definition
 } = ({ href, label, type = "default" }) => {
  const buttonClasses = cx({
   button: true,
   [`type--${type}`]: type,
  });
+
  return (
   <button className={buttonClasses}>
    {href ? <Link href={href}>{label}</Link> : label}
@@ -62,7 +72,12 @@ const Group: React.FC<GroupProps> = ({
 };
 
 // UI component (for button with icons)
-const UI: React.FC<UIProps> = ({ backgroundColor, type, clickHandler }) => {
+const UI: React.FC<UIProps> = ({
+ backgroundColor,
+ label,
+ type,
+ clickHandler,
+}) => {
  const uiClasses = cx({
   [`button--ui`]: true,
   [`type--${type}`]: type,
@@ -71,6 +86,7 @@ const UI: React.FC<UIProps> = ({ backgroundColor, type, clickHandler }) => {
 
  return (
   <button className={uiClasses} onClick={clickHandler}>
+   {label ? label : ""}
    <Icon
     icon={type}
     color={
@@ -83,8 +99,23 @@ const UI: React.FC<UIProps> = ({ backgroundColor, type, clickHandler }) => {
  );
 };
 
+// Step component
+const Step: React.FC<StepProps> = ({ type, label, clickHandler }) => {
+ const buttonClasses = cx({
+  button: true,
+  [`type--${type}`]: type,
+ });
+
+ return (
+  <button onClick={clickHandler} className={buttonClasses}>
+   {label}
+  </button>
+ );
+};
+
 // Assign subcomponents to the Button component
 Button.Group = Group;
 Button.UI = UI;
+Button.Step = Step; // ✅ Ensure Step is assigned
 
 export default Button;

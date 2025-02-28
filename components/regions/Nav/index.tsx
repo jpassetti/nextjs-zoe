@@ -15,7 +15,7 @@ interface NavProps {
 
 const navLinks = [
  { id: 1, url: "/", text: "Home" },
- { id: 2, url: "/about", text: "About Me" },
+ { id: 2, url: "/about-me", text: "About Me" },
  { id: 3, url: "/services", text: "Services" },
  { id: 4, url: "/resources", text: "Resources" },
  { id: 5, url: "/contact", text: "Contact" },
