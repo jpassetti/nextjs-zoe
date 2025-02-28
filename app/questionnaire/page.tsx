@@ -63,16 +63,20 @@ export default function QuestionnaireLandingPage() {
   return <p>No questionnaire found.</p>;
  }
 
- const steps = questionnaire.steps;
+ const steps: Step[] = questionnaire?.steps ?? [];
 
  const handleInputChange = (
   question: string,
-  value: string | string[],
-  type?: string
+  value: string,
+  type?: "short" | "long" | "multiple" | "checkbox"
  ) => {
   setResponses((prev) => {
    if (type === "checkbox") {
-    const prevAnswers = Array.isArray(prev[question]) ? prev[question] : [];
+    // Ensure that prev[question] is always treated as an array of strings
+    const prevAnswers: string[] = Array.isArray(prev[question])
+     ? (prev[question] as string[])
+     : [];
+
     return {
      ...prev,
      [question]: prevAnswers.includes(value)
@@ -80,6 +84,7 @@ export default function QuestionnaireLandingPage() {
       : [...prevAnswers, value], // Add if checked
     };
    }
+
    return { ...prev, [question]: value };
   });
  };
@@ -130,7 +135,7 @@ export default function QuestionnaireLandingPage() {
      )}
 
      {/* Render Questions for the Current Step */}
-     {steps[step]?.questions?.map((q: any, index: number) => (
+     {steps[step]?.questions?.map((q: Question, index: number) => (
       <Form.Group key={index}>
        <Heading level={3} marginBottom={1} color="white">
         {q.question}
@@ -140,13 +145,17 @@ export default function QuestionnaireLandingPage() {
         <Form.Input
          type="text"
          placeholder="Your answer"
-         onChange={(e) => handleInputChange(q.question, e.target.value)}
+         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          handleInputChange(q.question, e.target.value)
+         }
         />
        )}
        {q.type === "long" && (
         <Form.Textarea
          placeholder="Your detailed response"
-         onChange={(e) => handleInputChange(q.question, e.target.value)}
+         onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+          handleInputChange(q.question, e.target.value)
+         }
         />
        )}
        {q.type === "multiple" &&
@@ -170,7 +179,10 @@ export default function QuestionnaireLandingPage() {
            type="checkbox"
            name={q.question}
            value={option}
-           onChange={(e) => handleInputChange(q.question, option, "checkbox")}
+           onChange={(e) => {
+            e.preventDefault();
+            handleInputChange(q.question, option, "checkbox");
+           }}
           />
           {option}
          </Form.Label>
@@ -197,7 +209,7 @@ export default function QuestionnaireLandingPage() {
       {step === steps.length - 1 && (
        <Button
         label="Submit"
-        type="submit" // ✅ Form submission only on last step
+        buttonType="submit" // ✅ Form submission only on last step
        />
       )}
      </Button.Group>

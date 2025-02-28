@@ -10,8 +10,8 @@ const cx = classNames.bind(styles);
 interface ButtonProps {
  href?: string;
  label: string;
- type?: string;
- buttonType?: "button" | "submit" | "reset"; // ✅ Allow button type
+ type?: "primary" | "secondary" | "accent"; // ✅ Used for styling
+ buttonType?: "button" | "submit" | "reset"; // ✅ Used for HTML `<button>` type
 }
 
 // Types for Group component props
@@ -25,34 +25,37 @@ interface GroupProps {
 // Types for UI component props
 interface UIProps {
  backgroundColor?: "black" | "accent" | "white";
- type?: string;
+ type?: "next" | "previous" | "primary"; // ✅ Styling purposes only
+ buttonType?: "button" | "submit" | "reset"; // ✅ HTML button attribute
  label?: string;
  clickHandler?: () => void;
- buttonType?: "button" | "submit" | "reset"; // ✅ Allow button type
 }
 
 // Types for Step component props
 interface StepProps {
  label: string;
+ type?: "next" | "previous"; // ✅ Used for styling
+ buttonType?: "button" | "submit" | "reset"; // ✅ Used for HTML button attribute
  clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
- type?: string;
- buttonType?: "button" | "submit" | "reset"; // ✅ Allow button type
-}
+} // Button component
 
-// Button component
 const Button: React.FC<ButtonProps> & {
  Group: React.FC<GroupProps>;
  UI: React.FC<UIProps>;
  Step: React.FC<StepProps>;
-} = ({ href, label, type = "default", buttonType = "button" }) => {
+} = ({ href, label, type = "primary", buttonType = "button" }) => {
  const buttonClasses = cx({
   button: true,
-  [`type--${type}`]: type,
+  [`type--${type}`]: type, // ✅ Used for styling only
  });
 
- return (
+ return href ? (
+  <Link href={href} className={buttonClasses}>
+   {label}
+  </Link>
+ ) : (
   <button className={buttonClasses} type={buttonType}>
-   {href ? <Link href={href}>{label}</Link> : label}
+   {label}
   </button>
  );
 };
@@ -77,20 +80,21 @@ const Group: React.FC<GroupProps> = ({
 const UI: React.FC<UIProps> = ({
  backgroundColor,
  label,
- type = "button", // Default type to "button"
+ type = "primary", // ✅ Used for styling
+ buttonType = "button", // ✅ Used for the HTML attribute
  clickHandler,
 }) => {
  const uiClasses = cx({
   [`button--ui`]: true,
-  [`type--${type}`]: type,
+  [`type--${type}`]: type, // ✅ Used for styling only
   [`background-color--${backgroundColor}`]: backgroundColor,
  });
 
  return (
-  <button className={uiClasses} type={type} onClick={clickHandler}>
+  <button className={uiClasses} type={buttonType} onClick={clickHandler}>
    {label ? label : ""}
    <Icon
-    icon={type}
+    icon={type} // ✅ This will still use "next"/"previous" for styling
     color={
      backgroundColor === "black" || backgroundColor === "accent"
       ? "white"
@@ -100,17 +104,16 @@ const UI: React.FC<UIProps> = ({
   </button>
  );
 };
-
 // Step component
 const Step: React.FC<StepProps> = ({
- type,
+ type = "next", // ✅ Used for styling
+ buttonType = "button", // ✅ Used for HTML button attribute
  label,
  clickHandler,
- buttonType = "button", // ✅ Default to "button"
 }) => {
  const buttonClasses = cx({
   button: true,
-  [`type--${type}`]: type,
+  [`type--${type}`]: type, // ✅ Styling only
  });
 
  return (

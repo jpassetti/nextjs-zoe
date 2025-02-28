@@ -33,7 +33,7 @@ const Header: React.FC = () => {
       <Button
        href="/consultation"
        label="Schedule a consultation"
-       type="accent"
+       //type="accent"
       />
      </Button.Group>
     </Row>
@@ -41,7 +41,7 @@ const Header: React.FC = () => {
 
    {!isLargeDesktop && (
     <Button.UI
-     type="menu"
+     //type="menu"
      backgroundColor="accent"
      clickHandler={() => {
       setIsMenuOpen(true);

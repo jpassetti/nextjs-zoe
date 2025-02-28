@@ -37,6 +37,8 @@ interface InputProps {
 }
 interface TextareaProps {
  name?: string;
+ placeholder?: string;
+ onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 // 🔹 Form component
@@ -87,8 +89,12 @@ const Input = ({
 };
 Form.Input = Input;
 
-const Textarea = ({ name }: TextareaProps) => {
- return <textarea className={styles.form__textarea} name={name}></textarea>;
+const Textarea = ({ name, placeholder, onChange }: TextareaProps) => {
+ return (
+  <textarea className={styles.form__textarea} name={name} onChange={onChange}>
+   {placeholder}
+  </textarea>
+ );
 };
 Form.Textarea = Textarea;
 

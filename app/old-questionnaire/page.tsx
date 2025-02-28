@@ -210,7 +210,7 @@ const QuestionnaireLandingPage = () => {
       {step > 1 && (
        <Button.Step
         label="Previous"
-        type="inverted-white"
+        // type="inverted-white"
         clickHandler={(e) => {
          e.preventDefault();
          setStep(step - 1);
@@ -220,7 +220,7 @@ const QuestionnaireLandingPage = () => {
       {step < 5 && (
        <Button.Step
         label="Next"
-        type="accent"
+        // type="accent"
         clickHandler={(e) => {
          e.preventDefault();
          setStep(step + 1);
