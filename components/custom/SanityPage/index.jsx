@@ -1,6 +1,5 @@
 import { Fragment } from "react";
 import { PortableText } from "@portabletext/react";
-import { PortableTextBlock } from "@sanity/types";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -9,25 +8,12 @@ import Container from "@/components/layout/Container";
 import CTA from "@/components/custom/CTA";
 import FeaturedImageContainer from "@/components/custom/FeaturedImageContainer";
 import Heading from "@/components/html/Heading";
+import { PortableTextComponents } from "@/components/utils/PortableTextComponents";
 import Row from "@/components/layout/Row";
 import SanityContent from "@/components/custom/SanityContent";
 import Section from "@/components/layout/Section";
 
-type PageProps = {
- page: {
-  title: string;
-  content: PortableTextBlock[]; // ✅ Corrected type
-  featuredImage?: {
-   asset: {
-    url: string;
-    metadata: { dimensions: { width: number; height: number } };
-   };
-   alt?: string;
-  };
- };
-};
-
-export default function SanityPage({ page }: PageProps) {
+export default function SanityPage({ page }) {
  if (!page) {
   notFound();
  }
@@ -64,7 +50,10 @@ export default function SanityPage({ page }: PageProps) {
      <Row justifyContent="center">
       <Col sm={9}>
        <SanityContent>
-        <PortableText value={page.content} />
+        <PortableText
+         value={page.content}
+         components={PortableTextComponents}
+        />
        </SanityContent>
       </Col>
      </Row>

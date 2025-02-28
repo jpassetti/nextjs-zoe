@@ -6,14 +6,17 @@ import { Ul, Ol, Li } from "@/components/html/List";
 // Define the custom PortableText components
 export const PortableTextComponents = {
  types: {
-  image: ({ value }) => (
-   <Image
-    src={value.asset.url}
-    alt={value.alt || " "}
-    width={value.asset.metadata.dimensions.width}
-    height={value.asset.metadata.dimensions.height}
-   />
-  ),
+  image: ({ value }) => {
+   if (!value?.asset?.url) return null; // Prevent errors if no image
+   return (
+    <Image
+     src={value.asset.url}
+     alt={value.alt || " "}
+     width={value.asset.metadata?.dimensions?.width || 500}
+     height={value.asset.metadata?.dimensions?.height || 500}
+    />
+   );
+  },
  },
  block: {
   normal: ({ children }) => <Paragraph>{children}</Paragraph>,
@@ -38,10 +41,15 @@ export const PortableTextComponents = {
   number: ({ children }) => <Li>{children}</Li>,
  },
  marks: {
-  link: ({ value, children }) => (
-   <a href={value.href} className="text-blue-600 underline">
-    {children}
-   </a>
-  ),
+  link: ({ value, children }) => {
+   if (!value || !value.href) {
+    return <>{children}</>; // If no href, just return text
+   }
+   return (
+    <a href={value.href} className="text-blue-600 underline">
+     {children}
+    </a>
+   );
+  },
  },
 };
