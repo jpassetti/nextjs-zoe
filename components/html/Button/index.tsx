@@ -4,7 +4,6 @@ import Icon from "@/components/html/Icon";
 import Link from "next/link";
 import styles from "./button.module.scss";
 
-// Bind classNames to the styles object
 const cx = classNames.bind(styles);
 
 // Types for Button component props
@@ -12,6 +11,7 @@ interface ButtonProps {
  href?: string;
  label: string;
  type?: string;
+ buttonType?: "button" | "submit" | "reset"; // ✅ Allow button type
 }
 
 // Types for Group component props
@@ -24,32 +24,34 @@ interface GroupProps {
 
 // Types for UI component props
 interface UIProps {
- backgroundColor?: "black" | "accent" | "white"; // Add more color options if needed
+ backgroundColor?: "black" | "accent" | "white";
  type?: string;
  label?: string;
- clickHandler: () => void;
+ clickHandler?: () => void;
+ buttonType?: "button" | "submit" | "reset"; // ✅ Allow button type
 }
 
 // Types for Step component props
 interface StepProps {
  label: string;
- clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void; // ✅ Accepts event
+ clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
  type?: string;
+ buttonType?: "button" | "submit" | "reset"; // ✅ Allow button type
 }
 
 // Button component
 const Button: React.FC<ButtonProps> & {
  Group: React.FC<GroupProps>;
  UI: React.FC<UIProps>;
- Step: React.FC<StepProps>; // ✅ Add Step to the type definition
-} = ({ href, label, type = "default" }) => {
+ Step: React.FC<StepProps>;
+} = ({ href, label, type = "default", buttonType = "button" }) => {
  const buttonClasses = cx({
   button: true,
   [`type--${type}`]: type,
  });
 
  return (
-  <button className={buttonClasses}>
+  <button className={buttonClasses} type={buttonType}>
    {href ? <Link href={href}>{label}</Link> : label}
   </button>
  );
@@ -75,7 +77,7 @@ const Group: React.FC<GroupProps> = ({
 const UI: React.FC<UIProps> = ({
  backgroundColor,
  label,
- type,
+ type = "button", // Default type to "button"
  clickHandler,
 }) => {
  const uiClasses = cx({
@@ -85,7 +87,7 @@ const UI: React.FC<UIProps> = ({
  });
 
  return (
-  <button className={uiClasses} onClick={clickHandler}>
+  <button className={uiClasses} type={type} onClick={clickHandler}>
    {label ? label : ""}
    <Icon
     icon={type}
@@ -100,14 +102,19 @@ const UI: React.FC<UIProps> = ({
 };
 
 // Step component
-const Step: React.FC<StepProps> = ({ type, label, clickHandler }) => {
+const Step: React.FC<StepProps> = ({
+ type,
+ label,
+ clickHandler,
+ buttonType = "button", // ✅ Default to "button"
+}) => {
  const buttonClasses = cx({
   button: true,
   [`type--${type}`]: type,
  });
 
  return (
-  <button onClick={clickHandler} className={buttonClasses}>
+  <button onClick={clickHandler} className={buttonClasses} type={buttonType}>
    {label}
   </button>
  );
@@ -116,6 +123,6 @@ const Step: React.FC<StepProps> = ({ type, label, clickHandler }) => {
 // Assign subcomponents to the Button component
 Button.Group = Group;
 Button.UI = UI;
-Button.Step = Step; // ✅ Ensure Step is assigned
+Button.Step = Step;
 
 export default Button;

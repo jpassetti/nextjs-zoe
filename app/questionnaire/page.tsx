@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { getQuestionnaire } from "@/lib/sanity";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
@@ -9,229 +9,200 @@ import Section from "@/components/layout/Section";
 import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
 
-const QuestionnaireLandingPage = () => {
- const [step, setStep] = useState<number>(1);
+interface Question {
+ question: string;
+ type: "short" | "long" | "multiple" | "checkbox";
+ options?: string[]; // Only for multiple-choice or checkbox questions
+}
+
+interface Step {
+ title: string;
+ description?: string;
+ questions: Question[];
+}
+
+interface Questionnaire {
+ _id: string;
+ title: string;
+ description?: string;
+ steps: Step[];
+}
+
+export default function QuestionnaireLandingPage() {
+ const [step, setStep] = useState<number>(0);
+ const [responses, setResponses] = useState<Record<string, string | string[]>>(
+  {}
+ );
+ const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
+ const [loading, setLoading] = useState(true);
+ const [error, setError] = useState<string | null>(null);
+
+ // Fetch questionnaire data
+ useEffect(() => {
+  setLoading(true);
+  getQuestionnaire("consultation-questionnaire")
+   .then((data) => {
+    console.log({ data });
+    if (data && data.steps?.length > 0) {
+     setQuestionnaire(data);
+    } else {
+     setError("No steps found.");
+    }
+   })
+   .catch(() => setError("Error fetching questionnaire."))
+   .finally(() => setLoading(false));
+ }, []);
+
+ if (loading) return <p>Loading...</p>;
+ if (error) return <p style={{ color: "red" }}>{error}</p>;
+ if (
+  !questionnaire ||
+  !questionnaire.steps ||
+  questionnaire.steps.length === 0
+ ) {
+  return <p>No questionnaire found.</p>;
+ }
+
+ const steps = questionnaire.steps;
+
+ const handleInputChange = (
+  question: string,
+  value: string | string[],
+  type?: string
+ ) => {
+  setResponses((prev) => {
+   if (type === "checkbox") {
+    const prevAnswers = Array.isArray(prev[question]) ? prev[question] : [];
+    return {
+     ...prev,
+     [question]: prevAnswers.includes(value)
+      ? prevAnswers.filter((v) => v !== value) // Remove if unchecked
+      : [...prevAnswers, value], // Add if checked
+    };
+   }
+   return { ...prev, [question]: value };
+  });
+ };
+
+ const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  console.log("Submitting responses:", responses);
+
+  try {
+   const res = await fetch("/api/submit", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+     questionnaireId: questionnaire?._id, // Ensure questionnaire exists
+     responses,
+    }),
+   });
+
+   if (!res.ok) throw new Error("Submission failed.");
+   alert("Submitted successfully!");
+  } catch (error) {
+   console.error("Error submitting form:", error);
+   alert("Submission failed. Please try again.");
+  }
+ };
+
  return (
   <Section backgroundColor="primary-dark">
    <Container type="content">
     <Heading level={1} color="white" marginBottom={2}>
-     Consultation Questionnaire
+     {questionnaire.title}
     </Heading>
-    <Paragraph color="white" marginBottom={6}>
-     Your responses will help us make the most of our time together.
-    </Paragraph>
-    <Form>
-     {step === 1 && (
-      <Form.Slide>
-       <Heading level={2} marginBottom={1} marginTop={3} color="accent">
-        Step 1: Contact Information
-       </Heading>
-       <Form.Group>
-        <Form.Label>Name</Form.Label>
-        <Form.Input placeholder="First Name" type="text" />
-       </Form.Group>
-       <Form.Group>
-        <Form.Label>Email</Form.Label>
-        <Form.Input placeholder="Email" type="email" />
-       </Form.Group>
-       <Form.Group>
-        <Form.Label>Phone</Form.Label>
-        <Form.Input placeholder="Phone" type="tel" />
-       </Form.Group>
-      </Form.Slide>
-     )}
-     {step === 2 && (
-      <Form.Slide>
-       <Heading level={2} marginBottom={1} marginTop={3} color="accent">
-        Step 2: Company Information
-       </Heading>
-       <Form.Group>
-        <Form.Label>Size (e.g., number of employees)</Form.Label>
-        <Form.Input placeholder="Size" type="number" />
-       </Form.Group>
-       <Form.Group>
-        <Form.Label>Industry</Form.Label>
-        <Form.Input placeholder="Industry" type="text" />
-       </Form.Group>
-       <Form.Group>
-        <Form.Label>Role</Form.Label>
-        <Form.Input placeholder="Role" type="text" />
-       </Form.Group>
-       <Form.Group>
-        <Paragraph marginBottom={1} color="white">
-         <strong>Inquiring for self or to sponsor someone?</strong>
-        </Paragraph>
+    {questionnaire.description && (
+     <Paragraph color="white" marginBottom={6}>
+      {questionnaire.description}
+     </Paragraph>
+    )}
 
-        <Form.Input type="radio" name="self" />
-        <Form.Label htmlFor="self">Self</Form.Label>
+    <Form onSubmit={handleSubmit}>
+     {/* Step Title */}
+     <Heading level={2} marginBottom={1} marginTop={3} color="accent">
+      {steps[step]?.title || "Untitled Step"}
+     </Heading>
+     {steps[step]?.description && (
+      <Paragraph color="white" marginBottom={3}>
+       {steps[step].description}
+      </Paragraph>
+     )}
 
-        <Form.Input type="radio" name="someone-else" />
-        <Form.Label htmlFor="someone-else">Someone else</Form.Label>
-       </Form.Group>
-      </Form.Slide>
-     )}
-     {step === 3 && (
-      <Form.Slide>
-       <Heading level={2} marginBottom={1} marginTop={3} color="accent">
-        Step 3: Current Challenges
+     {/* Render Questions for the Current Step */}
+     {steps[step]?.questions?.map((q: any, index: number) => (
+      <Form.Group key={index}>
+       <Heading level={3} marginBottom={1} color="white">
+        {q.question}
        </Heading>
-       <Form.Group>
-        <Paragraph marginBottom={1} color="white">
-         <strong>What is the primary challenge you&apos;re facing?</strong>
-        </Paragraph>
-        <Form.CheckboxGroup>
-         <Form.Input type="checkbox" name="driving-innovation" />
-         <Form.Label htmlFor="driving-innovation">
-          Driving innovation (e.g., product-market fit, branding, new
-          initiatives)
-         </Form.Label>
-        </Form.CheckboxGroup>
-        <Form.CheckboxGroup>
-         <Form.Input type="checkbox" name="exploring-growth-opportunities" />
-         <Form.Label htmlFor="exploring-growth-opportunities">
-          Exploring growth opportunities (e.g., funding, hiring, expanding to
-          new markets)
-         </Form.Label>
-        </Form.CheckboxGroup>
-        <Form.CheckboxGroup>
-         <Form.Input type="checkbox" name="scaling-organization" />
-         <Form.Label htmlFor="scaling-organization">
-          Scaling the organization (e.g., improving operations through systems
-          and structure)
-         </Form.Label>
-        </Form.CheckboxGroup>
-        <Form.CheckboxGroup>
-         <Form.Input type="checkbox" name="navigating-transition" />
-         <Form.Label htmlFor="navigating-transition">
-          Navigating a transition (e.g., succession planning, new role, M&A,
-          restructuring)
-         </Form.Label>
-        </Form.CheckboxGroup>
-        <Form.CheckboxGroup>
-         <Form.Input type="checkbox" name="aligning-team" />
-         <Form.Label htmlFor="navigating-transition">
-          Aligning teams or departments to a common vision
-         </Form.Label>
-        </Form.CheckboxGroup>
-        <Form.CheckboxGroup>
-         <Form.Input type="checkbox" name="other" />
-         <Form.Label htmlFor="other">Other</Form.Label>
-        </Form.CheckboxGroup>
-       </Form.Group>
-      </Form.Slide>
-     )}
-     {step === 4 && (
-      <Form.Slide>
-       <Heading level={2} marginBottom={1} marginTop={3} color="accent">
-        Step 4: Your Goals
-       </Heading>
-       <Paragraph marginBottom={1} marginTop={2} color="white">
-        <strong>What is your primary goal?</strong>
-       </Paragraph>
-       <Form.CheckboxGroup>
-        <Form.Input type="checkbox" name="develop-my-personal-leadership" />
-        <Form.Label htmlFor="develop-my-personal-leadership">
-         Develop my personal leadership
-        </Form.Label>
-       </Form.CheckboxGroup>
-       <Form.CheckboxGroup>
-        <Form.Input
-         type="checkbox"
-         name="increase-team-alignment-and-collaboration"
-        />
-        <Form.Label htmlFor="increase-team-alignment-and-collaboration">
-         Increase team alignment and collaboration
-        </Form.Label>
-       </Form.CheckboxGroup>
-       <Form.CheckboxGroup>
-        <Form.Input
-         type="checkbox"
-         name="improve-organizational-change-management"
-        />
-        <Form.Label htmlFor="improve-organizational-change-management">
-         Improve organizational change management
-        </Form.Label>
-       </Form.CheckboxGroup>
-       <Form.CheckboxGroup>
-        <Form.Input
-         type="checkbox"
-         name="strengthen-decision-making-or-strategic-planning"
-        />
-        <Form.Label htmlFor="strengthen-decision-making-or-strategic-planning">
-         Strengthen decision-making or strategic planning
-        </Form.Label>
-       </Form.CheckboxGroup>
-       <Form.CheckboxGroup>
-        <Form.Input
-         type="checkbox"
-         name="manage-stress-and-achieve-better-work-life-balance"
-        />
-        <Form.Label htmlFor="manage-stress-and-achieve-better-work-life-balance">
-         Manage stress and achieve better work-life balance
-        </Form.Label>
-       </Form.CheckboxGroup>
-       <Form.CheckboxGroup>
-        <Form.Input type="checkbox" name="other" />
-        <Form.Label htmlFor="other">Other</Form.Label>
-       </Form.CheckboxGroup>
-       <Form.Group>
-        <Form.Label htmlFor="ideal-outcome">
-         {" "}
-         What is your ideal outcome for the consultation?
-        </Form.Label>
 
-        <Form.Textarea name="ideal-outcome" />
-       </Form.Group>
-      </Form.Slide>
-     )}
-     {step === 5 && (
-      <Form.Slide>
-       <Heading level={2} marginBottom={1} marginTop={3} color="accent">
-        Step 5: Consultation Preferences
-       </Heading>
-       <Form.Group>
-        <Paragraph marginTop={2} marginBottom={1} color="white">
-         Do you prefer in-person or remote consultations?
-        </Paragraph>
-        <Form.Input type="radio" name="in-person" />
-        <Form.Label htmlFor="in-person">In-person</Form.Label>
-        <Form.Input type="radio" name="remote" />
-        <Form.Label htmlFor="remote">Remote</Form.Label>
-       </Form.Group>
-       <Form.Group>
-        <Form.Label htmlFor="preferred-date-and-time">
-         What is your preferred date and time?
-        </Form.Label>
-        <Form.Input placeholder="Date and Time" type="datetime-local" />
-       </Form.Group>
-      </Form.Slide>
-     )}
+       {q.type === "short" && (
+        <Form.Input
+         type="text"
+         placeholder="Your answer"
+         onChange={(e) => handleInputChange(q.question, e.target.value)}
+        />
+       )}
+       {q.type === "long" && (
+        <Form.Textarea
+         placeholder="Your detailed response"
+         onChange={(e) => handleInputChange(q.question, e.target.value)}
+        />
+       )}
+       {q.type === "multiple" &&
+        Array.isArray(q.options) &&
+        q.options.map((option: string, i: number) => (
+         <Form.Label key={i}>
+          <Form.Input
+           type="radio"
+           name={q.question}
+           value={option}
+           onChange={(e) => handleInputChange(q.question, e.target.value)}
+          />
+          {option}
+         </Form.Label>
+        ))}
+       {q.type === "checkbox" &&
+        Array.isArray(q.options) &&
+        q.options.map((option: string, i: number) => (
+         <Form.Label key={i}>
+          <Form.Input
+           type="checkbox"
+           name={q.question}
+           value={option}
+           onChange={(e) => handleInputChange(q.question, option, "checkbox")}
+          />
+          {option}
+         </Form.Label>
+        ))}
+      </Form.Group>
+     ))}
+
+     {/* Navigation Buttons */}
      <Button.Group>
-      {step > 1 && (
+      {step > 0 && (
        <Button.Step
         label="Previous"
-        type="inverted-white"
-        clickHandler={(e) => {
-         e.preventDefault();
-         setStep(step - 1);
-        }}
+        buttonType="button" // ✅ Prevent form submission
+        clickHandler={() => setStep(step - 1)}
        />
       )}
-      {step < 5 && (
+      {step < steps.length - 1 && (
        <Button.Step
         label="Next"
-        type="accent"
-        clickHandler={(e) => {
-         e.preventDefault();
-         setStep(step + 1);
-        }}
+        buttonType="button" // ✅ Prevent form submission
+        clickHandler={() => setStep(step + 1)}
        />
       )}
-      {step === 5 && <Button label="Submit" type="accent" />}
+      {step === steps.length - 1 && (
+       <Button
+        label="Submit"
+        type="submit" // ✅ Form submission only on last step
+       />
+      )}
      </Button.Group>
     </Form>
    </Container>
   </Section>
  );
-};
-export default QuestionnaireLandingPage;
+}
