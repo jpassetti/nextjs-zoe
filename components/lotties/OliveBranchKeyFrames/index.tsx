@@ -9,10 +9,10 @@ const OliveBranchKeyFrames = ({ step }: { step: number }) => {
  const lottieRef = useRef<LottieRefCurrentProps | null>(null);
 
  // ✅ Memoize keyframes to prevent unnecessary re-renders
- const keyframes = useMemo(() => [17, 17, 25, 37, 37], []);
+ const keyframes = useMemo(() => [17, 25, 37], []);
 
  // Define scaling values for each step
- const scaleValues = [1, 1, 1.5, 2, 2];
+ const scaleValues = [1, 1.5, 2];
 
  useEffect(() => {
   if (lottieRef.current) {
