@@ -29,13 +29,12 @@ const Header: React.FC = () => {
    {isLargeDesktop && (
     <Row alignItems="center" gap={3} className={styles.header_desktop_nav}>
      <Nav />
-     <Button.Group>
-      <Button
-       href="/consultation"
-       label="Schedule a consultation"
-       //type="accent"
-      />
-     </Button.Group>
+
+     <Button
+      href="/consultation"
+      label="Schedule a consultation"
+      //type="accent"
+     />
     </Row>
    )}
 
