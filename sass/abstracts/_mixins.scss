@@ -136,6 +136,16 @@
  }
 }
 
+@mixin positions() {
+ $values: relative, absolute, fixed, sticky, initial, inherit;
+
+ @each $value in $values {
+  &.position-#{$value} {
+   position: #{$value};
+  }
+ }
+}
+
 @mixin fontWeight() {
  $values: 500, 700, normal, bold;
 

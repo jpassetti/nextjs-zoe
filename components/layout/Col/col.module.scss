@@ -17,6 +17,7 @@ $sizes: xs, sm, md, lg;
  }
  // for each loop end
  @include mixins.marginAndPadding();
+ @include mixins.positions();
  @include mixins.textAlign();
  @include mixins.fontSizes();
  @include mixins.fontWeight();

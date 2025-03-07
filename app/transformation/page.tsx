@@ -1,9 +1,9 @@
-import TransSequenceV3 from "@/components/custom/TransSequenceV3";
+import TransSequenceV4 from "@/components/custom/TransSequenceV4";
 
 const Transformation = () => {
  return (
   <div>
-   <TransSequenceV3 />
+   <TransSequenceV4 />
   </div>
  );
 };

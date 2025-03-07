@@ -86,6 +86,7 @@ const Col: React.FC<ColProps> = ({
   [`padding-bottom-${paddingBottom}`]: paddingBottom,
   [`padding-left-${paddingLeft}`]: paddingLeft,
   [`padding-all-${paddingAll}`]: paddingAll,
+  [`position-${position}`]: position,
   [`table-header`]: th,
   [`table-data-cell`]: td,
   [`text-align-${textAlign}`]: textAlign,
