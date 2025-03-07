@@ -33,7 +33,7 @@ const Header: React.FC = () => {
      <Button
       href="/consultation"
       label="Schedule a consultation"
-      //type="accent"
+      type="accent"
      />
     </Row>
    )}

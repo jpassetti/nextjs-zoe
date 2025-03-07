@@ -22,9 +22,9 @@ const CTA = () => {
       <Button
        href="/contact"
        label="Schedule a free consultation"
-       type="primary"
+       type="accent"
       />
-      <Button href="/services" label="Learn more" />
+      <Button href="/services" label="Learn more" type="inverted" />
      </Button.Group>
     </div>
    </Container>

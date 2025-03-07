@@ -10,7 +10,7 @@ const cx = classNames.bind(styles);
 interface ButtonProps {
  href?: string;
  label: string;
- type?: "primary" | "secondary" | "accent"; // ✅ Used for styling
+ type?: "primary" | "secondary" | "accent" | "inverted"; // ✅ Used for styling
  buttonType?: "button" | "submit" | "reset"; // ✅ Used for HTML `<button>` type
 }
 

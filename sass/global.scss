@@ -32,8 +32,23 @@ li {
  --color-primary--dark: #4b2859;
  --color-secondary: #f7f3ed;
  --color-accent: #d9915c;
- --color-text: #2c2c2c; /* Dark Text */
+ --color-text: #2c2c2c;
  --color-text-inverse: #fff;
+ --font-primary: "Montserrat", sans-serif;
+ --font-secondary: "Playfair Display", serif;
+}
+
+/* Alternative Theme (Theme 2) */
+[data-theme="theme2"] {
+ --color-primary: #bb8588;
+ --color-primary--light: #6d3b7c;
+ --color-primary--dark: #2c1836;
+ --color-secondary: #f0e4d7;
+ --color-accent: teal;
+ --color-text: #2c2c2c;
+ --color-text-inverse: #fff;
+ --font-primary: "Lora", serif;
+ --font-secondary: "Poppins", sans-serif;
 }
 
 html,
