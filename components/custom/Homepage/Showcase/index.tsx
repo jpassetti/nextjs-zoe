@@ -1,4 +1,5 @@
 import Button from "@/components/html/Button";
+import Heading from "@/components/html/Heading";
 import Image from "next/image";
 import styles from "./showcase.module.scss";
 
@@ -13,9 +14,11 @@ const Showcase = () => {
     className={styles.showcase_image}
    />
    <div className={styles.showcase_content}>
-    <h1>Empowering Leaders, Inspiring Change</h1>
+    <Heading level={1} color="white" marginBottom={2}>
+     Empowering Leaders, Inspiring Change
+    </Heading>
     <Button.Group justifyContent="center">
-     <Button href="/transformation" label="My Transformation" type="accent" />
+     <Button href="/transformation" label="My Transformation" type="primary" />
      <Button href="/services" label="Services" type="inverted" />
     </Button.Group>
    </div>

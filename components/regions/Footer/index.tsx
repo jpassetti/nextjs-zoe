@@ -14,10 +14,10 @@ const Footer: React.FC = () => {
   <footer className={styles.footer}>
    <Container>
     <Paragraph>Copyright 2025, Transform with Irini.</Paragraph>
-    <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+    {/* <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
      <button onClick={() => handleThemeChange("theme1")}>Theme 1</button>
      <button onClick={() => handleThemeChange("theme2")}>Theme 2</button>
-    </div>
+    </div> */}
    </Container>
   </footer>
  );

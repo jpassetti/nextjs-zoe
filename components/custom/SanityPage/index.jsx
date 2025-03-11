@@ -21,10 +21,10 @@ export default function SanityPage({ page }) {
  return (
   <Fragment>
    <Section backgroundColor="secondary">
-    <Container>
+    <Container type="content">
      <Row>
       <Col sm={12} textAlign="center">
-       <Heading level={1} color="primary" marginTop={4} marginBottom={2}>
+       <Heading level={1} color="black" marginTop={4} marginBottom={2}>
         {page.title}
        </Heading>
       </Col>
@@ -48,7 +48,7 @@ export default function SanityPage({ page }) {
 
      {/* Content */}
      <Row justifyContent="center">
-      <Col sm={9}>
+      <Col sm={12}>
        <SanityContent>
         <PortableText
          value={page.content}

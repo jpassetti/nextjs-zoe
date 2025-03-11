@@ -2,9 +2,10 @@
 @use "../../../sass/abstracts/variables";
 
 .heading {
- font-family: var(--font-primary);
+ font-family: var(--font-headlines);
  font-weight: bold;
  color: var(--color-text);
+ line-height: 1.2;
  &.color--primary {
   color: var(--color-primary);
  }

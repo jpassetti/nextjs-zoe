@@ -90,8 +90,8 @@ const TransSequenceV4 = () => {
      <Col xs={12} sm={6}>
       <div
        style={{
-        backgroundColor: "#794a4d",
-        height: "100vh",
+        backgroundColor: "#a06367",
+        minHeight: "100vh",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

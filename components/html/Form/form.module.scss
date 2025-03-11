@@ -6,17 +6,20 @@
   padding-bottom: 1rem;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
  }
 
  &__label {
   //margin-bottom: 0.5rem;
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   //background-color: yellow;
   font-family: var(--font-primary);
   //font-weight: bold;
-  color: white;
  }
 
  &__input {

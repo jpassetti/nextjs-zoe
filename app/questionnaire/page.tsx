@@ -112,24 +112,24 @@ export default function QuestionnaireLandingPage() {
  };
 
  return (
-  <Section backgroundColor="primary-dark">
+  <Section backgroundColor="secondary">
    <Container type="content">
-    <Heading level={1} color="white" marginBottom={2}>
+    <Heading level={1} color="black" marginBottom={2}>
      {questionnaire.title}
     </Heading>
     {questionnaire.description && (
-     <Paragraph color="white" marginBottom={6}>
+     <Paragraph color="black" marginBottom={6}>
       {questionnaire.description}
      </Paragraph>
     )}
 
     <Form onSubmit={handleSubmit}>
      {/* Step Title */}
-     <Heading level={2} marginBottom={1} marginTop={3} color="accent">
+     <Heading level={2} marginBottom={1} marginTop={3} color="black">
       {steps[step]?.title || "Untitled Step"}
      </Heading>
      {steps[step]?.description && (
-      <Paragraph color="white" marginBottom={3}>
+      <Paragraph color="black" marginBottom={3}>
        {steps[step].description}
       </Paragraph>
      )}
@@ -137,7 +137,7 @@ export default function QuestionnaireLandingPage() {
      {/* Render Questions for the Current Step */}
      {steps[step]?.questions?.map((q: Question, index: number) => (
       <Form.Group key={index}>
-       <Heading level={3} marginBottom={1} color="white">
+       <Heading level={3} marginBottom={1} color="black">
         {q.question}
        </Heading>
 
@@ -191,7 +191,7 @@ export default function QuestionnaireLandingPage() {
      ))}
 
      {/* Navigation Buttons */}
-     <Button.Group>
+     <Button.Group justifyContent="space-between" borderTop={1}>
       {step > 0 && (
        <Button.Step
         label="Previous"

@@ -31,11 +31,15 @@ li {
  --color-primary--light: #dcb3b6;
  --color-primary--dark: #4b2859;
  --color-secondary: #f7f3ed;
- --color-accent: #d9915c;
+ --color-accent: teal;
+ //--color-accent: #d9915c;
  --color-text: #2c2c2c;
  --color-text-inverse: #fff;
- --font-primary: "Montserrat", sans-serif;
+ --font-primary: "Lora", serif;
  --font-secondary: "Playfair Display", serif;
+ --font-headlines: "Poppins", sans-serif;
+ --font-buttons: "Poppins", sans-serif;
+ --font-navigation: "Poppins", sans-serif;
 }
 
 /* Alternative Theme (Theme 2) */

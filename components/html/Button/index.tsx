@@ -8,6 +8,7 @@ const cx = classNames.bind(styles);
 
 // Types for Button component props
 interface ButtonProps {
+ color?: "primary" | "secondary" | "accent" | "inverted" | "white" | "black";
  href?: string;
  label: string;
  type?: "primary" | "secondary" | "accent" | "inverted"; // ✅ Used for styling
@@ -16,6 +17,7 @@ interface ButtonProps {
 
 // Types for Group component props
 interface GroupProps {
+ borderTop?: number;
  children: React.ReactNode;
  className?: string;
  justifyContent?: string;
@@ -43,9 +45,10 @@ const Button: React.FC<ButtonProps> & {
  Group: React.FC<GroupProps>;
  UI: React.FC<UIProps>;
  Step: React.FC<StepProps>;
-} = ({ href, label, type = "primary", buttonType = "button" }) => {
+} = ({ color, href, label, type = "primary", buttonType = "button" }) => {
  const buttonClasses = cx({
   button: true,
+  [`color--${color}`]: color,
   [`type--${type}`]: type, // ✅ Used for styling only
  });
 
@@ -62,6 +65,7 @@ const Button: React.FC<ButtonProps> & {
 
 // Group component
 const Group: React.FC<GroupProps> = ({
+ borderTop,
  children,
  className,
  justifyContent,
@@ -71,6 +75,7 @@ const Group: React.FC<GroupProps> = ({
   [`button--group`]: true,
   [`justify-content--${justifyContent}`]: justifyContent,
   [`margin-bottom--${marginBottom}`]: marginBottom,
+  [`border-top--${borderTop}`]: borderTop,
   className,
  });
  return <div className={groupClasses}>{children}</div>;
@@ -113,6 +118,7 @@ const Step: React.FC<StepProps> = ({
 }) => {
  const buttonClasses = cx({
   button: true,
+  step: true,
   [`type--${type}`]: type, // ✅ Styling only
  });
 
