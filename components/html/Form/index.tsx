@@ -1,44 +1,64 @@
 import { ChangeEvent, ReactNode } from "react";
 import styles from "./form.module.scss";
 
-// 🔹 Define the form component props
+// 🔹 Define form component props
 interface FormProps {
  children: ReactNode;
  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-// 🔹 Define the group component props
+// 🔹 Define form group component props
 interface GroupProps {
  children: ReactNode;
 }
 
-// 🔹 Define the label component props
+// 🔹 Define label component props
 interface LabelProps {
  children: ReactNode;
  htmlFor?: string;
 }
 
-// 🔹 Define input props, now supporting text and radio inputs
+// 🔹 Define input props, supporting various types
 interface InputProps {
  type:
   | "text"
-  | "radio"
   | "email"
   | "number"
   | "password"
   | "checkbox"
+  | "radio"
+  | "tel"
+  | "date"
   | "datetime-local"
-  | "tel"; // Add more types as needed
+  | "textarea"; // Added 'textarea' for consistency, though not a valid input type
  placeholder?: string;
- value?: string;
+ value?: string | string[]; // Allow multiple values for checkboxes
  name?: string;
- checked?: boolean; // Required for radio buttons
+ id?: string;
+ checked?: boolean;
+ required?: boolean;
+ pattern?: string;
  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
+
+// 🔹 Define textarea props
 interface TextareaProps {
  name?: string;
  placeholder?: string;
+ id?: string;
+ required?: boolean;
+ value?: string;
  onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+}
+
+// 🔹 Define helper text props
+interface HelperTextProps {
+ children: ReactNode;
+}
+
+// 🔹 Define validation error props
+interface ValidationErrorProps {
+ message?: string;
 }
 
 // 🔹 Form component
@@ -51,6 +71,8 @@ const Group = ({ children }: GroupProps) => {
  return <div className={styles.form__group}>{children}</div>;
 };
 Form.Group = Group;
+
+// 🔹 Form.CheckboxGroup
 const CheckboxGroup = ({ children }: GroupProps) => {
  return <div className={styles.form__checkbox_group}>{children}</div>;
 };
@@ -66,13 +88,16 @@ const Label = ({ children, htmlFor }: LabelProps) => {
 };
 Form.Label = Label;
 
-// 🔹 Form.Input (Handles both text and radio inputs)
+// 🔹 Form.Input (Handles text, email, password, radio, checkbox, number, date, etc.)
 const Input = ({
  type,
  placeholder,
  value,
  name,
+ id,
  checked,
+ required,
+ pattern,
  onChange,
 }: InputProps) => {
  return (
@@ -80,28 +105,72 @@ const Input = ({
    className={`${styles.form__input} ${styles[`form__input--${type}`]}`}
    type={type}
    placeholder={placeholder}
-   value={value}
+   value={value ?? ""} // Ensure controlled inputs don't become uncontrolled
    name={name}
+   id={id}
    checked={checked}
+   required={required}
+   pattern={pattern}
    onChange={onChange}
   />
  );
 };
 Form.Input = Input;
 
-const Textarea = ({ name, placeholder, onChange }: TextareaProps) => {
+// 🔹 Form.Textarea
+const Textarea = ({
+ name,
+ placeholder,
+ id,
+ required,
+ value,
+ onChange,
+}: TextareaProps) => {
  return (
-  <textarea className={styles.form__textarea} name={name} onChange={onChange}>
-   {placeholder}
-  </textarea>
+  <textarea
+   className={styles.form__textarea}
+   name={name}
+   id={id}
+   placeholder={placeholder}
+   required={required}
+   value={value ?? ""} // Ensure controlled behavior
+   onChange={onChange}
+  />
  );
 };
 Form.Textarea = Textarea;
 
-const Slide = ({ children }: GroupProps) => {
- return <div className={styles.form__slide}>{children}</div>;
+// 🔹 Form.HelperText
+const HelperText = ({ children }: HelperTextProps) => {
+ return <p className={styles.form__helperText}>{children}</p>;
 };
-Form.Slide = Slide;
+Form.HelperText = HelperText;
+
+// 🔹 Form.ValidationError
+const ValidationError = ({ message }: ValidationErrorProps) => {
+ if (!message) return null;
+ return <p className={styles.form__validationError}>{message}</p>;
+};
+Form.ValidationError = ValidationError;
+
+// 🔹 Form.OtherInput (For handling "Other" option)
+interface OtherInputProps {
+ show: boolean;
+ name: string;
+ value: string;
+ onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+}
+
+const OtherInput = ({ show, name, value, onChange }: OtherInputProps) => {
+ if (!show) return null;
+ return (
+  <div className={styles.form__otherInput}>
+   <Label htmlFor={name}>Please specify</Label>
+   <Input type="text" name={name} id={name} value={value} onChange={onChange} />
+  </div>
+ );
+};
+Form.OtherInput = OtherInput;
 
 // ✅ Export Form Component
 export default Form;

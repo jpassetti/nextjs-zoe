@@ -62,12 +62,15 @@ const TransSequenceV4 = () => {
    threshold: 0.6, // Trigger when 60% of the slide is visible
   });
 
-  slideRefs.current.forEach((slide) => {
+  // Store current refs in a variable
+  const currentSlides = slideRefs.current;
+
+  currentSlides.forEach((slide) => {
    if (slide) observer.observe(slide);
   });
 
   return () => {
-   slideRefs.current.forEach((slide) => {
+   currentSlides.forEach((slide) => {
     if (slide) observer.unobserve(slide);
    });
   };

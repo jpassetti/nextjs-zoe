@@ -12,6 +12,10 @@
  border-style: solid;
  border-color: transparent;
  text-decoration: none; // for buttons directly styled to anchor elements
+ &.disabled {
+  cursor: not-allowed;
+  opacity: 0.25;
+ }
  a {
   color: #2c2c2c;
   text-decoration: none;

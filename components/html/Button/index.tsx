@@ -35,6 +35,7 @@ interface UIProps {
 
 // Types for Step component props
 interface StepProps {
+ disabled?: boolean;
  label: string;
  type?: "next" | "previous"; // ✅ Used for styling
  buttonType?: "button" | "submit" | "reset"; // ✅ Used for HTML button attribute
@@ -111,6 +112,7 @@ const UI: React.FC<UIProps> = ({
 };
 // Step component
 const Step: React.FC<StepProps> = ({
+ disabled = false,
  type = "next", // ✅ Used for styling
  buttonType = "button", // ✅ Used for HTML button attribute
  label,
@@ -118,12 +120,18 @@ const Step: React.FC<StepProps> = ({
 }) => {
  const buttonClasses = cx({
   button: true,
+  disabled: disabled,
   step: true,
   [`type--${type}`]: type, // ✅ Styling only
  });
 
  return (
-  <button onClick={clickHandler} className={buttonClasses} type={buttonType}>
+  <button
+   onClick={clickHandler}
+   className={buttonClasses}
+   type={buttonType}
+   disabled={disabled}
+  >
    {label}
   </button>
  );
