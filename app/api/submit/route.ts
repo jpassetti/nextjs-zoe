@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@sanity/client";
+import { v4 as uuidv4 } from "uuid";
 
 const sanityClient = createClient({
  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
  useCdn: false,
  apiVersion: "2024-03-07",
- token: process.env.SANITY_API_WRITE_TOKEN!, // Requires a write-enabled API token
+ token: process.env.SANITY_API_WRITE_TOKEN!,
 });
 
 export async function POST(req: Request) {
@@ -20,26 +21,23 @@ export async function POST(req: Request) {
    );
   }
 
-  // Transform responses into the correct format for Sanity
-  const formattedResponses = Object.entries(responses).map(
-   ([question, answer]) => {
-    const isArray = Array.isArray(answer);
+  // Extract submitted name
+  const submittedName = responses["Name"] || "Unnamed Submission";
 
-    return {
-     question,
-     answer: isArray ? answer : [answer], // Ensure all answers are stored as arrays
-     other:
-      isArray && answer.includes("Other")
-       ? responses[`${question}_other`] || ""
-       : undefined, // Store "Other" response if applicable
-    };
-   }
+  // Transform responses for Sanity
+  const formattedResponses = Object.entries(responses).map(
+   ([question, answer]) => ({
+    _key: uuidv4(), // ✅ Generate unique keys (Sanity requires _key for arrays via API)
+    question,
+    answer: Array.isArray(answer) ? answer : [answer], // Store answers as arrays
+   })
   );
 
   // Create a new response document in Sanity
   const newResponse = await sanityClient.create({
    _type: "responses",
-   questionnaireId,
+   title: submittedName, // ✅ Use Name field as the document title
+   questionnaireId: { _ref: questionnaireId, _type: "reference" },
    submittedAt: new Date().toISOString(),
    data: formattedResponses,
   });

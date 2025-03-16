@@ -31,6 +31,9 @@ export default function QuestionnaireLandingPage() {
     body: JSON.stringify({
      questionnaireId: questionnaire?._id,
      responses,
+     questionTypes: questionnaire?.steps
+      .flatMap((step) => step.questions.map((q) => ({ [q.question]: q.type })))
+      .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
     }),
    });
 
