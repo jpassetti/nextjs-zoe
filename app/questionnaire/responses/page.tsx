@@ -11,7 +11,7 @@ import Table from "@/components/html/Table";
 interface Response {
  _id: string;
  submittedAt: string;
- questionnaireTitle?: string;
+ submitterName?: string;
 }
 
 export default function ResponsesPage() {
@@ -48,7 +48,7 @@ export default function ResponsesPage() {
     <Table>
      <Table.THead>
       <Table.TR>
-       <Table.TH>Questionnaire</Table.TH>
+       <Table.TH>Name</Table.TH>
        <Table.TH>Submitted At</Table.TH>
        <Table.TH>Action</Table.TH>
       </Table.TR>
@@ -56,7 +56,7 @@ export default function ResponsesPage() {
      <Table.TBody>
       {responses.map((response) => (
        <Table.TR key={response._id}>
-        <Table.TD>{response.questionnaireTitle || "Untitled"}</Table.TD>
+        <Table.TD>{response.submitterName || "Unknown"}</Table.TD>
         <Table.TD>{new Date(response.submittedAt).toLocaleString()}</Table.TD>
         <Table.TD>
          <Link href={`/questionnaire/responses/${response._id}`}>View</Link>

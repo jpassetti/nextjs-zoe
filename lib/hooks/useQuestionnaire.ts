@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { getQuestionnaire } from "@/lib/sanity";
 import { Questionnaire, Responses } from "@/lib/types/questionnaire";
 import { validationPatterns } from "@/lib/validationPatterns";
@@ -27,7 +27,6 @@ export function useQuestionnaire(slug: string) {
    .finally(() => setLoading(false));
  }, [slug]);
 
- // 🔹 Handle input changes
  const handleInputChange = (
   question: string,
   value: string | string[],
@@ -49,7 +48,6 @@ export function useQuestionnaire(slug: string) {
   });
  };
 
- // 🔹 Validate current step
  const validateStep = (): boolean => {
   if (!questionnaire) return false;
 
@@ -78,20 +76,31 @@ export function useQuestionnaire(slug: string) {
   return isValid;
  };
 
- // 🔹 Go to next step
+ const isStepValid = useMemo(() => {
+  if (!questionnaire) return false;
+
+  const currentStep = questionnaire.steps[step];
+  return currentStep.questions.every((q) => {
+   const response = responses[q.question];
+   const pattern = validationPatterns[q.type]?.pattern;
+
+   if (q.required && !response) return false;
+   if (pattern && typeof response === "string") {
+    return new RegExp(pattern).test(response);
+   }
+   return true;
+  });
+ }, [questionnaire, step, responses]);
+
  const nextStep = () => {
   if (validateStep()) {
    setStep((prev) => prev + 1);
   }
  };
 
- // 🔹 Go to previous step
  const prevStep = () => {
   setStep((prev) => Math.max(0, prev - 1));
  };
-
- // 🔹 Compute isStepValid based on current step
- const isStepValid = validateStep();
 
  return {
   step,
@@ -103,6 +112,7 @@ export function useQuestionnaire(slug: string) {
   error,
   validationErrors,
   handleInputChange,
+  validateStep,
   isStepValid,
   nextStep,
   prevStep,

@@ -1,15 +1,20 @@
-import { useState, ChangeEvent, ReactNode } from "react";
+import {
+ forwardRef,
+ ChangeEvent,
+ ReactNode,
+ FormHTMLAttributes,
+ InputHTMLAttributes,
+ TextareaHTMLAttributes,
+} from "react";
 import styles from "./form.module.scss";
-import { validationPatterns } from "@/lib/validationPatterns";
 
-// 🔹 Define form component props
-interface FormProps {
+// 🔹 Form props
+interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
  children: ReactNode;
- onSubmit?: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
-// 🔹 Define input props
-interface InputProps {
+// 🔹 Input props
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
  type:
   | "text"
   | "email"
@@ -20,185 +25,100 @@ interface InputProps {
   | "tel"
   | "date"
   | "datetime-local";
- placeholder?: string;
- value?: string | string[];
- name?: string;
- id?: string;
- checked?: boolean;
- required?: boolean;
- pattern?: string;
- maxLength?: number;
- onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
-// 🔹 Define textarea props
-interface TextareaProps {
- name?: string;
- placeholder?: string;
- id?: string;
- required?: boolean;
- value?: string;
- onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void;
+// 🔹 OtherInput props
+interface OtherInputProps {
+ show: boolean;
+ name: string;
+ value: string;
+ onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-// 🔹 Define validation error props
-interface ValidationErrorProps {
- message?: string;
-}
+// 🔹 Main form component
+const FormBase = forwardRef<HTMLFormElement, FormProps>(
+ ({ children, ...props }, ref) => {
+  return (
+   <form ref={ref} {...props}>
+    {children}
+   </form>
+  );
+ }
+);
+FormBase.displayName = "Form";
 
-// 🔹 Form component
-const Form = ({ children, onSubmit }: FormProps) => {
- return <form onSubmit={onSubmit}>{children}</form>;
-};
-Form.displayName = "Form";
+// 🔹 Subcomponents
+const Group = ({ children }: { children: ReactNode }) => (
+ <div className={styles.form__group}>{children}</div>
+);
 
-// 🔹 Form.Group
-const Group = ({ children }: { children: ReactNode }) => {
- return <div className={styles.form__group}>{children}</div>;
-};
-Group.displayName = "Form.Group";
-Form.Group = Group;
+const CheckboxGroup = ({ children }: { children: ReactNode }) => (
+ <div className={styles.form__checkbox_group}>{children}</div>
+);
 
-// 🔹 Form.Label
 const Label = ({
  children,
  htmlFor,
 }: {
  children: ReactNode;
  htmlFor?: string;
-}) => {
- return (
-  <label className={styles.form__label} htmlFor={htmlFor}>
-   {children}
-  </label>
- );
-};
-Label.displayName = "Form.Label";
-Form.Label = Label;
+}) => (
+ <label className={styles.form__label} htmlFor={htmlFor}>
+  {children}
+ </label>
+);
 
-// 🔹 Form.CheckboxGroup (Restored)
-const CheckboxGroup = ({ children }: { children: ReactNode }) => {
- return <div className={styles.form__checkbox_group}>{children}</div>;
-};
-CheckboxGroup.displayName = "Form.CheckboxGroup";
-Form.CheckboxGroup = CheckboxGroup;
+const Input = ({ type, className, ...props }: InputProps) => (
+ <input
+  className={`${styles.form__input} ${styles[`form__input--${type}`]} ${className || ""}`}
+  type={type}
+  {...props}
+ />
+);
 
-// 🔹 Form.Input (Handles text, email, password, radio, checkbox, number, date, etc.)
-const Input = ({
- type,
- placeholder,
- value,
- name,
- id,
- checked,
- required,
- pattern,
- maxLength,
- onChange,
-}: InputProps) => {
- const [error, setError] = useState<string | null>(null);
+const Textarea = (props: TextareaHTMLAttributes<HTMLTextAreaElement>) => (
+ <textarea className={styles.form__textarea} {...props} />
+);
 
- // Use predefined pattern if available, fallback to provided pattern
- const appliedPattern =
-  pattern || validationPatterns[type]?.pattern || undefined;
- const appliedMaxLength =
-  maxLength || validationPatterns[type]?.maxLength || undefined;
+const HelperText = ({ children }: { children: ReactNode }) => (
+ <p className={styles.form__helperText}>{children}</p>
+);
 
- const handleValidation = (e: ChangeEvent<HTMLInputElement>) => {
-  if (e.target.validity.valueMissing) {
-   setError("This field is required.");
-  } else if (e.target.validity.patternMismatch) {
-   setError("Invalid format.");
-  } else {
-   setError(null);
-  }
-  onChange?.(e);
- };
+const ValidationError = ({ message }: { message?: string }) =>
+ message ? <p className={styles.form__validationError}>{message}</p> : null;
 
- return (
-  <div className={styles.form__group}>
-   <input
-    className={`${styles.form__input} ${styles[`form__input--${type}`]}`}
-    type={type}
-    placeholder={placeholder}
-    value={value ?? ""}
-    name={name}
-    id={id}
-    checked={checked}
-    required={required}
-    pattern={appliedPattern}
-    maxLength={appliedMaxLength}
-    onChange={handleValidation}
-    onInvalid={(e) => e.preventDefault()} // Prevents default HTML popups
-    aria-describedby={error ? `${id}-error` : undefined}
-   />
-   {error && <Form.ValidationError message={error} />}
-  </div>
- );
-};
-Input.displayName = "Form.Input";
-Form.Input = Input;
-
-// 🔹 Form.Textarea
-const Textarea = ({
- name,
- placeholder,
- id,
- required,
- value,
- onChange,
-}: TextareaProps) => {
- return (
-  <textarea
-   className={styles.form__textarea}
-   name={name}
-   id={id}
-   placeholder={placeholder}
-   required={required}
-   value={value ?? ""}
-   onChange={onChange}
-  />
- );
-};
-Textarea.displayName = "Form.Textarea";
-Form.Textarea = Textarea;
-
-// 🔹 Form.ValidationError
-const ValidationError = ({ message }: ValidationErrorProps) => {
- if (!message) return null;
- return <p className={styles.form__validationError}>{message}</p>;
-};
-ValidationError.displayName = "Form.ValidationError";
-Form.ValidationError = ValidationError;
-
-// 🔹 Form.OtherInput (For handling "Other" option)
-const OtherInput = ({
- show,
- name,
- value,
- onChange,
-}: {
- show: boolean;
- name: string;
- value: string;
- onChange: (event: ChangeEvent<HTMLInputElement>) => void;
-}) => {
+const OtherInput = ({ show, name, value, onChange }: OtherInputProps) => {
  if (!show) return null;
  return (
   <div className={styles.form__otherInput}>
-   <Form.Label htmlFor={name}>Please specify</Form.Label>
-   <Form.Input
-    type="text"
-    name={name}
-    id={name}
-    value={value}
-    onChange={onChange}
-   />
+   <Label htmlFor={name}>Please specify</Label>
+   <Input type="text" name={name} id={name} value={value} onChange={onChange} />
   </div>
  );
 };
-OtherInput.displayName = "Form.OtherInput";
-Form.OtherInput = OtherInput;
 
-// ✅ Export Form Component
+// 🔹 Extend the main Form type with all subcomponents
+type FormComponent = typeof FormBase & {
+ Group: typeof Group;
+ CheckboxGroup: typeof CheckboxGroup;
+ Label: typeof Label;
+ Input: typeof Input;
+ Textarea: typeof Textarea;
+ HelperText: typeof HelperText;
+ ValidationError: typeof ValidationError;
+ OtherInput: typeof OtherInput;
+};
+
+// 🔹 Merge base + subcomponents
+const Form = Object.assign(FormBase, {
+ Group,
+ CheckboxGroup,
+ Label,
+ Input,
+ Textarea,
+ HelperText,
+ ValidationError,
+ OtherInput,
+}) as FormComponent;
+
 export default Form;

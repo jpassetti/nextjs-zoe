@@ -13,7 +13,7 @@ export async function GET() {
   const query = `*[_type == "responses"] | order(submittedAt desc) {
     _id,
     submittedAt,
-    "questionnaireTitle": questionnaireId->title,
+    "submitterName": data[question == "Name"][0].answer[0],
     data
   }`;
 

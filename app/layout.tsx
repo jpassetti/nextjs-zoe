@@ -62,7 +62,7 @@ export default function RootLayout({
    <body>
     <ViewportProvider>
      <Header />
-     {children} {/* The page content */}
+     <main>{children}</main>
      <Footer />
     </ViewportProvider>
    </body>

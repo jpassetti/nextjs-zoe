@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useQuestionnaire } from "@/lib/hooks/useQuestionnaire";
 import QuestionnaireForm from "@/components/custom/QuestionnaireForm";
 import Section from "@/components/layout/Section";
@@ -8,6 +9,7 @@ import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
 
 export default function QuestionnaireLandingPage() {
+ const router = useRouter();
  const {
   step,
   setStep,
@@ -16,14 +18,13 @@ export default function QuestionnaireLandingPage() {
   questionnaire,
   loading,
   error,
-  isStepValid,
+  validateStep,
   validationErrors,
  } = useQuestionnaire("consultation-questionnaire");
 
  // ✅ Define handleSubmit function
  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
-  console.log("Submitting responses:", responses);
 
   try {
    const res = await fetch("/api/submit", {
@@ -41,7 +42,10 @@ export default function QuestionnaireLandingPage() {
    if (!res.ok) throw new Error("Submission failed.");
 
    const result = await res.json();
-   alert("Submitted successfully! Response ID: " + result.responseId);
+   const responseId = result.responseId;
+
+   // ✅ Redirect to success page with the response ID
+   router.push(`/questionnaire/success?id=${responseId}`);
   } catch (error) {
    console.error("Error submitting form:", error);
    alert("Submission failed. Please try again.");
@@ -69,7 +73,7 @@ export default function QuestionnaireLandingPage() {
      responses={responses}
      handleInputChange={handleInputChange}
      questionnaire={questionnaire}
-     isStepValid={isStepValid}
+     validateStep={validateStep}
      validationErrors={validationErrors}
      handleSubmit={handleSubmit} // ✅ Pass handleSubmit
     />
