@@ -6,6 +6,7 @@ import Section from "@/components/layout/Section";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
+import Table from "@/components/html/Table";
 
 interface Response {
  _id: string;
@@ -44,26 +45,26 @@ export default function ResponsesPage() {
    <Container>
     <Heading level={1}>Responses</Heading>
     <Paragraph>Click &quot;View&quot; to see response details.</Paragraph>
-    <table>
-     <thead>
-      <tr>
-       <th>Questionnaire</th>
-       <th>Submitted At</th>
-       <th>Action</th>
-      </tr>
-     </thead>
-     <tbody>
+    <Table>
+     <Table.THead>
+      <Table.TR>
+       <Table.TH>Questionnaire</Table.TH>
+       <Table.TH>Submitted At</Table.TH>
+       <Table.TH>Action</Table.TH>
+      </Table.TR>
+     </Table.THead>
+     <Table.TBody>
       {responses.map((response) => (
-       <tr key={response._id}>
-        <td>{response.questionnaireTitle || "Untitled"}</td>
-        <td>{new Date(response.submittedAt).toLocaleString()}</td>
-        <td>
+       <Table.TR key={response._id}>
+        <Table.TD>{response.questionnaireTitle || "Untitled"}</Table.TD>
+        <Table.TD>{new Date(response.submittedAt).toLocaleString()}</Table.TD>
+        <Table.TD>
          <Link href={`/questionnaire/responses/${response._id}`}>View</Link>
-        </td>
-       </tr>
+        </Table.TD>
+       </Table.TR>
       ))}
-     </tbody>
-    </table>
+     </Table.TBody>
+    </Table>
    </Container>
   </Section>
  );

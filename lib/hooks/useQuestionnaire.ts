@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getQuestionnaire } from "@/lib/sanity";
 import { Questionnaire, Responses } from "@/lib/types/questionnaire";
+import { validationPatterns } from "@/lib/validationPatterns";
 
 export function useQuestionnaire(slug: string) {
  const [step, setStep] = useState<number>(0);
@@ -8,14 +9,16 @@ export function useQuestionnaire(slug: string) {
  const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState<string | null>(null);
- const [isStepValid, setIsStepValid] = useState(false);
+ const [validationErrors, setValidationErrors] = useState<
+  Record<string, string>
+ >({});
 
  useEffect(() => {
   setLoading(true);
   getQuestionnaire(slug)
    .then((data) => {
     if (data && data.steps?.length > 0) {
-     setQuestionnaire(data as Questionnaire);
+     setQuestionnaire(data);
     } else {
      setError("No steps found.");
     }
@@ -24,20 +27,7 @@ export function useQuestionnaire(slug: string) {
    .finally(() => setLoading(false));
  }, [slug]);
 
- // Validate current step
- useEffect(() => {
-  if (questionnaire) {
-   const currentStep = questionnaire.steps[step];
-   const isValid = currentStep.questions.every((q) =>
-    q.required
-     ? responses[q.question] && responses[q.question].length > 0
-     : true
-   );
-   setIsStepValid(isValid);
-  }
- }, [responses, step, questionnaire]);
-
- // Handle user input
+ // 🔹 Handle input changes
  const handleInputChange = (
   question: string,
   value: string | string[],
@@ -45,7 +35,7 @@ export function useQuestionnaire(slug: string) {
  ) => {
   setResponses((prev) => {
    if (type === "checkbox") {
-    const prevAnswers: string[] = Array.isArray(prev[question])
+    const prevAnswers = Array.isArray(prev[question])
      ? (prev[question] as string[])
      : [];
     return {
@@ -59,14 +49,62 @@ export function useQuestionnaire(slug: string) {
   });
  };
 
+ // 🔹 Validate current step
+ const validateStep = (): boolean => {
+  if (!questionnaire) return false;
+
+  const currentStep = questionnaire.steps[step];
+  let isValid = true;
+  const newValidationErrors: Record<string, string> = {};
+
+  currentStep.questions.forEach((q) => {
+   const response = responses[q.question] || "";
+   const pattern = validationPatterns[q.type]?.pattern;
+
+   if (q.required && !response) {
+    newValidationErrors[q.question] = "This field is required.";
+    isValid = false;
+   } else if (
+    pattern &&
+    typeof response === "string" &&
+    !new RegExp(pattern).test(response)
+   ) {
+    newValidationErrors[q.question] = "Invalid format.";
+    isValid = false;
+   }
+  });
+
+  setValidationErrors(newValidationErrors);
+  return isValid;
+ };
+
+ // 🔹 Go to next step
+ const nextStep = () => {
+  if (validateStep()) {
+   setStep((prev) => prev + 1);
+  }
+ };
+
+ // 🔹 Go to previous step
+ const prevStep = () => {
+  setStep((prev) => Math.max(0, prev - 1));
+ };
+
+ // 🔹 Compute isStepValid based on current step
+ const isStepValid = validateStep();
+
  return {
   step,
   setStep,
   responses,
-  handleInputChange,
+  setResponses,
   questionnaire,
   loading,
   error,
+  validationErrors,
+  handleInputChange,
   isStepValid,
+  nextStep,
+  prevStep,
  };
 }

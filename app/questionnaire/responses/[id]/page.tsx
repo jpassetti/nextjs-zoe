@@ -6,6 +6,8 @@ import Section from "@/components/layout/Section";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
+import Table from "@/components/html/Table";
+import Link from "next/link";
 
 interface ResponseData {
  question: string;
@@ -51,19 +53,31 @@ export default function ResponseDetailPage() {
  return (
   <Section>
    <Container>
-    <Heading level={1}>{response.questionnaireTitle || "Untitled"}</Heading>
-    <Paragraph>
+    <Paragraph marginBottom={2}>
+     <Link href="/questionnaire/responses">Back to Responses</Link>
+    </Paragraph>
+    <Heading level={1} marginBottom={2}>
+     {response.questionnaireTitle || "Untitled"}
+    </Heading>
+    <Paragraph marginBottom={2}>
      Submitted At: {new Date(response.submittedAt).toLocaleString()}
     </Paragraph>
-
-    <Heading level={2}>Responses</Heading>
-    <ul>
-     {response.data.map((item, index) => (
-      <li key={index}>
-       <strong>{item.question}</strong>: {item.answer.join(", ")}
-      </li>
-     ))}
-    </ul>
+    <Table>
+     <Table.THead>
+      <Table.TR>
+       <Table.TH>Question</Table.TH>
+       <Table.TH>Answer</Table.TH>
+      </Table.TR>
+     </Table.THead>
+     <Table.TBody>
+      {response.data.map((item, index) => (
+       <Table.TR key={index}>
+        <Table.TD>{item.question}</Table.TD>
+        <Table.TD>{item.answer.join(", ")}</Table.TD>
+       </Table.TR>
+      ))}
+     </Table.TBody>
+    </Table>
    </Container>
   </Section>
  );

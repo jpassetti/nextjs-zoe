@@ -17,6 +17,7 @@ export default function QuestionnaireLandingPage() {
   loading,
   error,
   isStepValid,
+  validationErrors,
  } = useQuestionnaire("consultation-questionnaire");
 
  // ✅ Define handleSubmit function
@@ -69,6 +70,7 @@ export default function QuestionnaireLandingPage() {
      handleInputChange={handleInputChange}
      questionnaire={questionnaire}
      isStepValid={isStepValid}
+     validationErrors={validationErrors}
      handleSubmit={handleSubmit} // ✅ Pass handleSubmit
     />
    </Container>

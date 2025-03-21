@@ -2,8 +2,8 @@ import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
+import { validationPatterns } from "@/lib/validationPatterns";
 
-// 🛠 Define TypeScript interfaces for clarity
 interface Question {
  label: string;
  question: string;
@@ -45,6 +45,7 @@ interface QuestionnaireFormProps {
   type?: string
  ) => void;
  questionnaire: Questionnaire;
+ validationErrors: Record<string, string>; // ✅ Stores validation messages
  isStepValid: boolean;
  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
@@ -55,6 +56,7 @@ export default function QuestionnaireForm({
  responses,
  handleInputChange,
  questionnaire,
+ validationErrors,
  isStepValid,
  handleSubmit,
 }: QuestionnaireFormProps) {
@@ -78,30 +80,39 @@ export default function QuestionnaireForm({
      </Heading>
      {q.helperText && <Paragraph color="gray">{q.helperText}</Paragraph>}
 
-     {/* Text Inputs */}
      {["text", "email", "tel", "password", "number", "date"].includes(
       q.type
      ) && (
       <Form.Input
-       type={q.type}
+       type={
+        q.type as "text" | "email" | "tel" | "password" | "number" | "date"
+       } // ✅ Narrow the type for TS
        placeholder={q.placeholder || ""}
-       value={responses[q.question] || ""}
+       value={
+        typeof responses[q.question] === "string" ? responses[q.question] : ""
+       }
        required={q.required}
+       pattern={validationPatterns[q.type]?.pattern}
        onChange={(e) => handleInputChange(q.question, e.target.value)}
       />
      )}
 
-     {/* Textarea */}
+     {/* Textarea - Fixes 'join' issue */}
      {q.type === "textarea" && (
-      <Form.Textarea
-       placeholder={q.placeholder || ""}
-       value={
-        Array.isArray(responses[q.question])
-         ? (responses[q.question] as string[]).join(", ") // Ensure it's an array before using join
-         : (responses[q.question] as string) || ""
-       } // Ensure it's a string
-       onChange={(e) => handleInputChange(q.question, e.target.value)}
-      />
+      <>
+       <Form.Textarea
+        placeholder={q.placeholder || ""}
+        value={
+         Array.isArray(responses[q.question])
+          ? (responses[q.question] as string[]).join(", ")
+          : (responses[q.question] as string) || ""
+        }
+        onChange={(e) => handleInputChange(q.question, e.target.value)}
+       />
+       {validationErrors[q.question] && (
+        <Form.ValidationError message={validationErrors[q.question]} />
+       )}
+      </>
      )}
 
      {/* Radio Buttons */}
@@ -130,7 +141,11 @@ export default function QuestionnaireForm({
           type="checkbox"
           name={`checkbox-${step}-${q.question}`}
           value={option}
-          checked={(responses[q.question] as string[])?.includes(option)}
+          checked={
+           Array.isArray(responses[q.question])
+            ? responses[q.question].includes(option)
+            : false
+          }
           onChange={() => handleInputChange(q.question, option, "checkbox")}
          />
          {option}
