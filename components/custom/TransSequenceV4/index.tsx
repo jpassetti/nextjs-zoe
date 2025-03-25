@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import type { PortableTextBlock } from "@portabletext/types";
 import dynamic from "next/dynamic";
 import { getTransformationSlides } from "@/lib/sanity";
 import Button from "@/components/html/Button";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
-import Paragraph from "@/components/html/Paragraph";
 import Row from "@/components/layout/Row";
 import Col from "@/components/layout/Col";
+import { PortableText } from "@portabletext/react";
+import { PortableTextComponents } from "@/components/utils/PortableTextComponents";
 
 // Lazy load Lottie animation
 const OliveBranchKeyFrames = dynamic(
@@ -20,7 +22,7 @@ const OliveBranchKeyFrames = dynamic(
 interface Slide {
  title: string;
  subheadline?: string | null;
- content?: string | null;
+ content?: PortableTextBlock[]; // ✅ Strongly typed rich text
  cta?: {
   label: string;
   href: string;
@@ -31,9 +33,8 @@ const TransSequenceV4 = () => {
  const [slides, setSlides] = useState<Slide[]>([]);
  const [animationState, setAnimationState] = useState<number>(0);
  const [loading, setLoading] = useState(true);
- const slideRefs = useRef<(HTMLDivElement | null)[]>([]); // Store refs for slides
+ const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
 
- // Fetch slides from Sanity
  useEffect(() => {
   getTransformationSlides()
    .then((data) => {
@@ -42,13 +43,12 @@ const TransSequenceV4 = () => {
    .finally(() => setLoading(false));
  }, []);
 
- // Handle intersection detection
  const handleIntersection = useCallback(
   (entries: IntersectionObserverEntry[]) => {
    entries.forEach((entry) => {
     if (entry.isIntersecting) {
      const index = slideRefs.current.indexOf(entry.target as HTMLDivElement);
-     if (index !== -1) setAnimationState(index); // Update animation step
+     if (index !== -1) setAnimationState(index);
     }
    });
   },
@@ -57,12 +57,11 @@ const TransSequenceV4 = () => {
 
  useEffect(() => {
   const observer = new IntersectionObserver(handleIntersection, {
-   root: null, // Viewport
+   root: null,
    rootMargin: "0px",
-   threshold: 0.6, // Trigger when 60% of the slide is visible
+   threshold: 0.6,
   });
 
-  // Store current refs in a variable
   const currentSlides = slideRefs.current;
 
   currentSlides.forEach((slide) => {
@@ -89,7 +88,6 @@ const TransSequenceV4 = () => {
   >
    <Container width="full" noPadding>
     <Row alignItems="stretch">
-     {/* Left column with Lottie animation */}
      <Col xs={12} sm={6}>
       <div
        style={{
@@ -107,7 +105,6 @@ const TransSequenceV4 = () => {
       </div>
      </Col>
 
-     {/* Right column with slides */}
      <Col xs={12} sm={6}>
       {slides.map((slide, index) => (
        <div
@@ -116,7 +113,7 @@ const TransSequenceV4 = () => {
          slideRefs.current[index] = el;
         }}
         style={{
-         height: "100vh",
+         minHeight: "100vh",
          display: "flex",
          flexDirection: "column",
          justifyContent: "center",
@@ -128,12 +125,24 @@ const TransSequenceV4 = () => {
          {slide.title}
         </Heading>
         {slide.subheadline && (
-         <Heading level={3} marginBottom={2}>
+         <Heading
+          level={3}
+          marginBottom={2}
+          color="black"
+          fontWeight="normal"
+          fontFamily="primary"
+          fontStyle="italic"
+         >
           {slide.subheadline}
          </Heading>
         )}
         {slide.content && (
-         <Paragraph marginBottom={2}>{slide.content}</Paragraph>
+         <div className="prose">
+          <PortableText
+           value={slide.content}
+           components={PortableTextComponents}
+          />
+         </div>
         )}
         {slide.cta && (
          <Button.Group>

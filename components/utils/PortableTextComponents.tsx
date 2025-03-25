@@ -1,16 +1,33 @@
+import type {
+ PortableTextReactComponents,
+ PortableTextMarkComponentProps,
+ PortableTextTypeComponentProps,
+} from "@portabletext/react";
+
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Image from "next/image";
 import Paragraph from "@/components/html/Paragraph";
 import { Ul, Ol, Li } from "@/components/html/List";
-
 import { getEnvironmentAwareUrl } from "@/components/utils/urlHelpers";
 
-// Define the custom PortableText components
-export const PortableTextComponents = {
+type SanityImageValue = {
+ asset: {
+  url: string;
+  metadata?: {
+   dimensions?: {
+    width?: number;
+    height?: number;
+   };
+  };
+ };
+ alt?: string;
+};
+
+export const PortableTextComponents: PortableTextReactComponents = {
  types: {
-  image: ({ value }) => {
-   if (!value?.asset?.url) return null; // Prevent errors if no image
+  image: ({ value }: PortableTextTypeComponentProps<SanityImageValue>) => {
+   if (!value?.asset?.url) return null;
    return (
     <Image
      src={value.asset.url}
@@ -22,7 +39,7 @@ export const PortableTextComponents = {
   },
  },
  block: {
-  normal: ({ children }) => <Paragraph>{children}</Paragraph>,
+  normal: ({ children }) => <Paragraph marginBottom={2}>{children}</Paragraph>,
   h1: ({ children }) => <Heading level={1}>{children}</Heading>,
   h2: ({ children }) => <Heading level={2}>{children}</Heading>,
   h3: ({ children }) => <Heading level={3}>{children}</Heading>,
@@ -43,9 +60,15 @@ export const PortableTextComponents = {
   bullet: ({ children }) => <Li>{children}</Li>,
   number: ({ children }) => <Li>{children}</Li>,
  },
-
  marks: {
-  link: ({ value, children }) => {
+  link: ({
+   value,
+   children,
+  }: PortableTextMarkComponentProps<{
+   _type: "link";
+   href: string;
+   isButton?: boolean;
+  }>) => {
    if (!value?.href) return <>{children}</>;
 
    const adjustedHref = getEnvironmentAwareUrl(value.href);
@@ -72,4 +95,11 @@ export const PortableTextComponents = {
    );
   },
  },
+ // ✅ Default fallbacks to satisfy TypeScript
+ hardBreak: () => <br />,
+ unknownMark: ({ children }) => <>{children}</>,
+ unknownType: ({ value }) => <pre>{JSON.stringify(value, null, 2)}</pre>,
+ unknownBlockStyle: ({ children }) => <Paragraph>{children}</Paragraph>,
+ unknownList: ({ children }) => <Ul>{children}</Ul>,
+ unknownListItem: ({ children }) => <Li>{children}</Li>,
 };

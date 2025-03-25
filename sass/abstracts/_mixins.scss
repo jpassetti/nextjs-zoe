@@ -184,8 +184,8 @@
 
 @mixin fontFamily() {
  $values: (
-  "primary": variables.$font__sherman_sans,
-  "secondary": variables.$font__sherman_serif,
+  "primary": var(--font-primary),
+  "secondary": var(--font-secondary),
  );
 
  @each $key, $value in $values {
