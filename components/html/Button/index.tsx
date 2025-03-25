@@ -10,9 +10,10 @@ const cx = classNames.bind(styles);
 interface ButtonProps {
  color?: "primary" | "secondary" | "accent" | "inverted" | "white" | "black";
  href?: string;
- label: string;
- type?: "primary" | "secondary" | "accent" | "inverted"; // ✅ Used for styling
- buttonType?: "button" | "submit" | "reset"; // ✅ Used for HTML `<button>` type
+ label?: string;
+ type?: "primary" | "secondary" | "accent" | "inverted";
+ buttonType?: "button" | "submit" | "reset";
+ children?: React.ReactNode; // ✅ New
 }
 
 // Types for Group component props
@@ -46,20 +47,29 @@ const Button: React.FC<ButtonProps> & {
  Group: React.FC<GroupProps>;
  UI: React.FC<UIProps>;
  Step: React.FC<StepProps>;
-} = ({ color, href, label, type = "primary", buttonType = "button" }) => {
+} = ({
+ color,
+ href,
+ label,
+ type = "primary",
+ buttonType = "button",
+ children,
+}) => {
  const buttonClasses = cx({
   button: true,
   [`color--${color}`]: color,
-  [`type--${type}`]: type, // ✅ Used for styling only
+  [`type--${type}`]: type,
  });
+
+ const content = children || label;
 
  return href ? (
   <Link href={href} className={buttonClasses}>
-   {label}
+   {content}
   </Link>
  ) : (
   <button className={buttonClasses} type={buttonType}>
-   {label}
+   {content}
   </button>
  );
 };

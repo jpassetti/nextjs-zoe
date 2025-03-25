@@ -68,13 +68,35 @@ const Label = ({
  </label>
 );
 
-const Input = ({ type, className, ...props }: InputProps) => (
- <input
-  className={`${styles.form__input} ${styles[`form__input--${type}`]} ${className || ""}`}
-  type={type}
-  {...props}
- />
-);
+const Input = ({
+ type,
+ className,
+ pattern,
+ title,
+ inputMode,
+ ...props
+}: InputProps) => {
+ const isTel = type === "tel";
+
+ const defaultPattern = "^\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}$";
+ const defaultTitle = "Please enter a valid phone number";
+ const defaultInputMode = "tel";
+
+ const resolvedPattern = isTel && !pattern ? defaultPattern : pattern;
+ const resolvedTitle = isTel && !title ? defaultTitle : title;
+ const resolvedInputMode = isTel && !inputMode ? defaultInputMode : inputMode;
+
+ return (
+  <input
+   className={`${styles.form__input} ${styles[`form__input--${type}`]} ${className || ""}`}
+   type={type}
+   pattern={resolvedPattern}
+   title={resolvedTitle}
+   inputMode={resolvedInputMode}
+   {...props}
+  />
+ );
+};
 
 const Textarea = (props: TextareaHTMLAttributes<HTMLTextAreaElement>) => (
  <textarea className={styles.form__textarea} {...props} />

@@ -1,7 +1,10 @@
+import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Image from "next/image";
 import Paragraph from "@/components/html/Paragraph";
 import { Ul, Ol, Li } from "@/components/html/List";
+
+import { getEnvironmentAwareUrl } from "@/components/utils/urlHelpers";
 
 // Define the custom PortableText components
 export const PortableTextComponents = {
@@ -40,13 +43,30 @@ export const PortableTextComponents = {
   bullet: ({ children }) => <Li>{children}</Li>,
   number: ({ children }) => <Li>{children}</Li>,
  },
+
  marks: {
   link: ({ value, children }) => {
-   if (!value || !value.href) {
-    return <>{children}</>; // If no href, just return text
+   if (!value?.href) return <>{children}</>;
+
+   const adjustedHref = getEnvironmentAwareUrl(value.href);
+
+   if (value.isButton) {
+    return (
+     <Button href={adjustedHref} type="primary">
+      {children}
+     </Button>
+    );
    }
+
+   const isExternal = adjustedHref.startsWith("http");
+
    return (
-    <a href={value.href} className="text-blue-600 underline">
+    <a
+     href={adjustedHref}
+     className="text-blue-600 underline"
+     target={isExternal ? "_blank" : undefined}
+     rel={isExternal ? "noopener noreferrer" : undefined}
+    >
      {children}
     </a>
    );
