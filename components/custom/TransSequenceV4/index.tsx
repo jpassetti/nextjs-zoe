@@ -7,6 +7,7 @@ import { getTransformationSlides } from "@/lib/sanity";
 import Button from "@/components/html/Button";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
+import Loading from "@/components/custom/Loading";
 import Row from "@/components/layout/Row";
 import Col from "@/components/layout/Col";
 import { PortableText } from "@portabletext/react";
@@ -75,7 +76,7 @@ const TransSequenceV4 = () => {
   };
  }, [slides, handleIntersection]);
 
- if (loading) return <p>Loading...</p>;
+ if (loading) return <Loading />;
  if (slides.length === 0) return <p>No slides available.</p>;
 
  return (
