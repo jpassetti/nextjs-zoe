@@ -11,7 +11,7 @@ interface ButtonProps {
  color?: "primary" | "secondary" | "accent" | "inverted" | "white" | "black";
  href?: string;
  label?: string;
- type?: "primary" | "secondary" | "accent" | "inverted";
+ type?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
  buttonType?: "button" | "submit" | "reset";
  children?: React.ReactNode; // ✅ New
 }

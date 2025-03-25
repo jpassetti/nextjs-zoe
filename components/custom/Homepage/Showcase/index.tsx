@@ -7,7 +7,7 @@ const Showcase = () => {
  return (
   <div className={styles.showcase}>
    <Image
-    src="/stock/01-stock.jpg"
+    src="/action/zoe-54.jpg"
     alt="Stock Image"
     width="689"
     height="312"
@@ -19,7 +19,7 @@ const Showcase = () => {
     </Heading>
     <Button.Group justifyContent="center">
      <Button href="/transformation" label="My Transformation" type="primary" />
-     <Button href="/services" label="Services" type="inverted" />
+     <Button href="/services" label="Services" type="inverted-white" />
     </Button.Group>
    </div>
   </div>
