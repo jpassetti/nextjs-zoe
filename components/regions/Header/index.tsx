@@ -40,7 +40,7 @@ const Header: React.FC = () => {
 
    {!isLargeDesktop && (
     <Button.UI
-     //type="menu"
+     type="menu"
      backgroundColor="accent"
      clickHandler={() => {
       setIsMenuOpen(true);

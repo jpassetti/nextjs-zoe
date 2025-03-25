@@ -28,7 +28,7 @@ interface GroupProps {
 // Types for UI component props
 interface UIProps {
  backgroundColor?: "black" | "accent" | "white";
- type?: "next" | "previous" | "primary"; // ✅ Styling purposes only
+ type?: "next" | "previous" | "primary" | "menu" | "close"; // ✅ Styling purposes only
  buttonType?: "button" | "submit" | "reset"; // ✅ HTML button attribute
  label?: string;
  clickHandler?: () => void;

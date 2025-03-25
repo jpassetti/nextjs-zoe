@@ -11,6 +11,9 @@ import Paragraph from "@/components/html/Paragraph";
 import { Ul, Ol, Li } from "@/components/html/List";
 import { getEnvironmentAwareUrl } from "@/components/utils/urlHelpers";
 
+// ----------------------------
+// Types
+// ----------------------------
 type SanityImageValue = {
  asset: {
   url: string;
@@ -24,20 +27,65 @@ type SanityImageValue = {
  alt?: string;
 };
 
+type ButtonType = {
+ _type: "button";
+ label: string;
+ href: string;
+ type?: "primary" | "secondary" | "accent" | "inverted";
+};
+
+type ButtonGroupType = {
+ _type: "buttonGroup";
+ buttons: ButtonType[];
+};
+
+type LinkMark = {
+ _type: "link";
+ href: string;
+ isButton?: boolean;
+};
+
+// ----------------------------
+// PortableText Components
+// ----------------------------
 export const PortableTextComponents: PortableTextReactComponents = {
  types: {
   image: ({ value }: PortableTextTypeComponentProps<SanityImageValue>) => {
    if (!value?.asset?.url) return null;
+
+   const width = value.asset.metadata?.dimensions?.width || 500;
+   const height = value.asset.metadata?.dimensions?.height || 500;
+
    return (
     <Image
      src={value.asset.url}
      alt={value.alt || " "}
-     width={value.asset.metadata?.dimensions?.width || 500}
-     height={value.asset.metadata?.dimensions?.height || 500}
+     width={width}
+     height={height}
     />
    );
   },
+
+  buttonGroup: ({ value }: PortableTextTypeComponentProps<ButtonGroupType>) => {
+   if (!value?.buttons || !Array.isArray(value.buttons)) return null;
+
+   return (
+    <div style={{ margin: "1rem 0" }}>
+     <Button.Group>
+      {value.buttons.map((btn, i) => (
+       <Button
+        key={i}
+        href={getEnvironmentAwareUrl(btn.href)}
+        type={btn.type || "primary"}
+        label={btn.label}
+       />
+      ))}
+     </Button.Group>
+    </div>
+   );
+  },
  },
+
  block: {
   normal: ({ children }) => <Paragraph marginBottom={2}>{children}</Paragraph>,
   h1: ({ children }) => <Heading level={1}>{children}</Heading>,
@@ -52,32 +100,32 @@ export const PortableTextComponents: PortableTextReactComponents = {
    </blockquote>
   ),
  },
+
  list: {
   bullet: ({ children }) => <Ul>{children}</Ul>,
   number: ({ children }) => <Ol>{children}</Ol>,
  },
+
  listItem: {
   bullet: ({ children }) => <Li>{children}</Li>,
   number: ({ children }) => <Li>{children}</Li>,
  },
+
  marks: {
-  link: ({
-   value,
-   children,
-  }: PortableTextMarkComponentProps<{
-   _type: "link";
-   href: string;
-   isButton?: boolean;
-  }>) => {
+  link: ({ value, children }: PortableTextMarkComponentProps<LinkMark>) => {
    if (!value?.href) return <>{children}</>;
 
    const adjustedHref = getEnvironmentAwareUrl(value.href);
 
    if (value.isButton) {
     return (
-     <Button href={adjustedHref} type="primary">
-      {children}
-     </Button>
+     <div style={{ margin: "1rem 0" }}>
+      <Button.Group>
+       <Button href={adjustedHref} type="primary">
+        {children}
+       </Button>
+      </Button.Group>
+     </div>
     );
    }
 
@@ -95,7 +143,8 @@ export const PortableTextComponents: PortableTextReactComponents = {
    );
   },
  },
- // ✅ Default fallbacks to satisfy TypeScript
+
+ // ✅ TypeScript-required fallbacks
  hardBreak: () => <br />,
  unknownMark: ({ children }) => <>{children}</>,
  unknownType: ({ value }) => <pre>{JSON.stringify(value, null, 2)}</pre>,
