@@ -16,7 +16,9 @@ interface ButtonProps {
   variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white"; // Button style
   actionType?: "button" | "submit" | "reset"; // HTML button type
   href?: string; // Fallback URL
+  type?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white"; // Alias for `variant`
   children?: React.ReactNode; // Optional children for custom content
+  buttonType?: "button" | "submit" | "reset"; // HTML button type
 }
 
 // Types for Group component props
@@ -56,16 +58,18 @@ const Button: React.FC<ButtonProps> & {
   internalPage,
   externalUrl,
   size = "medium",
-  variant = "primary",
+  variant,
+  type,
   actionType = "button",
   href,
   children,
 }) => {
-  console.log({linkType, internalPage, externalUrl, href});
+  const resolvedVariant = variant || type; // Merge `variant` and `type`
+
   const buttonClasses = cx({
     button: true,
     [`size--${size}`]: size,
-    [`variant--${variant}`]: variant,
+    [`variant--${resolvedVariant}`]: resolvedVariant, // Use merged `variant` and `type`
   });
 
   const resolvedHref =

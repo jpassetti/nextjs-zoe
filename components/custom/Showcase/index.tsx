@@ -52,7 +52,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
                 key={index}
                 href={button.linkType === "internal" ? button.internalPage?.slug?.current : button.externalUrl}
                 label={button.label}
-                type={button.variant || "primary"}
+                variant={button.variant || "primary"}
               />
             ))}
           </Button.Group>
