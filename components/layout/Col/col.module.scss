@@ -1,7 +1,7 @@
 @use "../../../sass/abstracts/mixins";
 @use "../../../sass/abstracts/variables";
 
-$sizes: xs, sm, md, lg;
+$sizes: xs, sm, md, lg, xl;
 
 .col {
  width: 100%;

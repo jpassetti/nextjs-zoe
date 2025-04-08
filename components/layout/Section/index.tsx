@@ -13,6 +13,9 @@ interface SectionProps {
   | "primary-light"
   | "secondary"
   | "tertiary"
+  | "accent"
+  | "white"
+  | "black"
   | string; // You can add more predefined colors or allow any string for backgroundColor
  children: React.ReactNode; // The content inside the section (required)
 }

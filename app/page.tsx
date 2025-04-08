@@ -1,17 +1,36 @@
 import { Fragment } from "react";
+import { sanityClient } from "@/sanity/client";
+import { Section } from "@/lib/sanity";
+import Showcase from "@/components/custom/Showcase";
+import ColumnsSection from "../components/custom/ColumnsSection";
 
-import CTA from "../components/custom/CTA";
-import HomepageAbout from "@/components/custom/Homepage/About";
-import Showcase from "../components/custom/Homepage/Showcase";
-import HomepageServices from "@/components/custom/Homepage/Services";
+export default async function Home() {
+  // Fetch the "home" page data from Sanity
+  const homePageData = await sanityClient.fetch<{
+    sections: Section[];
+  }>(`
+    *[_type == "page" && slug.current == "home"][0]{
+      sections[] {
+        _type,
+        ...
+      }
+    }
+  `);
 
-export default function Home() {
- return (
-  <Fragment>
-   <Showcase />
-   <HomepageAbout />
-   <HomepageServices />
-   <CTA />
-  </Fragment>
- );
+  const { sections = [] } = homePageData || {};
+
+  return (
+    <Fragment>
+      {sections.map((section, index) => {
+        switch (section._type) {
+          case "showcaseSection":
+            return <Showcase key={index} data={section} />;
+          case "columnsSection":
+            return <ColumnsSection key={index} data={section} />;
+          default:
+            return null;
+        }
+      })}
+    </Fragment>
+  );
 }

@@ -14,6 +14,10 @@ interface ButtonProps {
  type?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
  buttonType?: "button" | "submit" | "reset";
  children?: React.ReactNode; // ✅ New
+ linkType?: "internal" | "external"; // ✅ Sanity link type
+ internalPage?: { slug?: { current?: string } }; // ✅ Sanity internal page
+ externalUrl?: string; // ✅ Sanity external URL
+ size?: "small" | "medium" | "large"; // ✅ New size prop
 }
 
 // Types for Group component props
@@ -54,17 +58,29 @@ const Button: React.FC<ButtonProps> & {
  type = "primary",
  buttonType = "button",
  children,
+ linkType,
+ internalPage,
+ externalUrl,
+ size = "medium", // Default size
 }) => {
  const buttonClasses = cx({
   button: true,
   [`color--${color}`]: color,
   [`type--${type}`]: type,
+  [`size--${size}`]: size, // Add size class
  });
+
+ const resolvedHref =
+  linkType === "internal"
+   ? internalPage?.slug?.current
+   : linkType === "external"
+   ? externalUrl
+   : href;
 
  const content = children || label;
 
- return href ? (
-  <Link href={href} className={buttonClasses}>
+ return resolvedHref ? (
+  <Link href={resolvedHref} className={buttonClasses}>
    {content}
   </Link>
  ) : (

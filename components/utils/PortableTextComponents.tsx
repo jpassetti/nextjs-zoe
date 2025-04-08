@@ -147,7 +147,10 @@ export const PortableTextComponents: PortableTextReactComponents = {
  // ✅ TypeScript-required fallbacks
  hardBreak: () => <br />,
  unknownMark: ({ children }) => <>{children}</>,
- unknownType: ({ value }) => <pre>{JSON.stringify(value, null, 2)}</pre>,
+ unknownType: ({ value }) => {
+  console.error("Unknown type encountered in PortableText: ", value);
+  return <div>Unsupported content type</div>;
+ },
  unknownBlockStyle: ({ children }) => <Paragraph>{children}</Paragraph>,
  unknownList: ({ children }) => <Ul>{children}</Ul>,
  unknownListItem: ({ children }) => <Li>{children}</Li>,
