@@ -1,6 +1,6 @@
 import React from "react";
 import classNames from "classnames/bind";
-import Icon from "@/components/html/Icon";
+import Icon, { icons } from "@/components/html/Icon";
 import Link from "next/link";
 import styles from "./button.module.scss";
 
@@ -122,11 +122,18 @@ const UI: React.FC<UIProps> = ({
   [`background-color--${backgroundColor}`]: backgroundColor,
  });
 
+ const iconName = type === "primary" ? "menu" : type; // Map `primary` to a valid icon name
+
+ if (!icons[iconName as keyof typeof icons]) {
+  console.error(`Invalid icon name: ${iconName}`);
+  return null;
+ }
+
  return (
   <button className={uiClasses} type={buttonType} onClick={clickHandler}>
    {label ? label : ""}
    <Icon
-    icon={type} // ✅ This will still use "next"/"previous" for styling
+    name={iconName as keyof typeof icons} // Ensure `name` is a valid key
     color={
      backgroundColor === "black" || backgroundColor === "accent"
       ? "white"

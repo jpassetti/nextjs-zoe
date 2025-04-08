@@ -35,7 +35,7 @@ const ColumnsSection: React.FC<ColumnsSectionProps> = ({ data }) => {
     <Section backgroundColor={backgroundColor || "transparent"}>
       <Container>
         {rows.map((row, rowIndex) => (
-          <Row key={rowIndex}>
+          <Row key={rowIndex} justifyContent="center">
             {row.columns.map((column, columnIndex) => (
               <Col
                 key={columnIndex}

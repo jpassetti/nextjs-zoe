@@ -4,7 +4,7 @@ import { PortableTextComponents } from "@/components/utils/PortableTextComponent
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
 import Button from "@/components/html/Button";
-import Icon from "@/components/html/Icon";
+import Icon, { icons } from "@/components/html/Icon";
 
 interface HeadingBlock {
   _type: "headingBlock";
@@ -40,6 +40,7 @@ interface ButtonBlock {
 interface IconBlock {
   _type: "iconBlock";
   icon: string;
+  alt?: string;
 }
 
 interface PortableTextBlock {
@@ -111,7 +112,18 @@ const ParseContent: React.FC<ParseContentProps> = ({ content }) => {
               </div>
             );
           case "iconBlock":
-            return <Icon key={index} name={block.icon} />;
+            const iconName = block.icon as keyof typeof icons; // Narrow the type
+            if (!icons[iconName]) {
+              console.error(`Invalid icon name: ${block.icon}`);
+              return null;
+            }
+            return (
+              <Icon
+                key={index}
+                name={iconName}
+                alt={block.alt || `${block.icon} icon`}
+              />
+            );
           case "block":
             return (
               <PortableText

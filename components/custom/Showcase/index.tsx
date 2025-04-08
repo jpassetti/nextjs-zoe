@@ -2,11 +2,12 @@ import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import { urlFor } from "@/lib/sanity";
 import styles from "./showcase.module.scss";
-import { Image } from "@sanity/types";
+import { Image as SanityImage } from "@sanity/types";
+import Image from "next/image";
 
 interface ShowcaseProps {
   data: {
-    backgroundImage?: Image & {
+    backgroundImage?: SanityImage & {
       alt?: string;
     };
     title?: string;
@@ -26,12 +27,16 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
   return (
     <div
       className={styles.showcase}
-      style={{
-        backgroundImage: backgroundImage?.asset ? `url(${urlFor(backgroundImage).url()})` : undefined,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
     >
+      {backgroundImage?.asset && (
+        <Image
+          src={urlFor(backgroundImage).url()}
+          alt={backgroundImage.alt || "Showcase Image"}
+          layout="fill"
+          objectFit="cover"
+          className={styles.showcase_image}
+        />
+      )}
       <div className={styles.showcase_content}>
         {title && (
           <Heading level={1} color="white" marginBottom={2}>
