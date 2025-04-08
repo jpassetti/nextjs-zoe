@@ -12,7 +12,16 @@ export default async function Home() {
     *[_type == "page" && slug.current == "home"][0]{
       sections[] {
         _type,
-        ...
+        ...,
+        buttons[] {
+          label,
+          linkType,
+          internalPage-> {
+            slug
+          },
+          externalUrl,
+          variant
+        }
       }
     }
   `);

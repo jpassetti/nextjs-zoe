@@ -24,6 +24,8 @@ interface ShowcaseProps {
 const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
   const { backgroundImage, title, buttons } = data;
 
+  console.log("Showcase buttons data:", buttons);
+
   return (
     <div
       className={styles.showcase}

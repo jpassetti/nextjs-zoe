@@ -8,16 +8,15 @@ const cx = classNames.bind(styles);
 
 // Types for Button component props
 interface ButtonProps {
- color?: "primary" | "secondary" | "accent" | "inverted" | "white" | "black";
- href?: string;
- label?: string;
- type?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
- buttonType?: "button" | "submit" | "reset";
- children?: React.ReactNode; // ✅ New
- linkType?: "internal" | "external"; // ✅ Sanity link type
- internalPage?: { slug?: { current?: string } }; // ✅ Sanity internal page
- externalUrl?: string; // ✅ Sanity external URL
- size?: "small" | "medium" | "large"; // ✅ New size prop
+  label?: string; // Text displayed on the button
+  linkType?: "internal" | "external"; // Determines the type of link
+  internalPage?: { slug?: { current?: string } }; // Reference to an internal page
+  externalUrl?: string; // URL for external links
+  size?: "small" | "medium" | "large"; // Button size
+  variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white"; // Button style
+  actionType?: "button" | "submit" | "reset"; // HTML button type
+  href?: string; // Fallback URL
+  children?: React.ReactNode; // Optional children for custom content
 }
 
 // Types for Group component props
@@ -52,42 +51,41 @@ const Button: React.FC<ButtonProps> & {
  UI: React.FC<UIProps>;
  Step: React.FC<StepProps>;
 } = ({
- color,
- href,
- label,
- type = "primary",
- buttonType = "button",
- children,
- linkType,
- internalPage,
- externalUrl,
- size = "medium", // Default size
+  label,
+  linkType,
+  internalPage,
+  externalUrl,
+  size = "medium",
+  variant = "primary",
+  actionType = "button",
+  href,
+  children,
 }) => {
- const buttonClasses = cx({
-  button: true,
-  [`color--${color}`]: color,
-  [`type--${type}`]: type,
-  [`size--${size}`]: size, // Add size class
- });
+  console.log({linkType, internalPage, externalUrl, href});
+  const buttonClasses = cx({
+    button: true,
+    [`size--${size}`]: size,
+    [`variant--${variant}`]: variant,
+  });
 
- const resolvedHref =
-  linkType === "internal"
-   ? internalPage?.slug?.current
-   : linkType === "external"
-   ? externalUrl
-   : href;
+  const resolvedHref =
+    linkType === "internal"
+      ? internalPage?.slug?.current
+      : linkType === "external"
+      ? externalUrl
+      : href;
 
- const content = children || label;
+  const content = children || label;
 
- return resolvedHref ? (
-  <Link href={resolvedHref} className={buttonClasses}>
-   {content}
-  </Link>
- ) : (
-  <button className={buttonClasses} type={buttonType}>
-   {content}
-  </button>
- );
+  return resolvedHref ? (
+    <Link href={resolvedHref} className={buttonClasses}>
+      {content}
+    </Link>
+  ) : (
+    <button className={buttonClasses} type={actionType}>
+      {content}
+    </button>
+  );
 };
 
 // Group component
