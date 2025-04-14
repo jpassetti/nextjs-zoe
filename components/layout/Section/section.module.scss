@@ -1,3 +1,6 @@
+@use "../../../sass/abstracts/mixins";
+
+
 .section {
  background-color: gray;
  padding: 3rem 0;
@@ -25,4 +28,5 @@
  &.background-color--black {
   background-color: #2c2c2c;
  }
+ @include mixins.textAlign();
 }

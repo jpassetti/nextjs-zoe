@@ -27,7 +27,9 @@ interface PageData {
 }
 
 export default async function Page({ params }: { params?: { slug: string } }) {
-  const pageData: PageData = await getPage(params?.slug ?? "home");
+  const slug = params?.slug ?? ""; // Provide a default value for slug
+
+  const pageData: PageData = await getPage(slug); // Use the defaulted slug
 
   if (!pageData) {
     notFound();
@@ -35,9 +37,11 @@ export default async function Page({ params }: { params?: { slug: string } }) {
 
   const sections = Array.isArray(pageData?.sections) ? pageData.sections : [];
 
+  const bannedSlugs = ["home", "services"];
+
   return (
     <Fragment>
-      {params?.slug !== "home" && <SanityPage page={pageData} />}
+      {!bannedSlugs.includes(slug) && <SanityPage page={pageData} />}
       {sections.length > 0 && (
         sections.map((section, index) => {
           switch (section._type) {

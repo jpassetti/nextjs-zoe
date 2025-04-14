@@ -20,6 +20,7 @@ interface RowProps {
   | "space-between"
   | "space-around"
   | "space-evenly"; // Possible values for justifyContent
+  textAlign?: "left" | "center" | "right"; // Possible values for textAlign
 }
 
 const Row: React.FC<RowProps> = ({
@@ -30,6 +31,7 @@ const Row: React.FC<RowProps> = ({
  gap,
  height,
  justifyContent,
+ textAlign,
 }) => {
  // Generate the dynamic class names based on the props
  const rowClasses = cx({
@@ -39,6 +41,7 @@ const Row: React.FC<RowProps> = ({
   [`flex-direction--${flexDirection}`]: flexDirection,
   [`gap--${gap}`]: gap,
   [`height--${height}`]: height,
+  [`text-align-${textAlign}`]: textAlign,
   className, // Allows additional custom classes
  });
 

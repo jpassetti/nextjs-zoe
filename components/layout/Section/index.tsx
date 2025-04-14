@@ -18,16 +18,19 @@ interface SectionProps {
   | "black"
   | string; // You can add more predefined colors or allow any string for backgroundColor
  children: React.ReactNode; // The content inside the section (required)
+    textAlign?: "left" | "center" | "right"; // Optional text alignment
 }
 
 const Section: React.FC<SectionProps> = ({
  backgroundColor = "secondary",
  children,
+ textAlign
 }) => {
  // Generate the dynamic class names based on the backgroundColor prop
  const sectionClasses = cx({
   section: true,
   [`background-color--${backgroundColor}`]: backgroundColor,
+    [`text-align-${textAlign}`]: textAlign, // Apply text alignment if provided
  });
 
  return <section className={sectionClasses}>{children}</section>;

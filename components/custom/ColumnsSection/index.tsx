@@ -24,6 +24,7 @@ interface ColumnsSectionProps {
       backgroundColor?: string;
     }>;
     backgroundColor?: string;
+    textAlign?: "left" | "center"; // Added textAlign property
     adminTitle?: string;
   };
 }
@@ -32,10 +33,16 @@ const ColumnsSection: React.FC<ColumnsSectionProps> = ({ data }) => {
   const { backgroundColor, rows } = data;
 
   return (
-    <Section backgroundColor={backgroundColor || "transparent"}>
+    <Section 
+    backgroundColor={backgroundColor || "transparent"}
+    textAlign={data.textAlign || "left"} // Apply text alignment to Section
+    >
       <Container>
         {rows.map((row, rowIndex) => (
-          <Row key={rowIndex} justifyContent="center">
+          <Row
+            key={rowIndex}
+            justifyContent="center"
+          >
             {row.columns.map((column, columnIndex) => (
               <Col
                 key={columnIndex}
@@ -44,7 +51,6 @@ const ColumnsSection: React.FC<ColumnsSectionProps> = ({ data }) => {
                 md={column.width?.md || 12}
                 lg={column.width?.lg || 12}
                 xl={column.width?.xl || 12}
-                textAlign="center"
               >
                 {typeof column.content === "string" ? (
                   <Paragraph>{column.content}</Paragraph>
