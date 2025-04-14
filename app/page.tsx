@@ -1,45 +1,5 @@
-import { Fragment } from "react";
-import { sanityClient } from "@/sanity/client";
-import { Section } from "@/lib/sanity";
-import Showcase from "@/components/custom/Showcase";
-import ColumnsSection from "../components/custom/ColumnsSection";
+import Page from "./[slug]/page";
 
-export default async function Home() {
-  // Fetch the "home" page data from Sanity
-  const homePageData = await sanityClient.fetch<{
-    sections: Section[];
-  }>(`
-    *[_type == "page" && slug.current == "home"][0]{
-      sections[] {
-        _type,
-        ...,
-        buttons[] {
-          label,
-          linkType,
-          internalPage-> {
-            slug
-          },
-          externalUrl,
-          variant
-        }
-      }
-    }
-  `);
-
-  const { sections = [] } = homePageData || {};
-
-  return (
-    <Fragment>
-      {sections.map((section, index) => {
-        switch (section._type) {
-          case "showcaseSection":
-            return <Showcase key={index} data={section} />;
-          case "columnsSection":
-            return <ColumnsSection key={index} data={section} />;
-          default:
-            return null;
-        }
-      })}
-    </Fragment>
-  );
+export default function HomePage() {
+  return <Page params={{ slug: "home" }} />;
 }

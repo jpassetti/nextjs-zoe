@@ -1,0 +1,70 @@
+.comparisonTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: #333;
+}
+
+.comparisonTable th,
+.comparisonTable td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+}
+
+.comparisonTable th {
+  background-color: #f9f9f9;
+  font-weight: bold;
+  text-align: center;
+  font-family: var(--font-secondary);
+  font-size: .9rem;
+}
+.comparisonTable th:nth-child(1) {
+ text-align: left;
+}
+.comparisonTable td {
+    font-family: var(--font-primary);
+    font-weight: 400;
+}
+
+.comparisonTable tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.comparisonTable tr:hover {
+  background-color: #e9e9e9;
+}
+
+.comparisonTable .featureLabel {
+  //font-weight: bold;
+  text-align: left;
+}
+
+.comparisonTable .checkmark {
+  color: green;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.comparisonTable .xmark {
+  color: red;
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .comparisonTable th,
+  .comparisonTable td {
+    padding: 1rem;
+  }
+
+  .comparisonTable th {
+    //font-size: 1.125rem;
+  }
+
+  .comparisonTable .checkmark,
+  .comparisonTable .xmark {
+    font-size: 1.5rem;
+  }
+}

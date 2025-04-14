@@ -1,92 +1,54 @@
-html,
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-ul,
-li,
-ol {
- padding: 0;
- margin: 0;
- font: inherit;
+h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, div, body, html {
+    font: inherit;
+    margin: 0;
+    padding: 0;
 }
-
-ol,
-ul,
-li {
- list-style: none;
-}
-
 * {
- box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-/* Default Theme (Theme 1) */
+// Custom global styles
 :root {
- --color-primary: #bb8588;
- --color-primary--light: #dcb3b6;
- --color-primary--dark: #4b2859;
- --color-secondary: #f7f3ed;
- --color-secondary-light: #f7f3ed;
- --color-accent: teal;
- //--color-accent: #d9915c;
- --color-text: #2c2c2c;
- --color-text-inverse: #fff;
- --font-primary: "Lora", serif;
- --font-secondary: "Poppins", sans-serif;
- --font-headlines: "Poppins", sans-serif;
- --font-buttons: "Poppins", sans-serif;
- --font-navigation: "Poppins", sans-serif;
+  --color-primary: #bb8588;
+  --color-primary--light: #dcb3b6;
+  --color-primary--dark: #4b2859;
+  --color-secondary: #f7f3ed;
+  --color-secondary-light: #f7f3ed;
+  --color-accent: teal;
+  --color-text: #2c2c2c;
+  --color-text-inverse: #fff;
+  --font-primary: "Lora", serif;
+  --font-secondary: "Poppins", sans-serif;
+  --font-headlines: "Poppins", sans-serif;
+  --font-buttons: "Poppins", sans-serif;
+  --font-navigation: "Poppins", sans-serif;
 }
 
 html,
 body {
- color: var(--text-color);
- font-size: 16px;
+  color: var(--color-text);
+  font-size: 16px;
 }
+
 .responsive {
- width: 100%;
- height: auto;
+  width: 100%;
+  height: auto;
 }
+
 h1 {
- color: var(--primary-color);
-}
-
-#progress {
- position: fixed;
- top: 20px;
- left: 20px;
- transform: rotate(-90deg);
-}
-
-circle {
- stroke-dashoffset: 0;
- stroke-width: 15%;
- fill: none;
-}
-
-.bg {
- stroke: black;
- opacity: 0.3;
-}
-
-#progress .indicator {
- stroke: red;
+  color: var(--color-primary);
 }
 
 .train-outer {
- width: 100%;
- height: 500px;
- background-color: limegreen;
- margin-top: 100px;
- overflow-x: scroll;
+  width: 100%;
+  height: 500px;
+  background-color: limegreen;
+  margin-top: 100px;
+  overflow-x: scroll;
 }
+
 .train-inner {
- width: 5000px;
- height: 500px;
- background-color: teal;
+  width: 5000px;
+  height: 500px;
+  background-color: teal;
 }

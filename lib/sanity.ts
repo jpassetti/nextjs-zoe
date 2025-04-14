@@ -73,7 +73,23 @@ export async function getPage(slug: string) {
         },
         alt
       },
-      excerpt
+      excerpt,
+      sections[] {
+        _type,
+        ...,
+        buttons[] {
+          label,
+          linkType,
+          internalPage-> {
+            slug
+          },
+          externalUrl,
+          variant
+        },
+        includedFeatures[]-> {
+          label
+        }
+      }
     }
   `;
  return await sanityClient.fetch(query, { slug });
@@ -128,4 +144,19 @@ export async function getTransformationSlides() {
     }
   `;
  return await sanityClient.fetch(query);
+}
+
+export async function getComparisonTableData(
+  featureRefs: { _ref: string }[]
+) {
+  const ids = featureRefs.map((ref) => ref._ref);
+  const query = groq`*[_type == "feature" && _id in $ids]{ _id, label }`;
+  const fetchedFeatures = await sanityClient.fetch(query, { ids });
+
+  // Sort the features to match the order of the `_ref` values
+  const sortedFeatures = ids.map((id) =>
+    fetchedFeatures.find((feature: { _id: string }) => feature._id === id)
+  );
+
+  return sortedFeatures;
 }

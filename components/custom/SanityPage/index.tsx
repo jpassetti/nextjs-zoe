@@ -1,5 +1,5 @@
+import type { PageType } from "@/lib/types/page";
 import { Fragment } from "react";
-import { PortableText } from "@portabletext/react";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -8,12 +8,13 @@ import Container from "@/components/layout/Container";
 import CTA from "@/components/custom/CTA";
 import FeaturedImageContainer from "@/components/custom/FeaturedImageContainer";
 import Heading from "@/components/html/Heading";
+import { PortableText }  from "@portabletext/react";
 import { PortableTextComponents } from "@/components/utils/PortableTextComponents";
 import Row from "@/components/layout/Row";
 import SanityContent from "@/components/custom/SanityContent";
 import Section from "@/components/layout/Section";
 
-export default function SanityPage({ page }) {
+export default function SanityPage({ page }: { page: PageType | null }) {
  if (!page) {
   notFound();
  }
@@ -51,7 +52,7 @@ export default function SanityPage({ page }) {
       <Col sm={12}>
        <SanityContent>
         <PortableText
-         value={page.content}
+         value={page.content || []} // Ensure value is always a valid array
          components={PortableTextComponents}
         />
        </SanityContent>

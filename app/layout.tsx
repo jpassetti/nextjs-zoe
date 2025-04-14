@@ -56,10 +56,10 @@ export default function RootLayout({
  return (
   <html
    lang="en"
-   className={`${theme === "theme1" ? montserrat.variable + " " + playfair.variable : lora.variable + " " + poppins.variable}`}
+   className={`p-0 m-0 ${theme === "theme1" ? montserrat.variable + " " + playfair.variable : lora.variable + " " + poppins.variable}`}
    data-theme={theme}
   >
-   <body>
+   <body className="p-0 m-0">
     <ViewportProvider>
      <Header />
      <main>{children}</main>

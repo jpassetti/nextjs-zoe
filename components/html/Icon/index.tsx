@@ -8,6 +8,7 @@ interface IconProps {
   name: keyof typeof icons; // Restrict `name` to valid keys in the `icons` object
   color?: "black" | "white" | "accent" | string; // Extendable color options
   alt?: string; // Alt text for accessibility
+  size?: "small" | "medium" | "large"; // Optional size prop
 }
 
 // Define a lookup table for SVG paths and viewBox dimensions
@@ -40,9 +41,17 @@ export const icons = {
     path: "M16 19V5l-11 7z",
     viewBox: "0 0 24 24",
   },
+  checkmark: {
+    path: "M438.6 105.4c12.5 12.5 12.5 32.8 0 45.3l-256 256c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0L160 338.7 393.4 105.4c12.5-12.5 32.8-12.5 45.3 0z",
+    viewBox: "0 0 448 512",
+  },
+  xmark: {
+      path: "M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z",
+      viewBox: "0 0 384 512",
+  }
 };
 
-const Icon: React.FC<IconProps> = ({ name, color = "black", alt }) => {
+const Icon: React.FC<IconProps> = ({ name, color = "black", alt, size="medium" }) => {
   const icon = icons[name];
 
   if (!icon) {
@@ -53,6 +62,7 @@ const Icon: React.FC<IconProps> = ({ name, color = "black", alt }) => {
   const iconClasses = cx({
     icon: true,
     [`fill--${color}`]: color,
+    [`size--${size}`]: size, // Add size class
   });
 
   return (

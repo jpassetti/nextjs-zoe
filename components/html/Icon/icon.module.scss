@@ -16,5 +16,17 @@
 .fill--accent {
   fill: var(--color-accent); // Use your project's accent color variable
 }
+.size--small {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.size--medium {
+  width: 3rem;
+  height: 3rem;
+}
+.size--large {
+  width: 4rem;
+  height: 4rem;
+}
 
 // Add more color classes as needed
