@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { getPage } from "@/lib/sanity";
+import { getPage } from "@/lib/sanity/queries/getPage";
 import type { Section, SanityImage } from "@/lib/sanity";
 import { notFound } from "next/navigation";
 import { PortableTextBlock } from "@portabletext/types";

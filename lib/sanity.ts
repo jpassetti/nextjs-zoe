@@ -1,4 +1,4 @@
-import { sanityClient } from "@/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { groq } from "next-sanity";
 import { Questionnaire } from "@/lib/types/questionnaire";
 import imageUrlBuilder from "@sanity/image-url";

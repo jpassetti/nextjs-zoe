@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sanityClient } from "@/sanity/client";
+import { sanityClient } from "@/lib/sanity/client";
 import { groq } from "next-sanity";
 
 export async function GET(req: Request) {

@@ -17,7 +17,7 @@ interface ParseContentProps {
 
 const ComparisonTableWrapper = ({ features, packages }: ComparisonTableBlockProps) => {
   const [loading, setLoading] = useState<boolean>(true);
-
+  console.log({features});
   useEffect(() => {
     async function fetchData() {
       try {
@@ -34,7 +34,7 @@ const ComparisonTableWrapper = ({ features, packages }: ComparisonTableBlockProp
   if (loading) return <p>Loading table...</p>;
 
   const transformedFeatures = features.map((feature, index) => ({
-    _id: feature._ref, // Use `_ref` as `_id`
+    _id: feature._id, // Use `_id` as is
     _ref: feature._ref, // Keep `_ref` as is
     _type: feature._type, // Preserve `_type`
     _key: feature._key || `feature-${index}`, // Use existing `_key` or generate one
@@ -44,7 +44,7 @@ const ComparisonTableWrapper = ({ features, packages }: ComparisonTableBlockProp
   const transformedPackages = packages.map((pkg, pkgIndex) => ({
     ...pkg,
     includedFeatures: pkg.includedFeatures.map((feature, featureIndex) => ({
-      _id: feature._ref, // Use `_ref` as `_id`
+      _id: feature._id, // Use `_ref` as `_id`
       _ref: feature._ref, // Keep `_ref` as is
       _type: feature._type, // Preserve `_type`
       _key: feature._key || `feature-${pkgIndex}-${featureIndex}`, // Use existing `_key` or generate one

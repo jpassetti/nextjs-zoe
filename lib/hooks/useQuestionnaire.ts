@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
-import { getQuestionnaire } from "@/lib/sanity";
+import { getQuestionnaire } from "@/lib/sanity/queries/getQuestionnaire";
 import { Questionnaire, Responses } from "@/lib/types/questionnaire";
 import { validationPatterns } from "@/lib/validationPatterns";
 

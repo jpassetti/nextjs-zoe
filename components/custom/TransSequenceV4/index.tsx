@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { PortableTextBlock } from "@portabletext/types";
 import dynamic from "next/dynamic";
-import { getTransformationSlides } from "@/lib/sanity";
+import { getTransformationSlides } from "@/lib/sanity/queries/getTransformationSlides";
 import Button from "@/components/html/Button";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
