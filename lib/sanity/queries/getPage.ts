@@ -17,6 +17,27 @@ export async function getPage(slug: string) {
         alt
       },
       excerpt,
+      callToAction-> { // Dereference the callToAction document
+        headline,
+        paragraph,
+        buttons {
+          ...,
+          buttonGroup[] {
+            label,
+            linkType,
+            "internalPage": internalPage-> {
+              _id,
+              slug {
+                current
+              }
+            },
+            externalUrl,
+            variant,
+            size,
+            actionType
+          }
+        }
+      },
       sections[] {
         _type,
         ...,
@@ -37,10 +58,29 @@ export async function getPage(slug: string) {
         _type == "columnsSection" => {
           ...,
           rows[] {
-          ...,
-            columns[] {
             ...,
-              content[]
+            columns[] {
+              ...,
+              content[] {
+                ...,
+                     _type == "button" => {
+                  ...,
+                  
+                        label,
+                        linkType,
+                        "internalPage": internalPage-> {
+                            _id,
+                            slug {
+                            current
+                            }
+                        },
+                        externalUrl,
+                        variant,
+                        size,
+                        actionType
+                    }
+                },
+             
             }
           }
         }

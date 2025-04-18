@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 
 import Col from "@/components/layout/Col";
 import Container from "@/components/layout/Container";
-import CTA from "@/components/custom/CTA";
 import FeaturedImageContainer from "@/components/custom/FeaturedImageContainer";
 import Heading from "@/components/html/Heading";
 import { PortableText }  from "@portabletext/react";
@@ -61,8 +60,7 @@ export default function SanityPage({ page }: { page: PageType | null }) {
     </Container>
    </Section>
 
-   {/* Call-to-Action Section */}
-   <CTA />
+
   </Fragment>
  );
 }

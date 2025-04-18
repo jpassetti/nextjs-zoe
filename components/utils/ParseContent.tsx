@@ -102,17 +102,14 @@ const ParseContent: React.FC<ParseContentProps> = ({ content }) => {
             return null;
 
           case "button":
+            console.log(block?.internalPage?.slug.current);
             if (isButtonProps(block)) {
               return (
                 <Button.Group key={index}>
                   <Button
                     _type="button"
                     linkType={block.linkType}
-                    href={
-                      block.linkType === "internal"
-                        ? `/${block.internalPage?.slug?.current}`
-                        : block.externalUrl
-                    }
+                    internalPage={block.internalPage}
                     size={block.size || "medium"}
                     label={block.label}
                     actionType={block.actionType}

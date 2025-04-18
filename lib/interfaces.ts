@@ -1,3 +1,6 @@
+import { PortableTextBlock } from "@portabletext/types";
+import type { Section, SanityImage } from "@/lib/sanity";
+
 // Unified interfaces for both ParseContent and ComparisonTable
 export interface Feature {
     _type: "reference"; // Type of the feature
@@ -50,6 +53,11 @@ export interface ButtonGroupBlockProps {
     buttons: ButtonProps[]; // Array of button properties
 }
 
+export interface CallToActionProps {
+        headline?: string;
+        paragraph?: string;
+        buttons?: ButtonBlockProps; // Reuse the ButtonGroupBlockProps interface
+}
 export interface GroupProps {
     borderTop?: number;
     children: React.ReactNode;
@@ -78,6 +86,26 @@ export interface HeadingBlockProps {
     _type: "headingBlock";
     level: number;
     text: string;
+}
+
+
+export interface PageData {
+  title: string;
+  slug?: { current: string };
+  content?: PortableTextBlock[];
+  sections?: Section[];
+  featuredImage?: SanityImage & {
+    asset: {
+      url: string;
+      metadata: {
+        dimensions: {
+          width: number;
+          height: number;
+        };
+      };
+    };
+  };
+  callToAction?: CallToActionProps; // Reference the unified CallToAction interface
 }
 
 export interface ParagraphBlockProps {

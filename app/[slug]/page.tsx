@@ -1,30 +1,13 @@
 import { Fragment } from "react";
 import { getPage } from "@/lib/sanity/queries/getPage";
-import type { Section, SanityImage } from "@/lib/sanity";
+import type { PageData } from "@/lib/interfaces"; // Import PageData
 import { notFound } from "next/navigation";
-import { PortableTextBlock } from "@portabletext/types";
 
 import ColumnsSection from "@/components/custom/ColumnsSection";
 import SanityPage from "@/components/custom/SanityPage";
 import Showcase from "@/components/custom/Showcase";
+import CTA from "@/components/custom/CTA";
 
-interface PageData {
-  title: string;
-  slug?: { current: string };
-  content?: PortableTextBlock[]; // Updated to match the expected type
-  sections?: Section[];
-  featuredImage?: SanityImage & {
-    asset: {
-      url: string;
-      metadata: {
-        dimensions: {
-          width: number;
-          height: number;
-        };
-      };
-    };
-  };
-}
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; // Await params before destructuring
@@ -35,14 +18,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
-  const sections = Array.isArray(pageData?.sections) ? pageData.sections : [];
-
+  const { sections, callToAction } = pageData;
   const bannedSlugs = ["home", "services", "consultation"];
-
+  
   return (
     <Fragment>
       {!bannedSlugs.includes(slug) && <SanityPage page={pageData} />}
-      {sections.length > 0 &&
+      {sections && sections.length > 0 &&
         sections.map((section, index) => {
           switch (section._type) {
             case "showcaseSection":
@@ -53,6 +35,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               return null;
           }
         })}
+        {callToAction && <CTA headline={callToAction.headline} paragraph={callToAction.paragraph} buttons={callToAction.buttons} />}
+
     </Fragment>
   );
 }
