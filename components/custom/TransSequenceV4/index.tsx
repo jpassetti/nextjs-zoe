@@ -148,7 +148,8 @@ const TransSequenceV4 = () => {
         {slide.cta && (
          <Button.Group>
           <Button
-           type="primary"
+            _type="button"
+           variant="primary"
            label={slide.cta.label}
            href={slide.cta.href}
           />

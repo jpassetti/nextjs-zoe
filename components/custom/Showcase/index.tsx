@@ -24,7 +24,7 @@ interface ShowcaseProps {
 const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
   const { backgroundImage, title, buttons } = data;
 
-  console.log("Showcase buttons data:", buttons);
+  //console.log("Showcase buttons data:", buttons);
 
   return (
     <div
@@ -49,6 +49,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
           <Button.Group justifyContent="center">
             {buttons.map((button, index) => (
               <Button
+                _type="button"
                 key={index}
                 href={button.linkType === "internal" ? button.internalPage?.slug?.current : button.externalUrl}
                 label={button.label}

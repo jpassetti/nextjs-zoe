@@ -59,8 +59,8 @@ export { urlFor };
 
 // Fetch a Page (already present)
 export async function getPage(slug: string) {
- const query = groq`
-    *[_type == "page" && slug.current == $slug][0] {
+  const query = groq`
+   *[_type == "page" && slug.current == $slug][0] {
       title,
       slug,
       content,
@@ -78,27 +78,70 @@ export async function getPage(slug: string) {
         _type,
         ...,
         buttons[] {
-          label,
-          linkType,
-          internalPage-> {
-            slug
-          },
-          externalUrl,
-          variant
-        },
-        includedFeatures[]-> {
-          label
+         label,
+                  linkType,
+                  "internalPage": internalPage-> {
+                    _id,
+                    slug {
+                      current
+                    }
+                  },
+                  externalUrl,
+                  variant,
+                  size,
+                  actionType
+},
+        _type == "columnsSection" => {
+        ...,
+         paddingTop,
+              paddingBottom,
+              marginTop,
+              marginBottom,
+          rows[] {
+            ...,
+            textAlign, // Include textAlign for rows
+            columns[] {
+            ...,
+              textAlign, // Include textAlign for columns
+              content[] {
+                ...,
+                _type == "headingBlock" => {
+                  textAlign, // Include textAlign for headingBlock
+                  ...
+                },
+                _type == "paragraphBlock" => {
+                  textAlign, // Include textAlign for paragraphBlock
+                  ...
+                },
+                _type == "button" => {
+                ...,
+                label,
+                  linkType,
+                  "internalPage": internalPage-> {
+                    _id,
+                    slug {
+                      current
+                    }
+                  },
+                  externalUrl,
+                  variant,
+                  size,
+                  actionType
+                  },
+              }
+            }
+          }
         }
       }
     }
   `;
- return await sanityClient.fetch(query, { slug });
+  return await sanityClient.fetch(query, { slug });
 }
 
 // Fetch Questionnaire Data
 export async function getQuestionnaire(slug: string) {
- console.log("Fetching questionnaire for slug:", slug);
- const query = groq`
+  console.log("Fetching questionnaire for slug:", slug);
+  const query = groq`
      *[_type == "questionnaire" && slug.current == $slug][0]{
        _id,
        title,
@@ -120,18 +163,18 @@ export async function getQuestionnaire(slug: string) {
      }
    `;
 
- try {
-  const data = await sanityClient.fetch(query, { slug });
-  console.log("Sanity Response:", data);
-  return data as Questionnaire; // ✅ Explicitly cast the data to the correct type
- } catch (error) {
-  console.error("Sanity Fetch Error:", error);
-  return null;
- }
+  try {
+    const data = await sanityClient.fetch(query, { slug });
+    console.log("Sanity Response:", data);
+    return data as Questionnaire; // ✅ Explicitly cast the data to the correct type
+  } catch (error) {
+    console.error("Sanity Fetch Error:", error);
+    return null;
+  }
 }
 
 export async function getTransformationSlides() {
- const query = groq`
+  const query = groq`
     *[_type == "transformation"] | order(_createdAt asc) {
       _id,
       title,
@@ -143,7 +186,7 @@ export async function getTransformationSlides() {
       }
     }
   `;
- return await sanityClient.fetch(query);
+  return await sanityClient.fetch(query);
 }
 
 export async function getComparisonTableData(

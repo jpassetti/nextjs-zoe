@@ -1,39 +1,47 @@
-import React from "react";
-import classnames from "classnames/bind";
+import classNames from 'classnames/bind';
+
 import styles from "./section.module.scss";
 
-// Bind classNames to styles
-const cx = classnames.bind(styles);
+const cx = classNames.bind(styles);
 
-// Define types for the component props
 interface SectionProps {
- backgroundColor?:
-  | "primary"
-  | "primary-dark"
-  | "primary-light"
-  | "secondary"
-  | "tertiary"
-  | "accent"
-  | "white"
-  | "black"
-  | string; // You can add more predefined colors or allow any string for backgroundColor
- children: React.ReactNode; // The content inside the section (required)
-    textAlign?: "left" | "center" | "right"; // Optional text alignment
+   children: React.ReactNode;
+   backgroundColor?: string;
+   textAlign?: "left" | "center";
+   paddingTop?: "none" | "small" | "medium" | "large";
+   paddingBottom?: "none" | "small" | "medium" | "large";
+   marginTop?: "none" | "small" | "medium" | "large";
+   marginBottom?: "none" | "small" | "medium" | "large";
 }
 
 const Section: React.FC<SectionProps> = ({
- backgroundColor = "secondary",
- children,
- textAlign
+   children,
+   backgroundColor = "white",
+   textAlign,
+   paddingTop = "small",
+   paddingBottom = "small",
+   marginTop = "none",
+   marginBottom = "none",
 }) => {
- // Generate the dynamic class names based on the backgroundColor prop
- const sectionClasses = cx({
-  section: true,
-  [`background-color--${backgroundColor}`]: backgroundColor,
-    [`text-align-${textAlign}`]: textAlign, // Apply text alignment if provided
- });
 
- return <section className={sectionClasses}>{children}</section>;
+
+   const sectionClasses = cx({
+      section: true,
+      [`background-color--${backgroundColor}`]: backgroundColor,
+      [`text-align--${textAlign}`]: textAlign,
+      [`padding-top--${paddingTop}`]: paddingTop,
+      [`padding-bottom--${paddingBottom}`]: paddingBottom,
+      [`margin-top--${marginTop}`]: marginTop,
+      [`margin-bottom--${marginBottom}`]: marginBottom,
+   });
+
+   return (
+      <section
+         className={sectionClasses}
+      >
+         {children}
+      </section>
+   );
 };
 
 export default Section;

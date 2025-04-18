@@ -26,10 +26,10 @@ interface PageData {
   };
 }
 
-export default async function Page({ params }: { params?: { slug: string } }) {
-  const slug = params?.slug ?? ""; // Provide a default value for slug
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params; // Await params before destructuring
 
-  const pageData: PageData = await getPage(slug); // Use the defaulted slug
+  const pageData: PageData = await getPage(slug); // Use the awaited slug
 
   if (!pageData) {
     notFound();
@@ -37,12 +37,12 @@ export default async function Page({ params }: { params?: { slug: string } }) {
 
   const sections = Array.isArray(pageData?.sections) ? pageData.sections : [];
 
-  const bannedSlugs = ["home", "services"];
+  const bannedSlugs = ["home", "services", "consultation"];
 
   return (
     <Fragment>
       {!bannedSlugs.includes(slug) && <SanityPage page={pageData} />}
-      {sections.length > 0 && (
+      {sections.length > 0 &&
         sections.map((section, index) => {
           switch (section._type) {
             case "showcaseSection":
@@ -52,10 +52,7 @@ export default async function Page({ params }: { params?: { slug: string } }) {
             default:
               return null;
           }
-        })
-      )}
-      
-
+        })}
     </Fragment>
   );
 }

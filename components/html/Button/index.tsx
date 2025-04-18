@@ -3,96 +3,54 @@ import classNames from "classnames/bind";
 import Icon, { icons } from "@/components/html/Icon";
 import Link from "next/link";
 import styles from "./button.module.scss";
+import { ButtonProps, GroupProps, UIProps, StepProps } from "@/lib/interfaces";
 
 const cx = classNames.bind(styles);
-
-// Types for Button component props
-interface ButtonProps {
-  label?: string; // Text displayed on the button
-  linkType?: "internal" | "external"; // Determines the type of link
-  internalPage?: { slug?: { current?: string } }; // Reference to an internal page
-  externalUrl?: string; // URL for external links
-  size?: "small" | "medium" | "large"; // Button size
-  variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white"; // Button style
-  actionType?: "button" | "submit" | "reset"; // HTML button type
-  href?: string; // Fallback URL
-  type?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white"; // Alias for `variant`
-  children?: React.ReactNode; // Optional children for custom content
-  buttonType?: "button" | "submit" | "reset"; // HTML button type
-}
-
-// Types for Group component props
-interface GroupProps {
- borderTop?: number;
- children: React.ReactNode;
- className?: string;
- justifyContent?: string;
- marginBottom?: number;
-}
-
-// Types for UI component props
-interface UIProps {
- backgroundColor?: "black" | "accent" | "white";
- type?: "next" | "previous" | "primary" | "menu" | "close"; // ✅ Styling purposes only
- buttonType?: "button" | "submit" | "reset"; // ✅ HTML button attribute
- label?: string;
- clickHandler?: () => void;
-}
-
-// Types for Step component props
-interface StepProps {
- disabled?: boolean;
- label: string;
- type?: "next" | "previous"; // ✅ Used for styling
- buttonType?: "button" | "submit" | "reset"; // ✅ Used for HTML button attribute
- clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
-} // Button component
 
 const Button: React.FC<ButtonProps> & {
  Group: React.FC<GroupProps>;
  UI: React.FC<UIProps>;
  Step: React.FC<StepProps>;
 } = ({
-  label,
-  linkType,
-  internalPage,
-  externalUrl,
-  size = "medium",
-  variant,
-  type,
-  actionType = "button",
-  href,
-  children,
+ label,
+ linkType,
+ internalPage,
+ externalUrl,
+ size = "medium",
+ variant,
+ type,
+ actionType = "button",
+ href,
+ children,
 }) => {
-  const resolvedVariant = variant || type; // Merge `variant` and `type`
+ const resolvedVariant = variant || type; // Merge `variant` and `type`
 
-  const buttonClasses = cx({
-    button: true,
-    [`size--${size}`]: size,
-    [`variant--${resolvedVariant}`]: resolvedVariant, // Use merged `variant` and `type`
-  });
+ const buttonClasses = cx({
+  button: true,
+  [`size--${size}`]: size,
+  [`variant--${resolvedVariant}`]: resolvedVariant, // Use merged `variant` and `type`
+ });
 
-  const resolvedHref =
-    linkType === "internal"
-      ? internalPage?.slug?.current
-      : linkType === "external"
-      ? externalUrl
-      : href;
+ const resolvedHref =
+  linkType === "internal"
+   ? internalPage?.slug?.current
+   : linkType === "external"
+   ? externalUrl
+   : href;
 
-  const content = children || label;
+ const content = children || label;
 
-  return resolvedHref ? (
-    <Link href={resolvedHref} className={buttonClasses}>
-      {content}
-    </Link>
-  ) : (
-    <button className={buttonClasses} type={actionType}>
-      {content}
-    </button>
-  );
+ return resolvedHref ? (
+  <Link href={resolvedHref} className={buttonClasses}>
+   {content}
+  </Link>
+ ) : (
+  <button className={buttonClasses} type={actionType}>
+   {content}
+  </button>
+ );
 };
 
-// Group component
 const Group: React.FC<GroupProps> = ({
  borderTop,
  children,
@@ -110,7 +68,6 @@ const Group: React.FC<GroupProps> = ({
  return <div className={groupClasses}>{children}</div>;
 };
 
-// UI component (for button with icons)
 const UI: React.FC<UIProps> = ({
  backgroundColor,
  label,
@@ -145,7 +102,7 @@ const UI: React.FC<UIProps> = ({
   </button>
  );
 };
-// Step component
+
 const Step: React.FC<StepProps> = ({
  disabled = false,
  type = "next", // ✅ Used for styling
@@ -172,7 +129,6 @@ const Step: React.FC<StepProps> = ({
  );
 };
 
-// Assign subcomponents to the Button component
 Button.Group = Group;
 Button.UI = UI;
 Button.Step = Step;

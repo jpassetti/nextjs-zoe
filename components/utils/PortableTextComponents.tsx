@@ -74,9 +74,10 @@ export const PortableTextComponents: PortableTextReactComponents = {
      <Button.Group>
       {value.buttons.map((btn, i) => (
        <Button
+        _type="button"
         key={i}
         href={getEnvironmentAwareUrl(btn.href)}
-        type={btn.type || "primary"}
+        variant={btn.type || "primary"}
         label={btn.label}
        />
       ))}
@@ -121,7 +122,7 @@ export const PortableTextComponents: PortableTextReactComponents = {
     return (
      <div style={{ margin: "1rem 0" }}>
       <Button.Group>
-       <Button href={adjustedHref} type="primary">
+       <Button _type="button" href={adjustedHref} variant="primary">
         {children}
        </Button>
       </Button.Group>

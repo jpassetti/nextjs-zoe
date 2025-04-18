@@ -31,9 +31,10 @@ const Header: React.FC = () => {
      <Nav />
 
      <Button
+        _type="button"
       href="/consultation"
       label="Schedule a consultation"
-      type="accent"
+      variant="accent"
      />
     </Row>
    )}

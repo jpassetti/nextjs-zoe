@@ -1,30 +1,8 @@
+import { ComparisonTableProps } from "@/lib/interfaces";
+
 import Icon from "@/components/html/Icon";
 
 import styles from "./comparisontable.module.scss";
-
-interface Feature {
-  _ref: string;
-  _type: string;
-  _key: string;
-  _id: string;
-  label?: string;
-}
-
-interface Package {
-  title: string;
-  description?: string;
-  includedFeatures: {
-    _key: string;
-    _ref: string;
-    _type: string;
-    label?: string;
-  }[];
-}
-
-interface ComparisonTableProps {
-  features: Feature[];
-  packages: Package[];
-}
 
 const ComparisonTable = ({ features, packages }: ComparisonTableProps) => {
   return (
@@ -42,12 +20,14 @@ const ComparisonTable = ({ features, packages }: ComparisonTableProps) => {
           </tr>
         </thead>
         <tbody>
-          {features.map((feature, featureIndex) => (
-            <tr key={`feature-${featureIndex}`} className={styles.tableRow}>
+          {features.map((feature, featureIndex) => {
+            console.log({feature});
+            return <tr key={`feature-${featureIndex}`} className={styles.tableRow}>
               <td className={styles.featureLabel}>{feature.label ?? "Missing label"}</td>
               {packages.map((pkg, pkgIndex) => {
+                console.log("Package included features:", pkg);
                 const isIncluded = pkg.includedFeatures.some(
-                  (includedFeature) => includedFeature._ref === feature._id
+                  (includedFeature) => includedFeature._ref === feature._ref
                 );
                 return (
                   <td
@@ -59,7 +39,7 @@ const ComparisonTable = ({ features, packages }: ComparisonTableProps) => {
                 );
               })}
             </tr>
-          ))}
+})}
         </tbody>
       </table>
     </div>

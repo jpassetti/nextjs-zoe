@@ -16,7 +16,7 @@ const Showcase: React.FC = () => {
      in handling greater responsibilities.
     </Paragraph>
     <Button.Group>
-     <Button label="Learn more" type="primary" />
+     <Button _type="button" label="Learn more" variant="primary" />
     </Button.Group>
    </div>
    <div className={styles.showcase__item}>
@@ -28,7 +28,7 @@ const Showcase: React.FC = () => {
      physically (or virtually) present during periods of organizational change?
     </Paragraph>
     <Button.Group>
-     <Button label="Learn more" type="primary" />
+     <Button _type="button" label="Learn more" variant="primary" />
     </Button.Group>
    </div>
    <div className={styles.showcase__item}>
@@ -41,7 +41,7 @@ const Showcase: React.FC = () => {
      scientists, seasoned business owners, and executives.
     </Paragraph>
     <Button.Group>
-     <Button label="Learn more" type="primary" />
+     <Button _type="button" label="Learn more" variant="primary" />
     </Button.Group>
    </div>
   </section>

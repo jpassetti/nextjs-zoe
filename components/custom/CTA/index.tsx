@@ -20,11 +20,12 @@ const CTA = () => {
      </Paragraph>
      <Button.Group justifyContent="center">
       <Button
+        _type="button"
        href="/contact"
        label="Schedule a free consultation"
        variant="primary"
       />
-      <Button href="/services" label="Learn more" type="inverted" />
+      <Button _type="button" href="/services" label="Learn more" variant="inverted" />
      </Button.Group>
     </div>
    </Container>

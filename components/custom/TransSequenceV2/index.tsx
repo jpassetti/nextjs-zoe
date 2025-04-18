@@ -123,7 +123,8 @@ const TransSequenceV2 = () => {
        {slides[animationState].cta && (
         <Button.Group>
          <Button
-          type="primary"
+         _type="button"
+          variant="primary"
           label={slides[animationState].cta.label}
           href={slides[animationState].cta.href}
          />
