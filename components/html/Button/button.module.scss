@@ -78,10 +78,9 @@
 .button--ui {
   width: 3rem;
   height: 3rem;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  display: inline-block;
   background-color: var(--color-accent);
   border: 0;
   cursor: pointer;
