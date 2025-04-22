@@ -14,31 +14,42 @@ import { ButtonProps, ButtonBlockProps, ButtonGroupBlockProps, ComparisonTableBl
 interface ParseContentProps {
   content: ContentBlockProps[];
 }
+// Define the type for a transformed feature
+interface TransformedFeature {
+  _id: string;
+  _ref: string;
+  _type: string;
+  _key: string;
+  label: string;
+}
+
 
 const ComparisonTableWrapper = ({ features, packages }: ComparisonTableBlockProps) => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [transformedFeatures, setTransformedFeatures] = useState<any[]>([]); // State to store fetched features
-
+const [transformedFeatures, setTransformedFeatures] = useState<TransformedFeature[]>([]); // State to store fetched features
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const fetchedFeatures = await getComparisonTableData(features); // Fetch feature labels by _ref IDs
-        const transformed = fetchedFeatures.map((feature, index) => ({
-          _id: feature._id, // Use `_id` as is
-          _ref: feature._ref, // Keep `_ref` as is
-          _type: feature._type, // Preserve `_type`
-          _key: feature._key || `feature-${index}`, // Use existing `_key` or generate one
-          label: feature.label || "Unknown Feature", // Provide a default label if missing
-        }));
-        setTransformedFeatures(transformed); // Store the transformed features in state
-      } catch (err) {
-        console.error("Failed to load feature data", err);
-      } finally {
-        setLoading(false);
-      }
+  async function fetchData() {
+    try {
+      const fetchedFeatures: Array<{ _id: string; _ref: string; _type: string; label?: string }> =
+        await getComparisonTableData(features); // Fetch feature labels by _ref IDs
+
+      const transformed: TransformedFeature[] = fetchedFeatures.map((feature, index) => ({
+        _id: feature._id, // Use `_id` as is
+        _ref: feature._ref, // Keep `_ref` as is
+        _type: feature._type, // Preserve `_type`
+        _key: `feature-${index}`, // Generate a unique key
+        label: feature.label || "Unknown Feature", // Provide a default label if missing
+      }));
+
+      setTransformedFeatures(transformed); // Store the transformed features in state
+    } catch (err) {
+      console.error("Failed to load feature data", err);
+    } finally {
+      setLoading(false);
     }
-    fetchData();
-  }, [features]);
+  }
+  fetchData();
+}, [features]);
 
   if (loading) return <p>Loading table...</p>;
 
