@@ -3,10 +3,14 @@
 import { useEffect, useRef, useMemo } from "react";
 import { motion } from "framer-motion";
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
-import animationData from "./olive-branch--keyframes.json"; // Adjust path
+import whiteAnimationData from "./olive-branch--keyframes--white.json"; // Adjust path
+import mauveAnimationData from "./olive-branch--keyframes--mauve.json"; // Adjust path
 
-const OliveBranchKeyFrames = ({ step }: { step: number }) => {
- const lottieRef = useRef<LottieRefCurrentProps | null>(null);
+interface OliveBranchKeyFramesProps {
+  step: number;
+  fill: "white" | "mauve"; // Restrict fill to "white" or "mauve"
+}
+const OliveBranchKeyFrames: React.FC<OliveBranchKeyFramesProps> = ({ step, fill }) => { const lottieRef = useRef<LottieRefCurrentProps | null>(null);
 
  // ✅ Memoize keyframes to prevent unnecessary re-renders
  const keyframes = useMemo(() => [17, 25, 37], []);
@@ -30,7 +34,7 @@ const OliveBranchKeyFrames = ({ step }: { step: number }) => {
    transition={{ duration: 0.5, ease: "easeOut" }}
   >
    <Lottie
-    animationData={animationData}
+    animationData={fill === "white" ? whiteAnimationData : mauveAnimationData}
     lottieRef={lottieRef} // Attach Lottie instance to ref
     loop={false}
     autoplay={false}

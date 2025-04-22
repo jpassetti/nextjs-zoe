@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import type { PortableTextBlock } from "@portabletext/types";
+import { useViewport } from "@/lib/context/ViewportContext"; // Adjust path if needed
+
 import dynamic from "next/dynamic";
 import { getTransformationSlides } from "@/lib/sanity/queries/getTransformationSlides";
 import Button from "@/components/html/Button";
@@ -10,158 +12,139 @@ import Heading from "@/components/html/Heading";
 import Loading from "@/components/custom/Loading";
 import Row from "@/components/layout/Row";
 import Col from "@/components/layout/Col";
-import { PortableText } from "@portabletext/react";
-import { PortableTextComponents } from "@/components/utils/PortableTextComponents";
-
+import SequenceSlide from "./SequenceSlide";
 // Lazy load Lottie animation
-const OliveBranchKeyFrames = dynamic(
- () => import("@/components/lotties/OliveBranchKeyFrames"),
- { ssr: false }
+const OliveBranchKeyFramesWhite = dynamic(
+  () => import("@/components/lotties/OliveBranchKeyFrames"),
+  { ssr: false }
+);
+
+const OliveBranchKeyFramesTan = dynamic(
+  () => import("@/components/lotties/OliveBranchKeyFrames"),
+  { ssr: false }
 );
 
 // Slide type
 interface Slide {
- title: string;
- subheadline?: string | null;
- content?: PortableTextBlock[]; // ✅ Strongly typed rich text
- cta?: {
-  label: string;
-  href: string;
- } | null;
+  title: string;
+  subheadline?: string | null;
+  content?: PortableTextBlock[]; // ✅ Strongly typed rich text
+  cta?: {
+    label: string;
+    href: string;
+  } | null;
 }
 
 const TransSequenceV4 = () => {
- const [slides, setSlides] = useState<Slide[]>([]);
- const [animationState, setAnimationState] = useState<number>(0);
- const [loading, setLoading] = useState(true);
- const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [slides, setSlides] = useState<Slide[]>([]);
+  const [animationState, setAnimationState] = useState<number>(0);
+  const [loading, setLoading] = useState(true);
+  const { isMobile } = useViewport();
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
 
- useEffect(() => {
-  getTransformationSlides()
-   .then((data) => {
-    if (data.length > 0) setSlides(data);
-   })
-   .finally(() => setLoading(false));
- }, []);
+  useEffect(() => {
+    getTransformationSlides()
+      .then((data) => {
+        if (data.length > 0) setSlides(data);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
- const handleIntersection = useCallback(
-  (entries: IntersectionObserverEntry[]) => {
-   entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-     const index = slideRefs.current.indexOf(entry.target as HTMLDivElement);
-     if (index !== -1) setAnimationState(index);
-    }
-   });
-  },
-  []
- );
+  const handleIntersection = useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const index = slideRefs.current.indexOf(entry.target as HTMLDivElement);
+          if (index !== -1) setAnimationState(index);
+        }
+      });
+    },
+    []
+  );
 
- useEffect(() => {
-  const observer = new IntersectionObserver(handleIntersection, {
-   root: null,
-   rootMargin: "0px",
-   threshold: 0.6,
-  });
+  useEffect(() => {
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null,
+      rootMargin: "0px",
+      threshold: 0.6,
+    });
 
-  const currentSlides = slideRefs.current;
+    const currentSlides = slideRefs.current;
 
-  currentSlides.forEach((slide) => {
-   if (slide) observer.observe(slide);
-  });
+    currentSlides.forEach((slide) => {
+      if (slide) observer.observe(slide);
+    });
 
-  return () => {
-   currentSlides.forEach((slide) => {
-    if (slide) observer.unobserve(slide);
-   });
-  };
- }, [slides, handleIntersection]);
+    return () => {
+      currentSlides.forEach((slide) => {
+        if (slide) observer.unobserve(slide);
+      });
+    };
+  }, [slides, handleIntersection]);
 
- if (loading) return <Loading />;
- if (slides.length === 0) return <p>No slides available.</p>;
+  if (loading) return <Loading />;
+  if (slides.length === 0) return <p>No slides available.</p>;
 
- return (
-  <div
-   style={{
-    height: "100vh",
-    overflowY: "scroll",
-    scrollSnapType: "y mandatory",
-   }}
-  >
-   <Container width="full" noPadding>
-    <Row alignItems="stretch">
-     <Col xs={12} sm={6}>
-      <div
-       style={{
-        backgroundColor: "#a06367",
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "sticky",
-        top: "0px",
-        left: "0px",
-       }}
-      >
-       <OliveBranchKeyFrames step={animationState} />
-      </div>
-     </Col>
+  return (
+    <div
+      style={{
+        height: isMobile === false ? "100vh" : "100%",
+        overflowY: isMobile === false ? "scroll" : "auto",
+        scrollSnapType: isMobile === false ? "y mandatory" : "none",
+      }}
+    >
+      <Container width={isMobile === false ? "full" : null} noPadding={isMobile === false ? true : false}>
+        {isMobile && <Row>
+          <Col xs={12} sm={12}>
+            <Heading level={1}>My Transformation</Heading>
+            </Col>
+        </Row>
+        }
+        <Row alignItems="stretch">
+          {isMobile === false ? <Col xs={12} sm={6}>
+            <div
+              style={{
+                backgroundColor: "#a06367",
+                minHeight: "100vh",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                position: "sticky",
+                top: "0px",
+                left: "0px",
+              }}
+            >
+              <OliveBranchKeyFramesWhite fill="white" step={animationState} />
+            </div>
+          </Col> : <div
+            style={{
+              backgroundColor: "white",
+              minHeight: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "fixed",
+              top: "0px",
+              left: "0px",
+              zIndex: -1,
+              width: "100%",
+              opacity: 0.2,
+            }}
+          >
+            <OliveBranchKeyFramesTan fill="mauve" step={animationState} />
+          </div>}
 
-     <Col xs={12} sm={6}>
-      {slides.map((slide, index) => (
-       <div
-        key={index}
-        ref={(el) => {
-         slideRefs.current[index] = el;
-        }}
-        style={{
-         minHeight: "100vh",
-         display: "flex",
-         flexDirection: "column",
-         justifyContent: "center",
-         scrollSnapAlign: "start",
-         padding: "20px",
-        }}
-       >
-        <Heading level={1} marginBottom={2}>
-         {slide.title}
-        </Heading>
-        {slide.subheadline && (
-         <Heading
-          level={3}
-          marginBottom={2}
-          color="black"
-          fontWeight="normal"
-          fontFamily="primary"
-          fontStyle="italic"
-         >
-          {slide.subheadline}
-         </Heading>
-        )}
-        {slide.content && (
-         <div className="prose">
-          <PortableText
-           value={slide.content}
-           components={PortableTextComponents}
-          />
-         </div>
-        )}
-        {slide.cta && (
-         <Button.Group>
-          <Button
-            _type="button"
-           variant="primary"
-           label={slide.cta.label}
-           href={slide.cta.href}
-          />
-         </Button.Group>
-        )}
-       </div>
-      ))}
-     </Col>
-    </Row>
-   </Container>
-  </div>
- );
+          <Col xs={12} sm={6}>
+            {slides.map((slide, index) => (
+              <SequenceSlide slide={slide} key={index} ref={(el) => {
+                  slideRefs.current[index] = el;
+                }} />
+            ))}
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
 };
 
 export default TransSequenceV4;

@@ -18,7 +18,7 @@ interface ContainerProps {
   | "space-evenly"; // Possible values for justifyContent
  type?: string; // The type of container, optional (e.g., 'content', 'sidebar')
  height?: string; // The height of the container, optional (e.g., 'auto', '100vh')
- width?: string; // The width of the container, optional (e.g., '100%', '50%')
+ width?: "full" | null; // The width of the container, optional (e.g., '100%', '50%')
  noPadding?: boolean;
 }
 

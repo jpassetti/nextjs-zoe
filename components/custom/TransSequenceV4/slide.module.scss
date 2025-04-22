@@ -1,0 +1,13 @@
+@use "../../../sass/abstracts/mixins";
+@use "../../../sass/abstracts/variables";
+
+.sequence_slide {
+    @include mixins.breakpoint(md) {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        scroll-snap-align: start;
+        padding: 1rem;
+    }
+}
