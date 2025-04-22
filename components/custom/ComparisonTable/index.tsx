@@ -5,6 +5,7 @@ import Icon from "@/components/html/Icon";
 import styles from "./comparisontable.module.scss";
 
 const ComparisonTable = ({ features, packages }: ComparisonTableProps) => {
+  //console.log("ComparisonTable features:", features);
   return (
     <div className={styles.tableWrapper}>
       <table className={styles.comparisonTable}>
@@ -21,13 +22,13 @@ const ComparisonTable = ({ features, packages }: ComparisonTableProps) => {
         </thead>
         <tbody>
           {features.map((feature, featureIndex) => {
-            console.log({feature});
+            //console.log(feature._ref);
             return <tr key={`feature-${featureIndex}`} className={styles.tableRow}>
               <td className={styles.featureLabel}>{feature.label ?? "Missing label"}</td>
               {packages.map((pkg, pkgIndex) => {
-                console.log("Package included features:", pkg);
+                //console.log("Package included features:", pkg);
                 const isIncluded = pkg.includedFeatures.some(
-                  (includedFeature) => includedFeature._ref === feature._ref
+                  (includedFeature) => includedFeature._ref === feature._id
                 );
                 return (
                   <td

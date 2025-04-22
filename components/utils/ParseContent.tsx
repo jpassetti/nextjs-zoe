@@ -17,11 +17,20 @@ interface ParseContentProps {
 
 const ComparisonTableWrapper = ({ features, packages }: ComparisonTableBlockProps) => {
   const [loading, setLoading] = useState<boolean>(true);
-  console.log({features});
+  const [transformedFeatures, setTransformedFeatures] = useState<any[]>([]); // State to store fetched features
+
   useEffect(() => {
     async function fetchData() {
       try {
-        await getComparisonTableData(features); // Fetch feature labels by _ref IDs
+        const fetchedFeatures = await getComparisonTableData(features); // Fetch feature labels by _ref IDs
+        const transformed = fetchedFeatures.map((feature, index) => ({
+          _id: feature._id, // Use `_id` as is
+          _ref: feature._ref, // Keep `_ref` as is
+          _type: feature._type, // Preserve `_type`
+          _key: feature._key || `feature-${index}`, // Use existing `_key` or generate one
+          label: feature.label || "Unknown Feature", // Provide a default label if missing
+        }));
+        setTransformedFeatures(transformed); // Store the transformed features in state
       } catch (err) {
         console.error("Failed to load feature data", err);
       } finally {
@@ -33,14 +42,7 @@ const ComparisonTableWrapper = ({ features, packages }: ComparisonTableBlockProp
 
   if (loading) return <p>Loading table...</p>;
 
-  const transformedFeatures = features.map((feature, index) => ({
-    _id: feature._id, // Use `_id` as is
-    _ref: feature._ref, // Keep `_ref` as is
-    _type: feature._type, // Preserve `_type`
-    _key: feature._key || `feature-${index}`, // Use existing `_key` or generate one
-    label: feature.label || "Unknown Feature", // Provide a default label if missing
-  }));
-
+  // Transform packages to include the fetched features
   const transformedPackages = packages.map((pkg, pkgIndex) => ({
     ...pkg,
     includedFeatures: pkg.includedFeatures.map((feature, featureIndex) => ({
@@ -52,7 +54,12 @@ const ComparisonTableWrapper = ({ features, packages }: ComparisonTableBlockProp
     })),
   }));
 
-  return <ComparisonTable features={transformedFeatures} packages={transformedPackages} />;
+  return (
+    <ComparisonTable
+      features={transformedFeatures} // Pass the fetched and transformed features
+      packages={transformedPackages} // Pass the transformed packages
+    />
+  );
 };
 
 const isHeadingBlock = (block: ContentBlockProps): block is HeadingBlockProps =>
