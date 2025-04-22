@@ -18,7 +18,7 @@ interface ParseContentProps {
 interface TransformedFeature {
   _id: string;
   _ref: string;
-  _type: string;
+  _type: "reference"; // Match the expected type
   _key: string;
   label: string;
 }
@@ -36,7 +36,7 @@ const [transformedFeatures, setTransformedFeatures] = useState<TransformedFeatur
       const transformed: TransformedFeature[] = fetchedFeatures.map((feature, index) => ({
         _id: feature._id, // Use `_id` as is
         _ref: feature._ref, // Keep `_ref` as is
-        _type: feature._type, // Preserve `_type`
+        _type: "reference", // Preserve `_type`
         _key: `feature-${index}`, // Generate a unique key
         label: feature.label || "Unknown Feature", // Provide a default label if missing
       }));
