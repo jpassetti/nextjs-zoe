@@ -6,7 +6,6 @@ import { useViewport } from "@/lib/context/ViewportContext"; // Adjust path if n
 
 import dynamic from "next/dynamic";
 import { getTransformationSlides } from "@/lib/sanity/queries/getTransformationSlides";
-import Button from "@/components/html/Button";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
 import Loading from "@/components/custom/Loading";
@@ -27,12 +26,12 @@ const OliveBranchKeyFramesTan = dynamic(
 // Slide type
 interface Slide {
   title: string;
-  subheadline?: string | null;
-  content?: PortableTextBlock[]; // ✅ Strongly typed rich text
+  subheadline?: string;
+  content?: PortableTextBlock[];
   cta?: {
     label: string;
     href: string;
-  } | null;
+  };
 }
 
 const TransSequenceV4 = () => {

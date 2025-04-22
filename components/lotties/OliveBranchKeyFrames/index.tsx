@@ -8,7 +8,7 @@ import mauveAnimationData from "./olive-branch--keyframes--mauve.json"; // Adjus
 
 interface OliveBranchKeyFramesProps {
   step: number;
-  fill: "white" | "mauve"; // Restrict fill to "white" or "mauve"
+  fill?: "white" | "mauve"; // Restrict fill to "white" or "mauve"
 }
 const OliveBranchKeyFrames: React.FC<OliveBranchKeyFramesProps> = ({ step, fill }) => { const lottieRef = useRef<LottieRefCurrentProps | null>(null);
 
