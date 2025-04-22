@@ -11,6 +11,7 @@ interface ShowcaseProps {
       alt?: string;
     };
     title?: string;
+    description?: string;
     buttons?: Array<{
       label: string;
       linkType: "internal" | "external";
@@ -22,7 +23,7 @@ interface ShowcaseProps {
 }
 
 const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
-  const { backgroundImage, title, buttons } = data;
+  const { backgroundImage, title, description, buttons } = data;
 
   //console.log("Showcase buttons data:", buttons);
 
@@ -44,6 +45,11 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
           <Heading level={1} color="white" marginBottom={2}>
             {title}
           </Heading>
+        )}
+        {description && (
+          <p className={styles.showcase_description}>
+            {description}
+          </p>
         )}
         {buttons && (
           <Button.Group justifyContent="center">
