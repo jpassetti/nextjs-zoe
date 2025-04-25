@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";

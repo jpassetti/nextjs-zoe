@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 // Define the types for the component props
 interface IconProps {
   name: keyof typeof icons; // Restrict `name` to valid keys in the `icons` object
-  color?: "black" | "white" | "primary" | "secondary" | "accent"; // Extendable color options
+  color?: "black" | "white" | "primary" | "secondary" | "accent" | "gray"; // Extendable color options
   alt?: string; // Alt text for accessibility
   size?: "small" | "medium" | "large"; // Optional size prop
 }
