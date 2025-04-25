@@ -57,7 +57,7 @@ export default function QuestionnaireLandingPage() {
  if (!questionnaire) return <p>No questionnaire found.</p>;
 
  return (
-  <Section backgroundColor="secondary">
+  <Section backgroundColor="secondary" paddingTop="large" paddingBottom="large">
    <Container type="content">
     <Heading level={1} color="black" marginBottom={2}>
      {questionnaire.title}

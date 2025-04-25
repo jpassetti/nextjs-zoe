@@ -109,13 +109,18 @@ const Step: React.FC<StepProps> = ({
  buttonType = "button", // ✅ Used for HTML button attribute
  label,
  clickHandler,
+ variant,
 }) => {
+  const resolvedVariant = variant || type; // Merge `variant` and `type`
+
  const buttonClasses = cx({
   button: true,
   disabled: disabled,
   step: true,
   [`type--${type}`]: type, // ✅ Styling only
+  [`variant--${resolvedVariant}`]: resolvedVariant, // Use merged `variant` and `type`
  });
+
 
  return (
   <button

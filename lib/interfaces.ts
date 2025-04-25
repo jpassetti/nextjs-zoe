@@ -76,6 +76,7 @@ export interface UIProps {
 
 export interface StepProps {
     disabled?: boolean;
+    variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
     label: string;
     type?: "next" | "previous"; // ✅ Used for styling
     buttonType?: "button" | "submit" | "reset"; // ✅ Used for HTML button attribute
@@ -117,6 +118,8 @@ export interface IconBlockProps {
     _type: "iconBlock";
     icon: string;
     alt?: string;
+    color?: "black" | "white" | "primary" | "secondary" | "accent"; // Color of the icon
+    size?: "small" | "medium" | "large";
 }
 
 export interface ComparisonTableProps {

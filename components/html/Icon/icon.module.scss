@@ -4,13 +4,18 @@
   height: 3rem;
   fill: currentColor; // Default fill color
 }
-
+.fill--primary {
+  fill: var(--color-primary); // Use your project's primary color variable
+}
 .fill--black {
   fill: #000;
 }
 
 .fill--white {
   fill: #fff;
+}
+.fill--gray {
+  fill: var(--color-gray);
 }
 
 .fill--accent {
@@ -21,8 +26,8 @@
   height: 1.5rem;
 }
 .size--medium {
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
 }
 .size--large {
   width: 4rem;

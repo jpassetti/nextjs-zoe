@@ -17,6 +17,7 @@ h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, div, body, html {
   --color-accent: teal;
   --color-text: #2c2c2c;
   --color-text-inverse: #fff;
+  --color-gray: #bbb;
   --font-primary: "Lora", serif;
   --font-secondary: "Poppins", sans-serif;
   --font-headlines: "Poppins", sans-serif;
@@ -28,6 +29,16 @@ html,
 body {
   color: var(--color-text);
   font-size: 16px;
+}
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+main {
+  flex: 1 0 auto;
+  background-color: var(--color-secondary);
 }
 
 .responsive {

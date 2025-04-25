@@ -200,6 +200,8 @@ const ParseContent: React.FC<ParseContentProps> = ({ content }) => {
                   key={index}
                   name={iconName}
                   alt={block.alt || `${block.icon} icon`}
+                  color={block.color}
+                  size="medium"
                 />
               );
             }

@@ -35,7 +35,7 @@ const ComparisonTable = ({ features, packages }: ComparisonTableProps) => {
                     key={`feature-${featureIndex}-package-${pkgIndex}`}
                     className={isIncluded ? styles.checkmark : styles.xmark}
                   >
-                    {isIncluded ? <Icon name="checkmark" color="green" size="small"/> : <Icon name="xmark" color="red" size="small" />}
+                    {isIncluded ? <Icon name="checkmark" color="accent" size="small"/> : <Icon name="dash" color="gray" size="small" />}
                   </td>
                 );
               })}

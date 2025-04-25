@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useState, useRef } from "react";
 import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
@@ -156,13 +156,16 @@ export default function QuestionnaireForm({
     {step > 0 && (
      <Button.Step
       label="Previous"
+      variant="inverted"
       buttonType="button"
       clickHandler={() => setStep(step - 1)}
      />
     )}
+    <Paragraph textAlign={step === 0 ? "left" : "center"}>Step {step+1} of {questionnaire.steps.length}</Paragraph>
     {step < questionnaire.steps.length - 1 && (
      <Button.Step
       label="Next"
+      variant="primary"
       buttonType="button"
       clickHandler={() => {
        if (formRef.current?.checkValidity()) {
@@ -174,7 +177,7 @@ export default function QuestionnaireForm({
      />
     )}
     {step === questionnaire.steps.length - 1 && (
-     <Button _type="button" label="Submit" type="submit" />
+     <Button _type="button" label="Submit" variant="primary" type="submit" />
     )}
    </Button.Group>
   </Form>
