@@ -19,7 +19,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   const { sections, callToAction } = pageData;
-  const bannedSlugs = ["home", "services", "consultation"];
+  const bannedSlugs = ["home", "services", "consultation", "about-me", "contact"];
   
   return (
     <Fragment>
