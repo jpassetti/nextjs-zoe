@@ -116,6 +116,7 @@ export interface PageData {
     slug?: { current: string };
     content?: PortableTextBlock[];
     sections?: Section[];
+    excerpt?: string;
     seo?: SEOProps;
     featuredImage?: SanityImage & {
         asset: {

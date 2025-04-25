@@ -17,6 +17,22 @@ export async function getPage(slug: string) {
         alt
       },
       excerpt,
+      seo {
+        seoTitle,
+        seoDescription,
+        ogTitle,
+        ogDescription,
+        ogImage {
+          asset->{
+            url,
+            metadata {
+              dimensions { width, height }
+            }
+          },
+          alt
+        },
+        noIndex
+      },
       callToAction-> { // Dereference the callToAction document
         headline,
         paragraph,

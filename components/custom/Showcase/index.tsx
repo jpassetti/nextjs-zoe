@@ -33,12 +33,11 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
     >
       {backgroundImage?.asset && (
         <Image
-          src={urlFor(backgroundImage).url()}
-          alt={backgroundImage.alt || "Showcase Image"}
-          layout="fill"
-          objectFit="cover"
-          className={styles.showcase_image}
-        />
+  src={urlFor(backgroundImage).url()}
+  alt={backgroundImage.alt || "Showcase Image"}
+  fill
+  className={styles.showcase_image}
+/>
       )}
       <div className={styles.showcase_content}>
         {title && (

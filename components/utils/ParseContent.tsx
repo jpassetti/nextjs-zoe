@@ -120,7 +120,7 @@ const ParseContent: React.FC<ParseContentProps> = ({ content }) => {
             return null;
 
           case "button":
-            console.log(block?.internalPage?.slug.current);
+            //console.log(block?.internalPage?.slug.current);
             if (isButtonProps(block)) {
               return (
                 <Button.Group key={index}>

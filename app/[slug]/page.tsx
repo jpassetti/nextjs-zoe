@@ -7,7 +7,6 @@ import ColumnsSection from "@/components/custom/ColumnsSection";
 import Showcase from "@/components/custom/Showcase";
 import CTA from "@/components/custom/CTA";
 
-
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const pageData: PageData = await getPage(params.slug);
 
@@ -15,11 +14,16 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
   const seo = pageData.seo || {};
 
+  // Compose the title
+  const title = seo.seoTitle || pageData.title;
+
   return {
-    title: seo.seoTitle || pageData.title,
-    description: seo.seoDescription,
+    title,
+    description: seo.seoDescription ? seo.seoDescription : pageData.excerpt,
     openGraph: {
-      title: seo.ogTitle || seo.seoTitle || pageData.title,
+      title: seo.ogTitle
+        ? seo.ogTitle
+        : title,
       description: seo.ogDescription || seo.seoDescription,
       images: seo.ogImage?.asset?.url ? [{ url: seo.ogImage.asset.url }] : [],
     },
