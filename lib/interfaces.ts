@@ -54,9 +54,9 @@ export interface ButtonGroupBlockProps {
 }
 
 export interface CallToActionProps {
-        headline?: string;
-        paragraph?: string;
-        buttons?: ButtonBlockProps; // Reuse the ButtonGroupBlockProps interface
+    headline?: string;
+    paragraph?: string;
+    buttons?: ButtonBlockProps; // Reuse the ButtonGroupBlockProps interface
 }
 export interface GroupProps {
     borderTop?: number;
@@ -89,24 +89,46 @@ export interface HeadingBlockProps {
     text: string;
 }
 
+export interface SEOImageProps {
+    asset?: {
+        url?: string;
+        metadata?: {
+            dimensions?: {
+                width: number;
+                height: number;
+            };
+        };
+    };
+    alt?: string;
+}
+
+export interface SEOProps {
+    seoTitle?: string;
+    seoDescription?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogImage?: SEOImageProps;
+    noIndex?: boolean;
+}
 
 export interface PageData {
-  title: string;
-  slug?: { current: string };
-  content?: PortableTextBlock[];
-  sections?: Section[];
-  featuredImage?: SanityImage & {
-    asset: {
-      url: string;
-      metadata: {
-        dimensions: {
-          width: number;
-          height: number;
+    title: string;
+    slug?: { current: string };
+    content?: PortableTextBlock[];
+    sections?: Section[];
+    seo?: SEOProps;
+    featuredImage?: SanityImage & {
+        asset: {
+            url: string;
+            metadata: {
+                dimensions: {
+                    width: number;
+                    height: number;
+                };
+            };
         };
-      };
     };
-  };
-  callToAction?: CallToActionProps; // Reference the unified CallToAction interface
+    callToAction?: CallToActionProps; // Reference the unified CallToAction interface
 }
 
 export interface ParagraphBlockProps {

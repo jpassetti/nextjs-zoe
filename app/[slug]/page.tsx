@@ -4,10 +4,28 @@ import type { PageData } from "@/lib/interfaces"; // Import PageData
 import { notFound } from "next/navigation";
 
 import ColumnsSection from "@/components/custom/ColumnsSection";
-import SanityPage from "@/components/custom/SanityPage";
 import Showcase from "@/components/custom/Showcase";
 import CTA from "@/components/custom/CTA";
 
+
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const pageData: PageData = await getPage(params.slug);
+
+  if (!pageData) return {};
+
+  const seo = pageData.seo || {};
+
+  return {
+    title: seo.seoTitle || pageData.title,
+    description: seo.seoDescription,
+    openGraph: {
+      title: seo.ogTitle || seo.seoTitle || pageData.title,
+      description: seo.ogDescription || seo.seoDescription,
+      images: seo.ogImage?.asset?.url ? [{ url: seo.ogImage.asset.url }] : [],
+    },
+    robots: seo.noIndex ? "noindex" : "index,follow",
+  };
+}
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params; // Await params before destructuring
@@ -19,11 +37,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   }
 
   const { sections, callToAction } = pageData;
-  const bannedSlugs = ["home", "services", "consultation", "about-me", "contact"];
   
   return (
     <Fragment>
-      {!bannedSlugs.includes(slug) && <SanityPage page={pageData} />}
+
       {sections && sections.length > 0 &&
         sections.map((section, index) => {
           switch (section._type) {
