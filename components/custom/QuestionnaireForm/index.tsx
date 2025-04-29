@@ -52,6 +52,24 @@ interface QuestionnaireFormProps {
  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
+// Google Analytics tracking helpers
+function trackFormStep(step: number, questionnaireTitle: string) {
+ if (typeof window !== "undefined" && (window as any).gtag) {
+  (window as any).gtag("event", "form_step", {
+   step,
+   questionnaire_title: questionnaireTitle,
+  });
+ }
+}
+
+function trackFormCompletion(questionnaireTitle: string) {
+ if (typeof window !== "undefined" && (window as any).gtag) {
+  (window as any).gtag("event", "form_complete", {
+   questionnaire_title: questionnaireTitle,
+  });
+ }
+}
+
 export default function QuestionnaireForm({
  step,
  setStep,
@@ -63,7 +81,14 @@ export default function QuestionnaireForm({
  const formRef = useRef<HTMLFormElement>(null);
 
  return (
-  <Form ref={formRef} onSubmit={handleSubmit}>
+  <Form
+   ref={formRef}
+   onSubmit={(e) => {
+    handleSubmit(e);
+    // Track form completion on submit
+    trackFormCompletion(questionnaire.title);
+   }}
+  >
    {/* Step Heading */}
    <Heading level={2} marginBottom={1} marginTop={3} color="black">
     {questionnaire.steps[step]?.title || "Untitled Step"}
@@ -161,7 +186,9 @@ export default function QuestionnaireForm({
       clickHandler={() => setStep(step - 1)}
      />
     )}
-    <Paragraph textAlign={step === 0 ? "left" : "center"}>Step {step+1} of {questionnaire.steps.length}</Paragraph>
+    <Paragraph textAlign={step === 0 ? "left" : "center"}>
+     Step {step + 1} of {questionnaire.steps.length}
+    </Paragraph>
     {step < questionnaire.steps.length - 1 && (
      <Button.Step
       label="Next"
@@ -170,6 +197,8 @@ export default function QuestionnaireForm({
       clickHandler={() => {
        if (formRef.current?.checkValidity()) {
         setStep(step + 1);
+        // Track step progress
+        trackFormStep(step + 2, questionnaire.title);
        } else {
         formRef.current?.reportValidity(); // show native error bubbles
        }
