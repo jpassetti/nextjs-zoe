@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { ViewportProvider } from "@/lib/context/ViewportContext"; // Adjust path if needed
 import Header from "@/components/regions/Header";
 import Footer from "@/components/regions/Footer";
+import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+
 import { Montserrat, Playfair, Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
 
 // Theme 1 Fonts
@@ -60,6 +62,7 @@ export default function RootLayout({
    data-theme={theme}
   >
    <body className="p-0 m-0">
+    <GoogleAnalytics />    
     <ViewportProvider>
      <Header />
      <main>{children}</main>
