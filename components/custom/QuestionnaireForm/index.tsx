@@ -220,7 +220,7 @@ export default function QuestionnaireForm({
      />
     )}
     {step === questionnaire.steps.length - 1 && (
-     <Button _type="button" label="Submit" variant="primary" type="submit" />
+     <Button _type="button" label="Submit" variant="primary" actionType="submit" />
     )}
    </Button.Group>
   </Form>
