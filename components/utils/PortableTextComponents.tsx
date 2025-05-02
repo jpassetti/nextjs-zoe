@@ -10,40 +10,8 @@ import Image from "next/image";
 import Paragraph from "@/components/html/Paragraph";
 import { Ul, Ol, Li } from "@/components/html/List";
 import { getEnvironmentAwareUrl } from "@/components/utils/urlHelpers";
+import { ButtonGroupBlockProps, LinkMark, SanityImageValue  } from "@/lib/interfaces";
 
-// ----------------------------
-// Types
-// ----------------------------
-type SanityImageValue = {
- asset: {
-  url: string;
-  metadata?: {
-   dimensions?: {
-    width?: number;
-    height?: number;
-   };
-  };
- };
- alt?: string;
-};
-
-type ButtonType = {
- _type: "button";
- label: string;
- href: string;
- type?: "primary" | "secondary" | "accent" | "inverted";
-};
-
-type ButtonGroupType = {
- _type: "buttonGroup";
- buttons: ButtonType[];
-};
-
-type LinkMark = {
- _type: "link";
- href: string;
- isButton?: boolean;
-};
 
 // ----------------------------
 // PortableText Components
@@ -66,18 +34,24 @@ export const PortableTextComponents: PortableTextReactComponents = {
    );
   },
 
-  buttonGroup: ({ value }: PortableTextTypeComponentProps<ButtonGroupType>) => {
+  buttonGroup: ({ value }: PortableTextTypeComponentProps<ButtonGroupBlockProps>) => {
    if (!value?.buttons || !Array.isArray(value.buttons)) return null;
-
+   //return '';
+   //console.log("ButtonGroup value : ", value.buttons);
    return (
     <div style={{ margin: "1rem 0" }}>
      <Button.Group>
       {value.buttons.map((btn, i) => (
        <Button
-        _type="button"
+        _type={btn._type}
         key={i}
-        href={getEnvironmentAwareUrl(btn.href)}
-        variant={btn.type || "primary"}
+        linkType={btn.linkType}
+        internalPage={btn.internalPage}
+        externalUrl={btn.externalUrl}
+        size={btn.size || "medium"}
+        actionType={btn.actionType}
+       href={getEnvironmentAwareUrl(btn.internalPage?.slug?.current || btn.externalUrl || "")}
+        variant={btn.variant || "primary"}
         label={btn.label}
        />
       ))}

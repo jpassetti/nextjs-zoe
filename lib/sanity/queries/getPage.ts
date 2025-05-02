@@ -6,8 +6,27 @@ export async function getPage(slug: string) {
     *[_type == "page" && slug.current == $slug][0] {
       title,
       slug,
-      content,
-      featuredImage {
+      content[]{
+        ...,
+        _type == "button" => {
+          ...,
+          "internalPage": internalPage->{
+            _id,
+            slug { current }
+          }
+        },
+        _type == "buttonGroup" => {
+          ...,
+          buttons[]{
+            ...,
+            "internalPage": internalPage->{
+              _id,
+              slug { current }
+            }
+          }
+        }
+      },     
+  featuredImage {
         asset->{
           url,
           metadata {

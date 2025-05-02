@@ -8,8 +8,9 @@ import Showcase from "@/components/custom/Showcase";
 import CTA from "@/components/custom/CTA";
 import SanityPage from "@/components/custom/SanityPage";
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const pageData: PageData = await getPage(params.slug);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const pageData: PageData = await getPage(slug);
 
   if (!pageData) return {};
 
@@ -45,7 +46,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   const bannedSlugs = ["about-me", "contact"];
   return (
     <Fragment>
-      {bannedSlugs.includes(slug) && <SanityPage page={pageData} />}
+      {(bannedSlugs.includes(slug) && pageData) && <SanityPage page={pageData} />}
       {!bannedSlugs.includes(slug) && sections && sections.length > 0 &&
         sections.map((section, index) => {
           switch (section._type) {

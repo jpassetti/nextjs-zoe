@@ -1,5 +1,6 @@
 // utils/urlHelpers.ts
 export function getEnvironmentAwareUrl(url: string): string {
+    //console.log("getEnvironmentAwareUrl called with URL:", url);
  const isDev = process.env.NODE_ENV === "development";
 
  // Replace only known production root URLs

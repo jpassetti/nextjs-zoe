@@ -8,47 +8,58 @@ import { ButtonProps, GroupProps, UIProps, StepProps } from "@/lib/interfaces";
 const cx = classNames.bind(styles);
 
 const Button: React.FC<ButtonProps> & {
- Group: React.FC<GroupProps>;
- UI: React.FC<UIProps>;
- Step: React.FC<StepProps>;
+  Group: React.FC<GroupProps>;
+  UI: React.FC<UIProps>;
+  Step: React.FC<StepProps>;
 } = ({
- label,
- linkType,
- internalPage,
- externalUrl,
- size = "medium",
- variant,
- type,
- actionType = "button",
- href,
- children,
+  label,
+  linkType,
+  internalPage,
+  externalUrl,
+  size = "medium",
+  variant,
+  type,
+  actionType = "button",
+  href,
+  children,
 }) => {
- const resolvedVariant = variant || type; // Merge `variant` and `type`
+  //console.log({externalUrl});
+  const resolvedVariant = variant || type;
+  const buttonClasses = cx({
+    button: true,
+    [`size--${size}`]: size,
+    [`variant--${resolvedVariant}`]: resolvedVariant,
+  });
 
- const buttonClasses = cx({
-  button: true,
-  [`size--${size}`]: size,
-  [`variant--${resolvedVariant}`]: resolvedVariant, // Use merged `variant` and `type`
- });
+  const content = children || label;
 
- const resolvedHref =
-  linkType === "internal"
-   ? internalPage?.slug?.current
-   : linkType === "external"
-   ? externalUrl
-   : href;
+  if (linkType === "internal" && internalPage?.slug?.current) {
+    return (
+      <Link href={`/${internalPage.slug.current}`} className={buttonClasses}>
+        {content}
+      </Link>
+    );
+  }
 
- const content = children || label;
+  if (linkType === "external") {
+    //console.log("External URL: ", externalUrl);
+    return (
+      <a
+        href={externalUrl}
+        className={buttonClasses}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {content}
+      </a>
+    );
+  }
 
- return resolvedHref ? (
-  <Link href={resolvedHref} className={buttonClasses}>
-   {content}
-  </Link>
- ) : (
-  <button className={buttonClasses} type={actionType}>
-   {content}
-  </button>
- );
+  return (
+    <button className={buttonClasses} type={actionType}>
+      {content}
+    </button>
+  );
 };
 
 const Group: React.FC<GroupProps> = ({

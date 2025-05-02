@@ -27,6 +27,11 @@ const CTA: React.FC<CallToActionProps> = ({ headline, paragraph, buttons }) => {
                 <Button
                   key={index}
                   _type="button"
+                  linkType={button.linkType}
+                  internalPage={button.internalPage}
+                  externalUrl={button.externalUrl}
+                  size={button.size || "medium"}
+                  actionType={button.actionType}
                   href={
                     button.linkType === "internal"
                       ? `/${button.internalPage?.slug?.current}`

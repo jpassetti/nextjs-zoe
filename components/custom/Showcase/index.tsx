@@ -33,11 +33,12 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
     >
       {backgroundImage?.asset && (
         <Image
-  src={urlFor(backgroundImage).url()}
-  alt={backgroundImage.alt || "Showcase Image"}
-  fill
-  className={styles.showcase_image}
-/>
+          src={urlFor(backgroundImage).url()}
+          alt={backgroundImage.alt || "Showcase Image"}
+          fill
+          className={styles.showcase_image}
+          priority
+        />
       )}
       <div className={styles.showcase_content}>
         {title && (
@@ -56,7 +57,14 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
               <Button
                 _type="button"
                 key={index}
-                href={button.linkType === "internal" ? button.internalPage?.slug?.current : button.externalUrl}
+                linkType={button.linkType}
+                internalPage={
+                  button.internalPage?.slug?.current
+                    ? { slug: { current: button.internalPage.slug.current } }
+                    : undefined
+                }
+                externalUrl={button.externalUrl || ""}
+                size="medium"
                 label={button.label}
                 variant={button.variant || "primary"}
               />

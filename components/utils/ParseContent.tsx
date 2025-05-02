@@ -122,12 +122,19 @@ const ParseContent: React.FC<ParseContentProps> = ({ content }) => {
           case "button":
             //console.log(block?.internalPage?.slug.current);
             if (isButtonProps(block)) {
+              //console.log("Buttonnnnnn value : ", block);
               return (
                 <Button.Group key={index}>
                   <Button
                     _type="button"
                     linkType={block.linkType}
                     internalPage={block.internalPage}
+                    externalUrl={block.externalUrl}
+                     href={
+                        block.linkType === "internal"
+                          ? `/${block.internalPage?.slug?.current}`
+                          : block.externalUrl
+                      }
                     size={block.size || "medium"}
                     label={block.label}
                     actionType={block.actionType}
@@ -140,6 +147,7 @@ const ParseContent: React.FC<ParseContentProps> = ({ content }) => {
 
           case "buttonGroup":
             if (isButtonGroupBlock(block)) {
+              //console.log("ButtonGroup value : ", block.buttons);
               return (
                 <div key={index} className="button-group">
                   {block.buttons.map((btn, btnIndex) => (

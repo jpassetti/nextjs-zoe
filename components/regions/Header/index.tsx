@@ -32,9 +32,18 @@ const Header: React.FC = () => {
 
      <Button
         _type="button"
-      href="/consultation"
       label="Schedule a consultation"
       variant="accent"
+      size="medium"
+      linkType="internal"
+      actionType="button"
+      internalPage={
+        {
+          slug: {
+          current: "consultation",
+          },
+        }
+      }
      />
     </Row>
    )}
