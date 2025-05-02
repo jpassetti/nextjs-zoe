@@ -7,6 +7,8 @@
  justify-content: space-between;
  align-items: center;
  height: 6rem;
+ position: relative;
+ z-index: 1;
 }
 .wordmark {
  color: var(--text-color);

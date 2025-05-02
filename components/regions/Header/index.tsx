@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import { useViewport } from "@/lib/context/ViewportContext"; // Adjust path if needed
 import { AnimatePresence } from "framer-motion"; // Import AnimatePresence from Framer Motion
 
@@ -21,6 +21,7 @@ const Header: React.FC = () => {
  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
  return (
+  <Fragment>
   <header className={styles.header}>
    <Link href="/">
     <Wordmark />
@@ -58,7 +59,9 @@ const Header: React.FC = () => {
     />
    )}
 
-   <AnimatePresence>
+   
+  </header>
+  <AnimatePresence>
     {isMenuOpen && (
      <MobileNav
       closeHandler={() => {
@@ -67,7 +70,7 @@ const Header: React.FC = () => {
      />
     )}
    </AnimatePresence>
-  </header>
+   </Fragment>
  );
 };
 

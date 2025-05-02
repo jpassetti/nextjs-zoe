@@ -7,11 +7,26 @@ export async function getTransformationSlides() {
       _id,
       title,
       subheadline,
-      content,
-      "cta": cta {
-        label,
-        href
-      }
+      content[]{
+        ...,
+        _type == "button" => {
+          ...,
+          "internalPage": internalPage->{
+            _id,
+            slug { current }
+          }
+        },
+        _type == "buttonGroup" => {
+          ...,
+          buttons[]{
+            ...,
+            "internalPage": internalPage->{
+              _id,
+              slug { current }
+            }
+          }
+        }
+      },   
     }
   `;
   return await sanityClient.fetch(query);

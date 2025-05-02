@@ -90,6 +90,7 @@ const TransSequenceV4 = () => {
         height: isMobile === false ? "100vh" : "100%",
         overflowY: isMobile === false ? "scroll" : "auto",
         scrollSnapType: isMobile === false ? "y mandatory" : "none",
+        backgroundColor: isMobile ? "white" : "inherit",
       }}
     >
       <Container width={isMobile === false ? "full" : null} noPadding={isMobile === false ? true : false}>
@@ -125,7 +126,7 @@ const TransSequenceV4 = () => {
               position: "fixed",
               top: "0px",
               left: "0px",
-              zIndex: -1,
+              zIndex: 0,
               width: "100%",
               opacity: 0.2,
             }}

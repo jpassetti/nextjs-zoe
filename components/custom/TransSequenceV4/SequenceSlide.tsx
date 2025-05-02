@@ -55,7 +55,10 @@ const SequenceSlide: React.FC<SequenceSlideProps> = ({ slide, ref }) => {
           _type="button"
           variant="primary"
           label={slide.cta.label}
-          href={slide.cta.href}
+          size="medium"
+          actionType="button"
+          linkType="internal"
+          internalPage={{ slug: { current: slide.cta.href } }} // Assuming href is a slug
         />
       </Button.Group>
     )}
