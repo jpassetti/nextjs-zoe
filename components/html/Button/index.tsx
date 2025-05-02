@@ -20,7 +20,6 @@ const Button: React.FC<ButtonProps> & {
   variant,
   type,
   actionType = "button",
-  href,
   children,
 }) => {
   //console.log({externalUrl});
