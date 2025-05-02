@@ -12,7 +12,7 @@
   border-style: solid;
   border-color: transparent;
   text-decoration: none; // for buttons directly styled to anchor elements
-
+  cursor: pointer;
   &.variant--primary {
     background-color: #2c2c2c;
     color: white;
