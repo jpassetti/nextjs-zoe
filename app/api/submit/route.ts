@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     // Send notification to Zoe
     await resend.emails.send({
       from: "notifications@irini.io",
-      to: "zoe@example.com", // <-- Replace with Zoe's real email
+      to: "zoe@irini.io",
       subject: "New Questionnaire Submission",
       html: `<p>New submission for questionnaire ID: ${questionnaireId}</p>
              <pre>${JSON.stringify(responses, null, 2)}</pre>`,
