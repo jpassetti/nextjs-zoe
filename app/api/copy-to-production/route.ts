@@ -1,5 +1,8 @@
 import { NextResponse } from "next/server";
 
+// ✅ Secure the secret key
+const secretKey = process.env.SANITY_API_SECRET;
+
 // ✅ CORS Configuration
 const corsHeaders = {
   "Access-Control-Allow-Origin": "https://transform-with-irini.sanity.studio",
@@ -14,13 +17,13 @@ export async function OPTIONS() {
   });
 }
 
+// ✅ API Route: POST - Copy Staging to Production
 export async function POST(req: Request) {
-  const { secret } = await req.json();
-  const secretKey = process.env.SANITY_API_SECRET;
+  const authHeader = req.headers.get("authorization");
 
-  // ✅ Verify the secret key from request body
-  if (!secret || secret !== secretKey) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  // ✅ Verify the secret key from the Authorization header
+  if (!authHeader || !authHeader.startsWith("Bearer ") || authHeader.split(" ")[1] !== secretKey) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: corsHeaders });
   }
 
   try {
@@ -44,7 +47,7 @@ export async function POST(req: Request) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Error response from Sanity:", errorText);
+      console.error("❌ Error response from Sanity:", errorText);
       throw new Error(`Failed to copy dataset to Production. ${errorText}`);
     }
 
