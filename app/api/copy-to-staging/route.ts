@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 
-// ✅ Secure the secret key
-const secretKey = process.env.SANITY_API_SECRET;
 
 // ✅ CORS Configuration
 const corsHeaders = {
@@ -19,11 +17,32 @@ export async function OPTIONS() {
 
 // ✅ API Route: POST - Copy Production to Staging
 export async function POST(req: Request) {
-  const authHeader = req.headers.get("authorization");
+  let secret = null;
 
-  // ✅ Verify the secret key from the Authorization header (Bearer token)
-  if (!authHeader || !authHeader.startsWith("Bearer ") || authHeader.split(" ")[1] !== secretKey) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401, headers: corsHeaders });
+  try {
+    const body = await req.text();
+    secret = JSON.parse(body)?.secret;
+  } catch {
+    return NextResponse.json(
+      { error: "Invalid JSON input. Ensure you are sending a valid JSON body." },
+      {
+        status: 400,
+        headers: corsHeaders,
+      }
+    );
+  }
+
+  const secretKey = process.env.SANITY_API_SECRET;
+
+  // ✅ Verify the secret key
+  if (!secret || secret !== secretKey) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      {
+        status: 401,
+        headers: corsHeaders,
+      }
+    );
   }
 
   try {
