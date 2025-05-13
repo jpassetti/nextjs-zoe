@@ -1,16 +1,19 @@
-// /app/api/copy-to-staging/route.ts
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
-// ✅ Secure the secret key
-const secretKey = process.env.NEXT_PUBLIC_API_SECRET_TOKEN;
-
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+  const secretKey = process.env.SANITY_API_SECRET;
   const authHeader = req.headers.get("authorization");
 
   // ✅ Verify the secret key
   if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // ✅ Set CORS Headers
+  const responseHeaders = new Headers();
+  responseHeaders.set("Access-Control-Allow-Origin", "https://transform-with-irini.sanity.studio");
+  responseHeaders.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  responseHeaders.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
   try {
     const result = await fetch(
@@ -33,12 +36,21 @@ export async function POST(req: Request) {
       throw new Error("Failed to copy dataset to Staging");
     }
 
-    return NextResponse.json({ message: "Successfully copied to Staging." });
+    return new NextResponse(
+      JSON.stringify({ message: "Successfully copied to Staging." }),
+      {
+        status: 200,
+        headers: responseHeaders,
+      }
+    );
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "Failed to copy to Staging." },
-      { status: 500 }
+    return new NextResponse(
+      JSON.stringify({ error: "Failed to copy to Staging." }),
+      {
+        status: 500,
+        headers: responseHeaders,
+      }
     );
   }
 }

@@ -13,8 +13,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const result = await fetch(
-      `https://api.sanity.io/v1/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/production/copy`,
+    const response = await fetch(
+      `https://api.sanity.io/v2021-06-07/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/production/copy`,
       {
         method: "POST",
         headers: {
@@ -23,21 +23,25 @@ export async function POST(req: Request) {
         },
         body: JSON.stringify({
           source: "staging",
-          targetDataset: "production",
+          target: "production",
           includeTypes: true,
+          excludeTypes: [],
+          skipMissingAssets: true,
         }),
       }
     );
 
-    if (!result.ok) {
-      throw new Error("Failed to copy dataset to Production");
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Error response from Sanity:", errorText);
+      throw new Error(`Failed to copy dataset to Production. ${errorText}`);
     }
 
-    return NextResponse.json({ message: "Successfully copied to Production." });
+    return NextResponse.json({ message: "✅ Successfully copied to Production." });
   } catch (error) {
-    console.error("Error copying dataset:", error);
+    console.error("❌ Error copying dataset:", error);
     return NextResponse.json(
-      { error: "Failed to copy to Production." },
+      { error: "❌ Failed to copy to Production." },
       { status: 500 }
     );
   }
