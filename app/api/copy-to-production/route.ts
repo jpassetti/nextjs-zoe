@@ -1,18 +1,15 @@
-import type { NextApiRequest, NextApiResponse } from "next";
+import { NextResponse } from "next/server";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const secretKey = process.env.NEXT_PUBLIC_API_SECRET_TOKEN;
+// ✅ Secure the secret key
+const secretKey = process.env.NEXT_PUBLIC_API_SECRET_TOKEN;
+
+// ✅ API Route: POST - Copy Staging to Production
+export async function POST(req: Request) {
+  const authHeader = req.headers.get("authorization");
 
   // ✅ Verify the secret key
-  if (req.headers.authorization !== `Bearer ${secretKey}`) {
-    return res.status(401).json({ error: "Unauthorized" });
-  }
-
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+  if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
@@ -36,9 +33,12 @@ export default async function handler(
       throw new Error("Failed to copy dataset to Production");
     }
 
-    return res.status(200).json({ message: "Successfully copied to Production." });
+    return NextResponse.json({ message: "Successfully copied to Production." });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ error: "Failed to copy to Production." });
+    console.error("Error copying dataset:", error);
+    return NextResponse.json(
+      { error: "Failed to copy to Production." },
+      { status: 500 }
+    );
   }
 }
