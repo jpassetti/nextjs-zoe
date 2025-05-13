@@ -1,14 +1,25 @@
 import { NextResponse } from "next/server";
 
-// ✅ Secure the secret key
-const secretKey = process.env.NEXT_PUBLIC_API_SECRET_TOKEN;
+// ✅ CORS Configuration
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "https://transform-with-irini.sanity.studio",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
-// ✅ API Route: POST - Copy Staging to Production
+// ✅ Handle OPTIONS (CORS preflight)
+export async function OPTIONS() {
+  return NextResponse.json(null, {
+    headers: corsHeaders,
+  });
+}
+
 export async function POST(req: Request) {
-  const authHeader = req.headers.get("authorization");
+  const { secret } = await req.json();
+  const secretKey = process.env.SANITY_API_SECRET;
 
-  // ✅ Verify the secret key
-  if (!authHeader || authHeader !== `Bearer ${secretKey}`) {
+  // ✅ Verify the secret key from request body
+  if (!secret || secret !== secretKey) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -37,12 +48,20 @@ export async function POST(req: Request) {
       throw new Error(`Failed to copy dataset to Production. ${errorText}`);
     }
 
-    return NextResponse.json({ message: "✅ Successfully copied to Production." });
+    return NextResponse.json(
+      { message: "✅ Successfully copied to Production." },
+      {
+        headers: corsHeaders,
+      }
+    );
   } catch (error) {
     console.error("❌ Error copying dataset:", error);
     return NextResponse.json(
       { error: "❌ Failed to copy to Production." },
-      { status: 500 }
+      {
+        status: 500,
+        headers: corsHeaders,
+      }
     );
   }
 }
