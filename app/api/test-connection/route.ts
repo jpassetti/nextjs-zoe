@@ -17,8 +17,22 @@ export async function OPTIONS() {
 // ✅ API Route: POST - Test API Connection
 export async function POST(req: Request) {
   try {
-    const { secret } = await req.json();
-    const secretKey = process.env.NEXT_PUBLIC_API_SECRET_TOKEN;
+    let secret = null;
+
+    try {
+      const body = await req.text();
+      secret = JSON.parse(body)?.secret;
+    } catch {
+      return NextResponse.json(
+        { error: "Invalid JSON input. Ensure you are sending a valid JSON body." },
+        {
+          status: 400,
+          headers: corsHeaders,
+        }
+      );
+    }
+
+    const secretKey = process.env.SANITY_API_SECRET;
 
     // ✅ Verify the secret key
     if (!secret || secret !== secretKey) {
