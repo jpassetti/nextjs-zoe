@@ -1,26 +1,23 @@
-// /app/api/copy-to-staging/route.ts
-import { NextResponse } from "next/server";
+import type { NextApiRequest, NextApiResponse } from "next";
 
-// ✅ Secure API route for copying Production to Staging
-export async function POST(request: Request) {
-  const origin = request.headers.get("origin");
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  const secretKey = process.env.NEXT_PUBLIC_API_SECRET_TOKEN;
 
-  // ✅ Allow only your Sanity Studio origin
-  if (origin !== "https://transform-with-irini.sanity.studio") {
-    return NextResponse.json(
-      { error: "Unauthorized origin" },
-      { status: 403 }
-    );
+  // ✅ Verify the secret key
+  if (req.headers.authorization !== `Bearer ${secretKey}`) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
-  const apiSecret = request.headers.get("x-api-secret");
-  if (apiSecret !== process.env.NEXT_PUBLIC_API_SECRET_TOKEN) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
   }
 
   try {
     const result = await fetch(
-      `https://${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}.api.sanity.io/v2023-01-01/datasets/staging/copy`,
+      `https://api.sanity.io/v1/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/staging/copy`,
       {
         method: "POST",
         headers: {
@@ -29,29 +26,19 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify({
           source: "production",
-          target: "staging",
+          targetDataset: "staging",
           includeTypes: true,
-          replace: true,
         }),
       }
     );
 
     if (!result.ok) {
-      console.error("Sanity API Error:", await result.text());
-      return NextResponse.json(
-        { error: "Failed to copy dataset to Staging" },
-        { status: 500 }
-      );
+      throw new Error("Failed to copy dataset to Staging");
     }
 
-    return NextResponse.json({
-      message: "Successfully copied to Staging.",
-    });
+    return res.status(200).json({ message: "Successfully copied to Staging." });
   } catch (error) {
-    console.error("Error copying to Staging:", error);
-    return NextResponse.json(
-      { error: "Failed to copy to Staging." },
-      { status: 500 }
-    );
+    console.error(error);
+    return res.status(500).json({ error: "Failed to copy to Staging." });
   }
 }
