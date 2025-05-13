@@ -46,7 +46,7 @@ export async function PUT(req: Request) {
 
   try {
     const response = await fetch(
-      `https://api.sanity.io/v2021-06-07/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/production/copy`,
+      `https://us.api.sanity.io/v2025-02-19/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/production/copy`,
       {
         method: "PUT",
         headers: {
@@ -60,10 +60,18 @@ export async function PUT(req: Request) {
       }
     );
 
+    const responseText = await response.text();
+    console.log("✅ Sanity Response:", responseText);
+
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("❌ Error response from Sanity:", errorText);
-      throw new Error(`Failed to copy dataset to Staging. ${errorText}`);
+      console.error("❌ Error response from Sanity:", responseText);
+      return NextResponse.json(
+        { error: `❌ Failed to copy to Staging: ${responseText}` },
+        {
+          status: response.status,
+          headers: corsHeaders,
+        }
+      );
     }
 
     return NextResponse.json(
