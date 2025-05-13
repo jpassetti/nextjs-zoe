@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
 
-
 // ✅ CORS Configuration
 const corsHeaders = {
   "Access-Control-Allow-Origin": "https://transform-with-irini.sanity.studio",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Methods": "PUT, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
@@ -15,8 +14,8 @@ export async function OPTIONS() {
   });
 }
 
-// ✅ API Route: POST - Copy Production to Staging
-export async function POST(req: Request) {
+// ✅ API Route: PUT - Copy Production to Staging
+export async function PUT(req: Request) {
   let secret = null;
 
   try {
@@ -47,19 +46,16 @@ export async function POST(req: Request) {
 
   try {
     const response = await fetch(
-      `https://api.sanity.io/v2021-06-07/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/staging/copy`,
+      `https://api.sanity.io/v2021-06-07/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/production/copy`,
       {
-        method: "POST",
+        method: "PUT",
         headers: {
           Authorization: `Bearer ${process.env.SANITY_API_WRITE_TOKEN}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          source: "production",
-          target: "staging",
-          includeTypes: true,
-          excludeTypes: [],
-          skipMissingAssets: true,
+          targetDataset: "staging", // Target dataset name
+          skipHistory: true,       // Optionally skip history to speed up the copy
         }),
       }
     );
