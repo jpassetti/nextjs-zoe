@@ -46,7 +46,7 @@ export async function PUT(req: Request) {
 
   try {
     const response = await fetch(
-      `https://us.api.sanity.io/v2025-02-19/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/production/copy`,
+      `https://api.sanity.io/v2025-02-19/projects/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/datasets/production/copy`,
       {
         method: "PUT",
         headers: {
