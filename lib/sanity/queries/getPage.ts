@@ -1,7 +1,7 @@
 import { groq } from "next-sanity";
 import { sanityClient } from "../client";
 
-export async function getPage(slug: string) {
+export async function getPage(slug: string, preview: boolean = false) {
   const query = groq`
     *[_type == "page" && slug.current == $slug][0] {
       title,
@@ -25,8 +25,8 @@ export async function getPage(slug: string) {
             }
           }
         }
-      },     
-  featuredImage {
+      },
+      featuredImage {
         asset->{
           url,
           metadata {
@@ -52,7 +52,7 @@ export async function getPage(slug: string) {
         },
         noIndex
       },
-      callToAction-> { // Dereference the callToAction document
+      callToAction-> {
         headline,
         paragraph,
         buttons {
@@ -98,29 +98,33 @@ export async function getPage(slug: string) {
               ...,
               content[] {
                 ...,
-                     _type == "button" => {
+                _type == "button" => {
                   ...,
-                  
-                        label,
-                        linkType,
-                        "internalPage": internalPage-> {
-                            _id,
-                            slug {
-                            current
-                            }
-                        },
-                        externalUrl,
-                        variant,
-                        size,
-                        actionType
+                  label,
+                  linkType,
+                  "internalPage": internalPage-> {
+                    _id,
+                    slug {
+                      current
                     }
-                },
-             
+                  },
+                  externalUrl,
+                  variant,
+                  size,
+                  actionType
+                }
+              }
             }
           }
         }
       }
     }
   `;
-  return await sanityClient.fetch(query, { slug });
+
+  // Use the Sanity client with or without CDN based on the preview flag
+  const client = preview
+    ? sanityClient.withConfig({ useCdn: false }) // Fetch drafts in preview mode
+    : sanityClient;
+
+  return await client.fetch(query, { slug });
 }

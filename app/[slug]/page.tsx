@@ -2,14 +2,15 @@ import { Fragment } from "react";
 import { getPage } from "@/lib/sanity/queries/getPage";
 import type { PageData } from "@/lib/interfaces"; // Import PageData
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers"; // Import draftMode for Next.js 15+
 
 import ColumnsSection from "@/components/custom/ColumnsSection";
 import Showcase from "@/components/custom/Showcase";
 import CTA from "@/components/custom/CTA";
 import SanityPage from "@/components/custom/SanityPage";
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
+export async function generateMetadata({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const pageData: PageData = await getPage(slug);
 
   if (!pageData) return {};
@@ -23,9 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     title,
     description: seo.seoDescription ? seo.seoDescription : pageData.excerpt,
     openGraph: {
-      title: seo.ogTitle
-        ? seo.ogTitle
-        : title,
+      title: seo.ogTitle ? seo.ogTitle : title,
       description: seo.ogDescription || seo.seoDescription,
       images: seo.ogImage?.asset?.url ? [{ url: seo.ogImage.asset.url }] : [],
     },
@@ -33,10 +32,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params; // Await params before destructuring
+export default async function Page({ params }: { params: { slug: string } }) {
+  const { slug } = params;
 
-  const pageData: PageData = await getPage(slug); // Use the awaited slug
+  // Check if Draft Mode is enabled
+  const isPreview = draftMode().isEnabled;
+
+  // Fetch the page data, including drafts if in preview mode
+  const pageData: PageData = await getPage(slug, isPreview);
 
   if (!pageData) {
     notFound();
@@ -44,10 +47,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 
   const { sections, callToAction } = pageData;
   const bannedSlugs = ["about-me", "contact"];
+
   return (
     <Fragment>
-      {(bannedSlugs.includes(slug) && pageData) && <SanityPage page={pageData} />}
-      {!bannedSlugs.includes(slug) && sections && sections.length > 0 &&
+      {bannedSlugs.includes(slug) && pageData && <SanityPage page={pageData} />}
+      {!bannedSlugs.includes(slug) &&
+        sections &&
+        sections.length > 0 &&
         sections.map((section, index) => {
           switch (section._type) {
             case "showcaseSection":
@@ -58,8 +64,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
               return null;
           }
         })}
-        {callToAction && <CTA headline={callToAction.headline} paragraph={callToAction.paragraph} buttons={callToAction.buttons} />}
-
+      {callToAction && (
+        <CTA
+          headline={callToAction.headline}
+          paragraph={callToAction.paragraph}
+          buttons={callToAction.buttons}
+        />
+      )}
     </Fragment>
   );
 }
