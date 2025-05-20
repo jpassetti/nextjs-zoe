@@ -64,8 +64,8 @@ export default async function Page({
     <Fragment>
       {preview && <div style={{ background: "#ff0", padding: "10px" }}>Preview Mode</div>}
 
-      {bannedSlugs.includes(slug) && pageData && <SanityPage page={pageData} />}
-      {!bannedSlugs.includes(slug) &&
+      {bannedSlugs.includes(slug || "") && pageData && <SanityPage page={pageData} />}
+      {!bannedSlugs.includes(slug || "") &&
         sections &&
         sections.length > 0 &&
         sections.map((section, index) => {
