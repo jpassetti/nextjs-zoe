@@ -122,10 +122,20 @@ export async function getPage(slug: string, preview: boolean = false) {
   `;
 
   if (preview) {
+    // Use token and disable CDN for draft mode
     return await sanityClient
-      .withConfig({ token: process.env.SANITY_API_WRITE_TOKEN })
+      .withConfig({
+        token: process.env.SANITY_API_WRITE_TOKEN,
+        useCdn: false,
+      })
       .fetch(query, { slug });
   } else {
-    return await sanityClient.fetch(query, { slug });
+    // Use CDN for published mode (no token)
+    return await sanityClient
+      .withConfig({
+        token: undefined,
+        useCdn: true,
+      })
+      .fetch(query, { slug });
   }
 }
