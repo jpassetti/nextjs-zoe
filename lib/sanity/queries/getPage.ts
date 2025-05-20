@@ -121,10 +121,11 @@ export async function getPage(slug: string, preview: boolean = false) {
     }
   `;
 
-  // Use the Sanity client with or without CDN based on the preview flag
-  const client = preview
-    ? sanityClient.withConfig({ useCdn: false }) // Fetch drafts in preview mode
-    : sanityClient;
-
-  return await client.fetch(query, { slug });
+  if (preview) {
+    return await sanityClient
+      .withConfig({ token: process.env.SANITY_API_WRITE_TOKEN })
+      .fetch(query, { slug });
+  } else {
+    return await sanityClient.fetch(query, { slug });
+  }
 }

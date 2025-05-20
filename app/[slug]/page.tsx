@@ -2,7 +2,6 @@ import { Fragment } from "react";
 import { getPage } from "@/lib/sanity/queries/getPage";
 import type { PageData } from "@/lib/interfaces"; // Import PageData
 import { notFound } from "next/navigation";
-import { draftMode } from "next/headers"; // Import draftMode for Next.js 15+
 
 import ColumnsSection from "@/components/custom/ColumnsSection";
 import Showcase from "@/components/custom/Showcase";
@@ -11,10 +10,14 @@ import SanityPage from "@/components/custom/SanityPage";
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const { slug } = params;
-  const pageData: PageData = await getPage(slug);
 
+   // Treat undefined or empty slug as "home"
+  const actualSlug = !slug ? "home" : slug;
+ 
+ const pageData: PageData = await getPage(actualSlug);
+ 
   if (!pageData) return {};
-
+  
   const seo = pageData.seo || {};
 
   // Compose the title
@@ -32,14 +35,23 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function Page({ params }: { params: { slug: string } }) {
+export default async function Page({
+  params,
+  searchParams,
+}: {
+  params: { slug?: string }; // Make slug optional to handle undefined cases
+  searchParams?: { preview?: string }; // Make searchParams optional
+}) {
   const { slug } = params;
 
-  // Check if Draft Mode is enabled
-  const isPreview = draftMode().isEnabled;
+  // Treat undefined or empty slug as "home"
+  const actualSlug = !slug ? "home" : slug;
+
+  // Safely check for the preview parameter
+  const preview = searchParams?.preview === "true";
 
   // Fetch the page data, including drafts if in preview mode
-  const pageData: PageData = await getPage(slug, isPreview);
+  const pageData: PageData = await getPage(actualSlug, preview);
 
   if (!pageData) {
     notFound();
@@ -50,6 +62,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
 
   return (
     <Fragment>
+      {preview && <div style={{ background: "#ff0", padding: "10px" }}>Preview Mode</div>}
+
       {bannedSlugs.includes(slug) && pageData && <SanityPage page={pageData} />}
       {!bannedSlugs.includes(slug) &&
         sections &&
