@@ -13,8 +13,9 @@ export async function GET(req: Request) {
     );
   }
 
-  // Enable draft/preview mode
-  draftMode().enable();
+  // Enable draft/preview mode (await the promise)
+  const dm = await draftMode();
+  dm.enable();
 
   // Build absolute redirect URL
   const origin = req.headers.get("origin") || `${new URL(req.url).protocol}//${new URL(req.url).host}`;
