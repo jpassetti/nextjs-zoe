@@ -1,4 +1,6 @@
 import { Fragment } from "react";
+import { draftMode } from "next/headers";
+
 import { getPage } from "@/lib/sanity/queries/getPage";
 import type { PageData } from "@/lib/interfaces"; // Import PageData
 import { notFound } from "next/navigation";
@@ -35,22 +37,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function Page({
-  params,
-  searchParams,
-}: {
-  params: { slug?: string }; // Make slug optional to handle undefined cases
-  searchParams?: { preview?: string }; // Make searchParams optional
-}) {
+export default async function Page({ params }: { params: { slug?: string } }) {
+  const { isEnabled: preview } = await draftMode();
   const { slug } = params;
 
-  // Treat undefined or empty slug as "home"
   const actualSlug = !slug ? "home" : slug;
-
-  // Safely check for the preview parameter
-  const preview = searchParams?.preview === "true";
-
-  // Fetch the page data, including drafts if in preview mode
   const pageData: PageData = await getPage(actualSlug, preview);
 
   if (!pageData) {
