@@ -2,6 +2,7 @@ import { groq } from "next-sanity";
 import { sanityClient } from "../client";
 
 export async function getPage(slug: string, preview: boolean = false) {
+  console.log({preview});
   const query = groq`
     *[_type == "page" && slug.current == $slug][0] {
       title,

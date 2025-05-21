@@ -39,7 +39,9 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
 export default async function Page({ params }: { params: { slug?: string } }) {
   const { isEnabled: preview } = await draftMode();
+  console.log("Preview mode:", preview);
   const { slug } = params;
+
 
   const actualSlug = !slug ? "home" : slug;
   const pageData: PageData = await getPage(actualSlug, preview);
