@@ -2,7 +2,7 @@ import { groq } from "next-sanity";
 import { sanityClient } from "../client";
 
 export async function getPage(slug: string, preview: boolean = false) {
-  console.log({preview});
+  console.log(`getPage called with slug: ${slug} and preview: ${preview}`);
   const query = groq`
     *[_type == "page" && slug.current == $slug][0] {
       title,
@@ -124,14 +124,17 @@ export async function getPage(slug: string, preview: boolean = false) {
 
   if (preview) {
     // Use token and disable CDN for draft mode
-    return await sanityClient
-      .withConfig({
-        token: process.env.SANITY_API_WRITE_TOKEN,
-        useCdn: false,
-      })
-      .fetch(query, { slug });
+    // console.log("Fetching in preview mode with token");
+    // console.log("Sanity API Write Token:", process.env.SANITY_API_WRITE_TOKEN);
+    // console.log("Dataset:", sanityClient.config().dataset);
+    return await sanityClient.withConfig({
+      token: process.env.SANITY_API_WRITE_TOKEN,
+      useCdn: false,
+      perspective: 'drafts',
+    }).fetch(query, { slug });
   } else {
     // Use CDN for published mode (no token)
+    // console.log("Fetching in published mode without token");
     return await sanityClient
       .withConfig({
         token: undefined,

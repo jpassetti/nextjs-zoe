@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import { Fragment } from "react";
 import { draftMode } from "next/headers";
 
@@ -9,17 +10,22 @@ import ColumnsSection from "@/components/custom/ColumnsSection";
 import Showcase from "@/components/custom/Showcase";
 import CTA from "@/components/custom/CTA";
 import SanityPage from "@/components/custom/SanityPage";
+import PreviewBanner from "@/components/custom/PreviewBanner";
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export async function generateMetadata({ params }: { params: Promise<{ slug?: string }> }) {
+  const { isEnabled: preview } = await draftMode();
+  const { slug } = await params;
 
-   // Treat undefined or empty slug as "home"
+  console.log(`Generate metadata for slug: ${slug}, preview: ${preview}`);
+
+
+  // Treat undefined or empty slug as "home"
   const actualSlug = !slug ? "home" : slug;
- 
- const pageData: PageData = await getPage(actualSlug);
- 
+
+  const pageData: PageData = await getPage(actualSlug, preview);
+
   if (!pageData) return {};
-  
+
   const seo = pageData.seo || {};
 
   // Compose the title
@@ -37,11 +43,11 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default async function Page({ params }: { params: { slug?: string } }) {
+export default async function Page({ params }: { params: Promise<{ slug?: string }> }) {
   const { isEnabled: preview } = await draftMode();
-  console.log("Preview mode:", preview);
-  const { slug } = params;
+  const { slug } = await params;
 
+  console.log(`Page component called with slug: ${slug}, preview: ${preview}`);
 
   const actualSlug = !slug ? "home" : slug;
   const pageData: PageData = await getPage(actualSlug, preview);
@@ -55,7 +61,7 @@ export default async function Page({ params }: { params: { slug?: string } }) {
 
   return (
     <Fragment>
-      {preview && <div style={{ background: "#ff0", padding: "10px" }}>Preview Mode</div>}
+      {preview && <PreviewBanner />}
 
       {bannedSlugs.includes(slug || "") && pageData && <SanityPage page={pageData} />}
       {!bannedSlugs.includes(slug || "") &&
