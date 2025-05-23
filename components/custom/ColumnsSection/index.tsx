@@ -7,7 +7,7 @@ import Paragraph from "@/components/html/Paragraph";
 import ParseContent from "@/components/utils/ParseContent";
 import { ColumnsSectionProps, ContentBlockProps} from "@/lib/interfaces";
 
-
+// invisible note for a test.
 
 const ColumnsSection: React.FC<ColumnsSectionProps> = ({ data }) => {
   const { backgroundColor, rows, paddingTop, paddingBottom, marginTop, marginBottom } = data;
