@@ -52,7 +52,9 @@ const TransSequenceV5 = () => {
       useEffect(() => {
           getTransformationSlides()
             .then((data) => {
-             if (data.length > 0) setSlides(data);
+                // reverse slide order
+                data.reverse();
+                if (data.length > 0) setSlides(data);
              //console.log({data});
             })
            .finally(() => setLoading(false));
