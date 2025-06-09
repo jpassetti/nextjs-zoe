@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> & {
   UI: React.FC<UIProps>;
   Step: React.FC<StepProps>;
 } = ({
-  disabled,
+  disabled =false,
   label,
   linkType,
   internalPage,

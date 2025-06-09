@@ -27,6 +27,10 @@ h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, div, body, html {
   --header-height:  6rem;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body {
   color: var(--color-text);

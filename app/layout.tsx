@@ -28,7 +28,7 @@ export const metadata = {
   title: 'Transform with Irini',
   description: 'Guiding human systems through growth and change.',
   icons: {
-    icon: '/favicon.png',
+    icon: '/favicon.ico',
   },
 };
 

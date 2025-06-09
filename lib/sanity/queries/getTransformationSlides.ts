@@ -9,7 +9,26 @@ export async function getTransformationSlides(preview: boolean = false) {
       title,
       description,
       subheadline,
-      content,
+      content[]{
+        ...,
+        _type == "button" => {
+          ...,
+          "internalPage": internalPage->{
+            _id,
+            slug { current }
+          }
+        },
+        _type == "buttonGroup" => {
+          ...,
+          buttons[]{
+            ...,
+            "internalPage": internalPage->{
+              _id,
+              slug { current }
+            }
+          }
+        }
+      },
       image {
         asset->{
           url,
