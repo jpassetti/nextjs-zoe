@@ -1,6 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { ViewportProvider } from "@/lib/context/ViewportContext"; // Adjust path if needed
 import Header from "@/components/regions/Header";
 import Footer from "@/components/regions/Footer";
@@ -44,23 +41,23 @@ const poppins = Poppins({
 
 import "@/sass/global.scss";
 
+export const metadata = {
+  title: 'Transform with Irini',
+  description: 'Guiding human systems through growth and change.',
+  icons: {
+    icon: '/favicon.png',
+  },
+};
+
 export default function RootLayout({
  children,
 }: Readonly<{ children: React.ReactNode }>) {
- const [theme, setTheme] = useState<string>("theme1");
-
- useEffect(() => {
-  const savedTheme = localStorage.getItem("theme") || "theme1";
-  setTheme(savedTheme);
-  document.documentElement.setAttribute("data-theme", savedTheme);
- }, []);
 
  return (
   <html
    lang="en"
-   className={`p-0 m-0 ${theme === "theme1" ? montserrat.variable + " " + playfair.variable : lora.variable + " " + poppins.variable}`}
-   data-theme={theme}
-  >
+   className={`p-0 m-0`}
+   >
    <body className="p-0 m-0">
     <GoogleAnalytics />    
     <ViewportProvider>
