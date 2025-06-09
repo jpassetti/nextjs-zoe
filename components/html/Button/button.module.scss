@@ -81,7 +81,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-accent);
+  background-color: transparent;
+  //background-color: var(--color-accent);
   border: 0;
   cursor: pointer;
 
@@ -90,7 +91,9 @@
     top: 1rem;
     right: 1rem;
   }
-
+  &.background-color--accent {
+    background-color: var(--color-accent);
+  }
   &.background-color--black {
     background-color: black;
   }

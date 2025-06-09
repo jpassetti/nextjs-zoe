@@ -23,6 +23,7 @@ export interface ButtonGroupBlockProps {
 
 export interface ButtonProps {
     _type: "button";
+    disabled?: boolean;
     label?: string;
     linkType?: "internal" | "external";
     internalPage?: { slug: { current: string } };
@@ -221,6 +222,10 @@ export interface UIProps {
     backgroundColor?: "black" | "accent" | "white";
     type?: "next" | "previous" | "primary" | "menu" | "close";
     buttonType?: "button" | "submit" | "reset";
+   iconProps?: {
+    name?: string;
+    color?: string;
+   };
     label?: string;
     clickHandler?: () => void;
 }

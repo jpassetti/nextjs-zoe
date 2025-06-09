@@ -12,6 +12,7 @@ const Button: React.FC<ButtonProps> & {
   UI: React.FC<UIProps>;
   Step: React.FC<StepProps>;
 } = ({
+  disabled,
   label,
   linkType,
   internalPage,
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> & {
     button: true,
     [`size--${size}`]: size,
     [`variant--${resolvedVariant}`]: resolvedVariant,
+    [`disabled`]: disabled,
   });
 
   const content = children || label;
@@ -80,8 +82,9 @@ const Group: React.FC<GroupProps> = ({
 
 const UI: React.FC<UIProps> = ({
  backgroundColor,
+ iconProps,
  label,
- type = "primary", // ✅ Used for styling
+ type, // ✅ Used for styling
  buttonType = "button", // ✅ Used for the HTML attribute
  clickHandler,
 }) => {
@@ -91,7 +94,7 @@ const UI: React.FC<UIProps> = ({
   [`background-color--${backgroundColor}`]: backgroundColor,
  });
 
- const iconName = type === "primary" ? "menu" : type; // Map `primary` to a valid icon name
+ const iconName = type === "primary" ? "menu" : iconProps?.name ? iconProps.name : type; // Map `primary` to a valid icon name
 
  if (!icons[iconName as keyof typeof icons]) {
   console.error(`Invalid icon name: ${iconName}`);
@@ -104,9 +107,10 @@ const UI: React.FC<UIProps> = ({
    <Icon
     name={iconName as keyof typeof icons} // Ensure `name` is a valid key
     color={
-     backgroundColor === "black" || backgroundColor === "accent"
-      ? "white"
-      : "black"
+      (iconProps?.color as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange" | undefined) ||
+      ((backgroundColor === "black" || backgroundColor === "accent"
+        ? "white"
+        : "black") as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange")
     }
    />
   </button>

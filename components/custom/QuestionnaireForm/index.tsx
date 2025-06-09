@@ -1,15 +1,15 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
 
 interface Question {
- label: string;
- question: string;
- type:
+  label: string;
+  question: string;
+  type:
   | "text"
   | "email"
   | "tel"
@@ -19,210 +19,299 @@ interface Question {
   | "textarea"
   | "radio"
   | "checkbox";
- placeholder?: string;
- helperText?: string;
- required?: boolean;
- options?: string[];
+  placeholder?: string;
+  helperText?: string;
+  required?: boolean;
+  options?: string[];
 }
 
 interface Step {
- title: string;
- description?: string;
- questions: Question[];
+  title: string;
+  description?: string;
+  questions: Question[];
 }
 
 interface Questionnaire {
- title: string;
- description?: string;
- steps: Step[];
+  title: string;
+  description?: string;
+  steps: Step[];
 }
 
 interface QuestionnaireFormProps {
- step: number;
- setStep: (step: number) => void;
- responses: Record<string, string | string[]>;
- handleInputChange: (
-  question: string,
-  value: string | string[],
-  type?: string
- ) => void;
- questionnaire: Questionnaire;
- validationErrors: Record<string, string>;
- validateStep: () => boolean; // ✅ Add this line
- handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
+  step: number;
+  setStep: (step: number) => void;
+  responses: Record<string, string | string[]>;
+  handleInputChange: (
+    question: string,
+    value: string | string[],
+    type?: string
+  ) => void;
+  questionnaire: Questionnaire;
+  validationErrors: Record<string, string>;
+  validateStep: () => boolean; // ✅ Add this line
+  handleSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
 }
 
 // Google Analytics tracking helpers
 function trackFormStep(step: number, questionnaireTitle: string) {
- if (
-  typeof window !== "undefined" &&
-  (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag
- ) {
-  (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
-   "event",
-   "form_step",
-   {
-    step,
-    questionnaire_title: questionnaireTitle,
-   }
-  );
- }
+  if (
+    typeof window !== "undefined" &&
+    (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag
+  ) {
+    (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
+      "event",
+      "form_step",
+      {
+        step,
+        questionnaire_title: questionnaireTitle,
+      }
+    );
+  }
 }
 
 function trackFormCompletion(questionnaireTitle: string) {
- if (
-  typeof window !== "undefined" &&
-  (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag
- ) {
-  (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
-   "event",
-   "form_complete",
-   {
-    questionnaire_title: questionnaireTitle,
-   }
-  );
- }
+  if (
+    typeof window !== "undefined" &&
+    (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag
+  ) {
+    (window as unknown as { gtag: (...args: unknown[]) => void }).gtag(
+      "event",
+      "form_complete",
+      {
+        questionnaire_title: questionnaireTitle,
+      }
+    );
+  }
 }
 
 export default function QuestionnaireForm({
- step,
- setStep,
- responses,
- handleInputChange,
- questionnaire,
- handleSubmit,
+  step,
+  setStep,
+  responses,
+  handleInputChange,
+  questionnaire,
+  handleSubmit,
 }: QuestionnaireFormProps) {
- const formRef = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
- return (
-  <Form
-   ref={formRef}
-   onSubmit={(e) => {
-    handleSubmit(e);
-    // Track form completion on submit
-    trackFormCompletion(questionnaire.title);
-   }}
-  >
-   {/* Step Heading */}
-   <Heading level={2} marginBottom={1} marginTop={3} color="black">
-    {questionnaire.steps[step]?.title || "Untitled Step"}
-   </Heading>
-   {questionnaire.steps[step]?.description && (
-    <Paragraph color="black" marginBottom={3}>
-     {questionnaire.steps[step].description}
-    </Paragraph>
-   )}
+  const [formErrors, setFormErrors] = useState<{ [key: string]: string | null }>({});
+  const [formValues, setFormValues] = useState<{ [key: string]: string | string[] | null }>({});
+  const [isFormValid, setIsFormValid] = useState(true);
 
-   {/* Questions */}
-   {questionnaire.steps[step]?.questions.map((q, index) => (
-    <Form.Group key={`step-${step}-question-${index}`}>
-     <Heading level={3} marginBottom={1} color="black">
-      {q.label} {q.required && <span style={{ color: "red" }}>*</span>}
-     </Heading>
-     {q.helperText && <Paragraph color="gray">{q.helperText}</Paragraph>}
+  const updateFormValidity = (
+    updatedErrors: { [key: string]: string | null },
+    updatedValues: { [key: string]: string | string[] | null }
+  ) => {
+    const allFieldsFilled = Object.values(updatedValues).every(
+      (value) =>
+        value !== null &&
+        (Array.isArray(value) ? value.length > 0 : value !== "")
+    );
+    const noValidationErrors = Object.values(updatedErrors).every((error) => error === null);
+    setIsFormValid(allFieldsFilled && noValidationErrors);
+  };
 
-     {/* Standard inputs */}
-     {["text", "email", "tel", "password", "number", "date"].includes(
-      q.type
-     ) && (
-      <Form.Input
-       type={
-        q.type as "text" | "email" | "tel" | "password" | "number" | "date"
-       }
-       placeholder={q.placeholder || ""}
-       value={
-        typeof responses[q.question] === "string" ? responses[q.question] : ""
-       }
-       name={q.question}
-       required={q.required}
-       onChange={(e) => handleInputChange(q.question, e.target.value)}
-      />
-     )}
+  const handleValidation = (name: string, error: string | null) => {
+    setFormErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors, [name]: error };
+      updateFormValidity(updatedErrors, formValues);
+      return updatedErrors;
+    });
+  };
 
-     {/* Textarea */}
-     {q.type === "textarea" && (
-      <Form.Textarea
-       placeholder={q.placeholder || ""}
-       value={
-        typeof responses[q.question] === "string" ? responses[q.question] : ""
-       }
-       name={q.question}
-       required={q.required}
-       onChange={(e) => handleInputChange(q.question, e.target.value)}
-      />
-     )}
-
-     {/* Radio group */}
-     {q.type === "radio" &&
-      q.options?.map((option, i) => (
-       <Form.Label key={`radio-${step}-${q.question}-${i}`}>
-        <Form.Input
-         type="radio"
-         name={q.question}
-         value={option}
-         checked={responses[q.question] === option}
-         onChange={(e) => handleInputChange(q.question, e.target.value)}
-        />
-        {option}
-       </Form.Label>
-      ))}
-
-     {/* Checkbox group */}
-     {q.type === "checkbox" &&
-      q.options?.map((option, i) => (
-       <Form.CheckboxGroup key={`checkbox-${step}-${q.question}-${i}`}>
-        <Form.Label>
-         <Form.Input
-          type="checkbox"
-          name={`${q.question}-${option}`}
-          value={option}
-          checked={
-           Array.isArray(responses[q.question])
-            ? responses[q.question].includes(option)
-            : false
-          }
-          onChange={() => handleInputChange(q.question, option, "checkbox")}
-         />
-         {option}
-        </Form.Label>
-       </Form.CheckboxGroup>
-      ))}
-    </Form.Group>
-   ))}
-
-   {/* Navigation Buttons */}
-   <Button.Group justifyContent="space-between" borderTop={1}>
-    {step > 0 && (
-     <Button.Step
-      label="Previous"
-      variant="inverted"
-      buttonType="button"
-      clickHandler={() => setStep(step - 1)}
-     />
-    )}
-    <Paragraph textAlign={step === 0 ? "left" : "center"}>
-     Step {step + 1} of {questionnaire.steps.length}
-    </Paragraph>
-    {step < questionnaire.steps.length - 1 && (
-     <Button.Step
-      label="Next"
-      variant="primary"
-      buttonType="button"
-      clickHandler={() => {
-       if (formRef.current?.checkValidity()) {
-        setStep(step + 1);
-        // Track step progress
-        trackFormStep(step + 2, questionnaire.title);
-       } else {
-        formRef.current?.reportValidity(); // show native error bubbles
-       }
+  const handleValueChange = (name: string, value: string | string[] | null) => {
+    setFormValues((prevValues) => {
+      const updatedValues = { ...prevValues, [name]: value };
+      updateFormValidity(formErrors, updatedValues);
+      return updatedValues;
+    });
+  };
+  return (
+    <Form
+      ref={formRef}
+      onSubmit={(e) => {
+        handleSubmit(e);
+        // Track form completion on submit
+        trackFormCompletion(questionnaire.title);
       }}
-     />
-    )}
-    {step === questionnaire.steps.length - 1 && (
-     <Button _type="button" label="Submit" variant="primary" actionType="submit" />
-    )}
-   </Button.Group>
-  </Form>
- );
+    >
+      {/* Step Heading */}
+      <Heading level={2} marginBottom={1} marginTop={3} color="black">
+        {questionnaire.steps[step]?.title || "Untitled Step"}
+      </Heading>
+      {questionnaire.steps[step]?.description && (
+        <Paragraph color="black" marginBottom={3}>
+          {questionnaire.steps[step].description}
+        </Paragraph>
+      )}
+
+      {/* Questions */}
+      {questionnaire.steps[step]?.questions.map((q, index) => (
+        <Form.Group key={`step-${step}-question-${index}`}>
+          <Heading level={3} marginBottom={1} color="black">
+            {q.label} {q.required && <span style={{ color: "red" }}>*</span>}
+          </Heading>
+          {q.helperText && <Paragraph color="gray">{q.helperText}</Paragraph>}
+
+          {/* Standard inputs */}
+          {["text", "email", "tel", "password", "number", "date"].includes(q.type) && (
+            <Form.Input
+              type={q.type as "text" | "email" | "tel" | "password" | "number" | "date"}
+              placeholder={q.placeholder || ""}
+              value={typeof responses[q.question] === "string" ? responses[q.question] : ""}
+              name={q.question}
+              required={q.required}
+              validate={(value) => {
+                if (
+                  q.required &&
+                  (!value ||
+                    (typeof value === "string" && value.trim() === "") ||
+                    (typeof value !== "string" && String(value).trim() === ""))
+                ) {
+                  return "This field is required";
+                }
+                if (q.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value))) {
+                  return "Invalid email address";
+                }
+                if (q.type === "tel" && value && !/^\+?[0-9]{10,15}$/.test(String(value))) {
+                  return "Invalid phone number";
+                }
+                return null;
+              }}
+              onValidation={(error) => handleValidation(q.question, error)}
+              onChange={(e) => {
+                handleValueChange(q.question, e.target.value);
+                handleInputChange(q.question, e.target.value);
+              }}
+            />
+          )}
+
+          {/* Textarea */}
+          {q.type === "textarea" && (
+            <Form.Textarea
+              placeholder={q.placeholder || ""}
+              maxLength={500}
+              value={typeof responses[q.question] === "string" ? responses[q.question] : ""}
+              name={q.question}
+              required={q.required}
+              validate={(value) => (q.required && (!value || value.trim() === "") ? "This field is required" : null)}
+              //onValidation={(error) => handleValidation(q.question, error)}
+              onChange={(e) => {
+                handleValueChange(q.question, e.target.value);
+                handleInputChange(q.question, e.target.value);
+              }}
+            />
+          )}
+
+          {/* Radio group */}
+          {q.type === "radio" &&
+            q.options?.map((option, i) => (
+              <Form.Label key={`radio-${step}-${q.question}-${i}`}>
+                <Form.Input
+                  type="radio"
+                  name={q.question}
+                  required={q.required}
+                  value={option}
+                  checked={responses[q.question] === option}
+                  onChange={(e) => {
+                    handleValueChange(q.question, e.target.value);
+                    handleInputChange(q.question, e.target.value);
+                  }}
+                />
+                {option}
+              </Form.Label>
+            ))}
+
+          {/* Checkbox group */}
+          {q.type === "checkbox" && (
+            <Form.CheckboxGroup>
+
+              {q.options?.map((option, i) => (
+                <Form.Label key={`checkbox-${step}-${q.question}-${i}`}>
+                  <Form.Input
+                    type="checkbox"
+                    name={`${q.question}-${option}`}
+                    value={option}
+                    checked={
+                      Array.isArray(responses[q.question])
+                        ? responses[q.question].includes(option)
+                        : false
+                    }
+                    onChange={(e) => {
+                      const checked = e.target.checked;
+                      const currentValues = Array.isArray(responses[q.question])
+                        ? responses[q.question]
+                        : typeof responses[q.question] === "string" && responses[q.question]
+                          ? [responses[q.question]]
+                          : [];
+                      const updatedValues = checked
+                        ? [...currentValues, option]
+                        : Array.isArray(currentValues)
+                          ? currentValues.filter((val) => val !== option)
+                          : [];
+
+                      // Ensure updatedValues is always a string[]
+                      const sanitizedValues = Array.isArray(updatedValues)
+                        ? updatedValues.filter((v): v is string => typeof v === "string")
+                        : [];
+
+                      handleValueChange(q.question, sanitizedValues);
+                      handleInputChange(q.question, sanitizedValues, "checkbox");
+                    }}
+                  />
+                  {option}
+                </Form.Label>
+              ))}
+              {/* Group-level validation */}
+              {q.required && Array.isArray(responses[q.question]) && responses[q.question].length === 0 && (
+                <span style={{ color: "red" }}>Please select at least one option</span>
+              )}
+            </Form.CheckboxGroup>
+          )}
+
+        </Form.Group>
+      ))}
+
+      {/* Navigation Buttons */}
+      <Button.Group justifyContent="space-between" borderTop={1}>
+        {step > 0 && (
+          <Button.Step
+            label="Previous"
+            variant="inverted"
+            buttonType="button"
+            clickHandler={() => setStep(step - 1)}
+          />
+        )}
+        <Paragraph textAlign={step === 0 ? "left" : "center"}>
+          Step {step + 1} of {questionnaire.steps.length}
+        </Paragraph>
+        {step < questionnaire.steps.length - 1 && (
+          <Button.Step
+            label="Next"
+            variant="primary"
+            buttonType="button"
+            disabled={!isFormValid}
+            clickHandler={() => {
+              if (formRef.current?.checkValidity()) {
+                setStep(step + 1);
+                trackFormStep(step + 2, questionnaire.title);
+              } else {
+                formRef.current?.reportValidity();
+              }
+            }}
+          />
+        )}
+        {step === questionnaire.steps.length - 1 && (
+          <Button
+            _type="button"
+            label="Submit"
+            variant="primary"
+            actionType="submit"
+            disabled={!isFormValid}
+          />
+        )}
+      </Button.Group>
+
+    </Form>
+  );
 }

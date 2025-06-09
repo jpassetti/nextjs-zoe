@@ -7,10 +7,11 @@ import whiteAnimationData from "./olive-branch--keyframes--white.json"; // Adjus
 import mauveAnimationData from "./olive-branch--keyframes--mauve.json"; // Adjust path
 
 interface OliveBranchKeyFramesProps {
+  isMobile?: boolean; // Optional prop for mobile detection
   step: number;
   fill?: "white" | "mauve"; // Restrict fill to "white" or "mauve"
 }
-const OliveBranchKeyFrames: React.FC<OliveBranchKeyFramesProps> = ({ step, fill }) => { const lottieRef = useRef<LottieRefCurrentProps | null>(null);
+const OliveBranchKeyFrames: React.FC<OliveBranchKeyFramesProps> = ({ step, fill, isMobile }) => { const lottieRef = useRef<LottieRefCurrentProps | null>(null);
 
  // ✅ Memoize keyframes to prevent unnecessary re-renders
  const keyframes = useMemo(() => [17, 25, 37], []);
@@ -30,7 +31,7 @@ const OliveBranchKeyFrames: React.FC<OliveBranchKeyFramesProps> = ({ step, fill 
  return (
   <motion.div
    style={{ width: 300, height: 300 }}
-   animate={{ scale: scaleValues[step] }}
+   animate={{ scale: !isMobile ? scaleValues[step]: 1 }}
    transition={{ duration: 0.5, ease: "easeOut" }}
   >
    <Lottie

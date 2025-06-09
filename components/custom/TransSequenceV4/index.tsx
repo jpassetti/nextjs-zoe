@@ -35,6 +35,7 @@ interface Slide {
 }
 
 const TransSequenceV4 = () => {
+  console.log("transsequencev4");
   const [slides, setSlides] = useState<Slide[]>([]);
   const [animationState, setAnimationState] = useState<number>(0);
   const [loading, setLoading] = useState(true);
@@ -44,9 +45,10 @@ const TransSequenceV4 = () => {
   useEffect(() => {
     getTransformationSlides()
       .then((data) => {
-        if (data.length > 0) setSlides(data);
+       if (data.length > 0) setSlides(data);
+       //console.log({data});
       })
-      .finally(() => setLoading(false));
+     .finally(() => setLoading(false));
   }, []);
 
   const handleIntersection = useCallback(

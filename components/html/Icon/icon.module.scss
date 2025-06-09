@@ -7,8 +7,14 @@
 .fill--primary {
   fill: var(--color-primary); // Use your project's primary color variable
 }
+.fill--secondary {
+  fill: var(--color-secondary); // Use your project's secondary color variable
+}
 .fill--black {
   fill: #000;
+}
+.fill--orange {
+  fill: var(--color-orange); // Use your project's orange color variable
 }
 
 .fill--white {

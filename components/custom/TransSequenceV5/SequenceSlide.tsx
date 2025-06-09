@@ -4,8 +4,9 @@ import { PortableTextComponents } from "@/components/utils/PortableTextComponent
 import { ForwardedRef } from "react";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
+import SlideNumbers from "./SlideNumbers";
 
-import styles from "./slide.module.scss";
+import styles from "./transsequence.module.scss";
 
 interface Slide {
   title: string;
@@ -19,14 +20,26 @@ interface Slide {
 interface SequenceSlideProps {
   slide: Slide;
   ref?: ForwardedRef<HTMLDivElement>; // Type the ref as a forwarded ref for a div element
+  id: string; // Assuming each slide has a unique ID
+  isMobile?: boolean; // Optional prop to indicate if the slide is for mobile
+    activeSlide?: number; // Optional prop to control animation state
+totalSlides?: number; // Optional prop to indicate total number of slides
 }
 
-const SequenceSlide: React.FC<SequenceSlideProps> = ({ slide, ref }) => {
+const SequenceSlide: React.FC<SequenceSlideProps> = ({ activeSlide, slide, ref, id, isMobile, totalSlides }) => {
   return <div
     ref={ref}
-    className={styles.sequence_slide}
+    className={styles.sequence__slide}
+    id={id}
   >
-    <Heading level={2} marginBottom={2} color="primary">
+    <div className={styles.sequence__slide__content}>
+        {isMobile && (
+          <SlideNumbers
+            totalSlides={totalSlides ?? 3}
+            activeSlide={activeSlide ?? 0}
+          />
+        )}
+    <Heading level={2} marginBottom={2} color="primary" textAlign={isMobile ? "center" : "left"}>
       {slide.title}
     </Heading>
     {slide.subheadline && (
@@ -37,12 +50,13 @@ const SequenceSlide: React.FC<SequenceSlideProps> = ({ slide, ref }) => {
         fontWeight="normal"
         fontFamily="primary"
         fontStyle="italic"
+        textAlign={isMobile ? "center" : "left"}
       >
         {slide.subheadline}
       </Heading>
     )}
     {slide.content && (
-      <div className="prose">
+      <div>
         <PortableText
           value={slide.content}
           components={PortableTextComponents}
@@ -62,6 +76,7 @@ const SequenceSlide: React.FC<SequenceSlideProps> = ({ slide, ref }) => {
         />
       </Button.Group>
     )}
+    </div>
   </div>
 }
 export default SequenceSlide;

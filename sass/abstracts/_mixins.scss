@@ -250,7 +250,7 @@
  $values: row, row-reverse, column, column-reverse, initial, inherit;
 
  @each $value in $values {
-  &.flex-direction-#{$value} {
+  &.flex-direction--#{$value} {
    display: flex;
    flex-direction: #{$value};
   }

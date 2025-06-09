@@ -1,3 +1,6 @@
+import { useState, Fragment } from "react";
+import classnames from "classnames/bind";
+
 import {
  forwardRef,
  ChangeEvent,
@@ -6,7 +9,9 @@ import {
  InputHTMLAttributes,
  TextareaHTMLAttributes,
 } from "react";
+
 import styles from "./form.module.scss";
+const cx = classnames.bind(styles);
 
 // 🔹 Form props
 interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
@@ -15,16 +20,18 @@ interface FormProps extends FormHTMLAttributes<HTMLFormElement> {
 
 // 🔹 Input props
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
- type:
-  | "text"
-  | "email"
-  | "number"
-  | "password"
-  | "checkbox"
-  | "radio"
-  | "tel"
-  | "date"
-  | "datetime-local";
+  type:
+    | "text"
+    | "email"
+    | "number"
+    | "password"
+    | "checkbox"
+    | "radio"
+    | "tel"
+    | "date"
+    | "datetime-local";
+  validate?: (value: string | number | boolean) => string | null; // Custom validation function
+  onValidation?: (error: string | null) => void; // Notify parent about validation errors
 }
 
 // 🔹 OtherInput props
@@ -35,9 +42,25 @@ interface OtherInputProps {
  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
+interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  validate?: (value: string) => string | null; // Validation function
+  onValidation?: (error: string | null) => void; // Notify parent about validation errors
+}
+
 // 🔹 Main form component
 const FormBase = forwardRef<HTMLFormElement, FormProps>(
  ({ children, ...props }, ref) => {
+  // const [formErrors, setFormErrors] = useState<{ [key: string]: string | null }>({});
+  // const [isFormValid, setIsFormValid] = useState(true);
+
+  // const handleValidation = (name: string, error: string | null) => {
+  //   setFormErrors((prevErrors) => {
+  //     const updatedErrors = { ...prevErrors, [name]: error };
+  //     setIsFormValid(Object.values(updatedErrors).every((err) => err === null));
+  //     return updatedErrors;
+  //   });
+  // };
+  
   return (
    <form ref={ref} {...props}>
     {children}
@@ -68,39 +91,113 @@ const Label = ({
  </label>
 );
 
-const Input = ({
- type,
- className,
- pattern,
- title,
- inputMode,
- ...props
-}: InputProps) => {
- const isTel = type === "tel";
+const Input: React.FC<InputProps> = ({ type, validate, onValidation, ...props }) => {
+  const [error, setError] = useState<string | null>(null);
 
- const defaultPattern = "^\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}$";
- const defaultTitle = "Please enter a valid phone number";
- const defaultInputMode = "tel";
+  const inputClasses = cx({ 
+    [`form__input`]: true,
+    [`form__input--${type}`]: type, // Add type-specific class
+  });
 
- const resolvedPattern = isTel && !pattern ? defaultPattern : pattern;
- const resolvedTitle = isTel && !title ? defaultTitle : title;
- const resolvedInputMode = isTel && !inputMode ? defaultInputMode : inputMode;
+  const handleValidation = (value: string | number | boolean) => {
+    if (validate) {
+      const validationError = validate(value);
+      setError(validationError);
+      if (onValidation) {
+        onValidation(validationError);
+      }
+    } else {
+      // Default validation logic for common types
+      switch (type) {
+        case "email":
+          if (typeof value === "string" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+            setError("Invalid email address");
+          } else {
+            setError(null);
+          }
+          break;
+        case "number":
+          if (typeof value === "string" && isNaN(Number(value))) {
+            setError("Must be a valid number");
+          } else {
+            setError(null);
+          }
+          break;
+        case "tel":
+          if (typeof value === "string" && !/^\+?[0-9]{10,15}$/.test(value)) {
+            setError("Invalid phone number");
+          } else {
+            setError(null);
+          }
+          break;
+        case "checkbox":
+        case "radio":
+          if (typeof value !== "boolean") {
+            setError("Invalid selection");
+          } else {
+            setError(null);
+          }
+          break;
+        default:
+          setError(null); // No default validation
+      }
+    }
+  };
 
- return (
-  <input
-   className={`${styles.form__input} ${styles[`form__input--${type}`]} ${className || ""}`}
-   type={type}
-   pattern={resolvedPattern}
-   title={resolvedTitle}
-   inputMode={resolvedInputMode}
-   {...props}
-  />
- );
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = type === "checkbox" || type === "radio" ? e.target.checked : e.target.value;
+    handleValidation(value);
+    if (props.onChange) {
+      props.onChange(e);
+    }
+  };
+
+  return (
+   <Fragment>
+      <input className={inputClasses} type={type} {...props} onChange={handleChange} />
+      {error && <span style={{ color: "red" }}>{error}</span>}
+   </Fragment>
+  );
 };
 
-const Textarea = (props: TextareaHTMLAttributes<HTMLTextAreaElement>) => (
- <textarea className={styles.form__textarea} {...props} />
-);
+const Textarea: React.FC<TextareaProps> = ({ validate, onValidation, maxLength, ...props }) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const textAreaClasses = cx({ 
+    [`form__textarea`]: true, 
+  });
+
+  const handleValidation = (value: string) => {
+    let validationError = null;
+    if (validate) {
+      validationError = validate(value);
+    }
+    // Check for maxLength validation
+    if (maxLength && value.length > maxLength) {
+      validationError = `Maximum ${maxLength} characters allowed`;
+    }
+    setError(validationError);
+    if (onValidation) {
+      onValidation(validationError);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    handleValidation(value);
+    if (props.onChange) {
+      props.onChange(e);
+    }
+  };
+
+  return (
+    <Fragment>
+      <textarea className={textAreaClasses} maxLength={maxLength} onChange={handleChange} {...props} />
+      {error && <span style={{ color: "red" }}>{error}</span>}
+    </Fragment>
+  );
+};
+
 
 const HelperText = ({ children }: { children: ReactNode }) => (
  <p className={styles.form__helperText}>{children}</p>
