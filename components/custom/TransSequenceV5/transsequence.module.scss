@@ -25,11 +25,13 @@
             }
         &__container {
             //background-color: orange;
-            height: 100vh;
-            display: flex;
+            
+           
+            @include mixins.breakpoint(sm) {
+                 display: flex;
             justify-content: center;
             align-items: center;
-            @include mixins.breakpoint(sm) {
+                height: 100vh;
                 position: sticky;
                 top: 0;
             }
