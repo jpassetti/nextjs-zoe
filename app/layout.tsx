@@ -3,24 +3,7 @@ import Header from "@/components/regions/Header";
 import Footer from "@/components/regions/Footer";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
-import { Montserrat, Playfair, Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
-
-// Theme 1 Fonts
-const montserrat = Montserrat({
- subsets: ["latin"],
- weight: ["400", "700"],
- style: ["normal", "italic"],
- variable: "--font-primary",
- display: "swap",
-});
-
-const playfair = Playfair({
- subsets: ["latin"],
- weight: ["400", "700"],
- style: ["normal", "italic"],
- variable: "--font-secondary",
- display: "swap",
-});
+import { Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
 
 // Theme 2 Fonts
 const lora = Lora({
@@ -56,8 +39,8 @@ export default function RootLayout({
  return (
   <html
    lang="en"
-   className={`p-0 m-0`}
-   >
+   className={`p-0 m-0 ${lora.variable + " " + poppins.variable}`}
+  >
    <body className="p-0 m-0">
     <GoogleAnalytics />    
     <ViewportProvider>
