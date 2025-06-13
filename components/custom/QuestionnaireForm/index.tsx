@@ -173,9 +173,10 @@ export default function QuestionnaireForm({
                 if (q.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value))) {
                   return "Invalid email address";
                 }
-                if (q.type === "tel" && value && !/^\+?[0-9]{10,15}$/.test(String(value))) {
-                  return "Invalid phone number";
+                if (q.type === "tel" && value && !/^\(\d{3}\) \d{3}-\d{4}$/.test(String(value))) {
+                  return "Invalid phone number. Format: (###) ###-####";
                 }
+
                 return null;
               }}
               onValidation={(error) => handleValidation(q.question, error)}
