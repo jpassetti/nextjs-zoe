@@ -158,6 +158,7 @@ export default function QuestionnaireForm({
             <Form.Input
               type={q.type as "text" | "email" | "tel" | "password" | "number" | "date"}
               placeholder={q.placeholder || ""}
+              maxLength={100} // Set maximum character limit
               value={typeof responses[q.question] === "string" ? responses[q.question] : ""}
               name={q.question}
               required={q.required}
@@ -169,6 +170,9 @@ export default function QuestionnaireForm({
                     (typeof value !== "string" && String(value).trim() === ""))
                 ) {
                   return "This field is required";
+                }
+                if (typeof value === "string" && value.length > 100) {
+                  return "Maximum 100 characters allowed";
                 }
                 if (q.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value))) {
                   return "Invalid email address";
@@ -195,8 +199,15 @@ export default function QuestionnaireForm({
               value={typeof responses[q.question] === "string" ? responses[q.question] : ""}
               name={q.question}
               required={q.required}
-              validate={(value) => (q.required && (!value || value.trim() === "") ? "This field is required" : null)}
-              //onValidation={(error) => handleValidation(q.question, error)}
+              validate={(value) => {
+                if (q.required && (!value || value.trim() === "")) {
+                  return "This field is required";
+                }
+                if (value.length > 500) {
+                  return "Maximum 500 characters allowed";
+                }
+                return null;
+              }}              //onValidation={(error) => handleValidation(q.question, error)}
               onChange={(e) => {
                 handleValueChange(q.question, e.target.value);
                 handleInputChange(q.question, e.target.value);
@@ -224,51 +235,46 @@ export default function QuestionnaireForm({
             ))}
 
           {/* Checkbox group */}
-          {q.type === "checkbox" && (
-            <Form.CheckboxGroup>
+        {q.type === "checkbox" && (
+  <Form.CheckboxGroup>
+    {q.options?.map((option, i) => (
+      <Form.Label key={`checkbox-${step}-${q.question}-${i}`}>
+        <Form.Input
+          type="checkbox"
+          name={q.question} // Use the same name for all checkboxes in the group
+          value={option}
+          checked={
+            Array.isArray(responses[q.question])
+              ? responses[q.question].includes(option)
+              : false
+          }
+          onChange={(e) => {
+            const checked = e.target.checked;
 
-              {q.options?.map((option, i) => (
-                <Form.Label key={`checkbox-${step}-${q.question}-${i}`}>
-                  <Form.Input
-                    type="checkbox"
-                    name={`${q.question}-${option}`}
-                    value={option}
-                    checked={
-                      Array.isArray(responses[q.question])
-                        ? responses[q.question].includes(option)
-                        : false
-                    }
-                    onChange={(e) => {
-                      const checked = e.target.checked;
-                      const currentValues = Array.isArray(responses[q.question])
-                        ? responses[q.question]
-                        : typeof responses[q.question] === "string" && responses[q.question]
-                          ? [responses[q.question]]
-                          : [];
-                      const updatedValues = checked
-                        ? [...currentValues, option]
-                        : Array.isArray(currentValues)
-                          ? currentValues.filter((val) => val !== option)
-                          : [];
+            // Ensure responses[q.question] is an array
+            const currentValues = Array.isArray(responses[q.question])
+              ? responses[q.question]
+              : [];
 
-                      // Ensure updatedValues is always a string[]
-                      const sanitizedValues = Array.isArray(updatedValues)
-                        ? updatedValues.filter((v): v is string => typeof v === "string")
-                        : [];
+            // Update the array based on whether the checkbox is checked or unchecked
+            const updatedValues = checked
+              ? [...currentValues, option]
+              : currentValues.filter((val) => val !== option);
 
-                      handleValueChange(q.question, sanitizedValues);
-                      handleInputChange(q.question, sanitizedValues, "checkbox");
-                    }}
-                  />
-                  {option}
-                </Form.Label>
-              ))}
-              {/* Group-level validation */}
-              {q.required && Array.isArray(responses[q.question]) && responses[q.question].length === 0 && (
-                <span style={{ color: "red" }}>Please select at least one option</span>
-              )}
-            </Form.CheckboxGroup>
-          )}
+            // Update the state with the new array
+            handleValueChange(q.question, updatedValues);
+            handleInputChange(q.question, updatedValues, "checkbox");
+          }}
+        />
+        {option}
+      </Form.Label>
+    ))}
+    {/* Group-level validation */}
+    {q.required && Array.isArray(responses[q.question]) && responses[q.question].length === 0 && (
+      <span style={{ color: "red" }}>Please select at least one option</span>
+    )}
+  </Form.CheckboxGroup>
+)}
 
         </Form.Group>
       ))}
