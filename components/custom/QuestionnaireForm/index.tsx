@@ -252,8 +252,8 @@ export default function QuestionnaireForm({
             const checked = e.target.checked;
 
             // Ensure responses[q.question] is an array
-            const currentValues = Array.isArray(responses[q.question])
-              ? responses[q.question]
+            const currentValues: string[] = Array.isArray(responses[q.question])
+              ? responses[q.question] as string[]
               : [];
 
             // Update the array based on whether the checkbox is checked or unchecked
