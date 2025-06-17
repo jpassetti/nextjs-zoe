@@ -12,7 +12,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const Input: React.FC<InputProps> = ({ type, validate, onValidation, maxLength, ...props }) => {
   const [error, setError] = useState<string | null>(null);
-  const [charCount, setCharCount] = useState<number>(0);
+  const [formattedValue, setFormattedValue] = useState<string>("");
 
   const inputClasses = cx({
     [`form__input`]: true,
@@ -40,14 +40,13 @@ const Input: React.FC<InputProps> = ({ type, validate, onValidation, maxLength, 
           break;
         case "tel":
           validationError =
-            typeof value === "string" && !/^\+?[0-9]{10,15}$/.test(value)
+            typeof value === "string" && !/^\(\d{3}\) \d{3}-\d{4}$/.test(value)
               ? "Invalid phone number"
               : null;
           break;
         case "checkbox":
         case "radio":
-          validationError =
-            typeof value !== "boolean" ? "Invalid selection" : null;
+          validationError = null; // Radio and checkbox are valid as long as they are clicked
           break;
         default:
           validationError = null;
@@ -61,18 +60,48 @@ const Input: React.FC<InputProps> = ({ type, validate, onValidation, maxLength, 
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = type === "checkbox" || type === "radio" ? e.target.checked : e.target.value;
+  const formatPhoneNumber = (value: string) => {
+    const digits = value.replace(/\D/g, ""); // Remove all non-digit characters
+    const match = digits.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
+    if (match) {
+      const formatted = [
+        match[1] && `(${match[1]}`,
+        match[2] && `) ${match[2]}`,
+        match[3] && `-${match[3]}`,
+      ]
+        .filter(Boolean)
+        .join("");
+      return formatted;
+    }
+    return value;
+  };
 
-    if (type === "text" || type === "email" || type === "tel" || type === "password") {
-      setCharCount((value as string).length);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+
+    if (type === "tel") {
+      value = formatPhoneNumber(value);
+      setFormattedValue(value);
     }
 
-    handleValidation(value);
+    
+
+    if (type === "checkbox") {
+      const isChecked = e.target.checked; // Use checked state for checkboxes
+      value = isChecked ? e.target.value : ""; // Assign value based on checked state
+    }
+
+    handleValidation(value); // Trigger validation on every change
 
     if (props.onChange) {
-      props.onChange(e);
+      props.onChange(e); // Pass the original event object without modification
     }
+  };
+
+  const handleBlur = () => {
+    // Re-trigger validation on blur to ensure the latest value is validated
+    const valueToValidate = formattedValue || (props.value as string) || "";
+    handleValidation(valueToValidate);
   };
 
   return (
@@ -81,21 +110,11 @@ const Input: React.FC<InputProps> = ({ type, validate, onValidation, maxLength, 
         className={inputClasses}
         type={type}
         maxLength={maxLength}
+        value={type === "tel" ? formattedValue : props.value}
         {...props}
         onChange={handleChange}
+        onBlur={handleBlur} // Trigger validation on blur
       />
-      <div className={styles.form__helperText}>
-        {maxLength && (
-          <p
-            className={cx("form__helperText", {
-              "form__helperText--error": !!error,
-              "form__helperText--success": !error && charCount < maxLength,
-            })}
-          >
-            {charCount}/{maxLength} characters
-          </p>
-        )}
-      </div>
       {error && <span className={cx("form__helperText", "form__helperText--error")}>{error}</span>}
     </Fragment>
   );

@@ -10,9 +10,18 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
   maxLength?: number;
 }
 
-const Textarea: React.FC<TextareaProps> = ({ validate, onValidation, maxLength, ...props }) => {
+const Textarea: React.FC<TextareaProps> = ({
+  validate,
+  onValidation,
+  maxLength,
+  value,
+  defaultValue,
+  ...props
+}) => {
   const [error, setError] = useState<string | null>(null);
-  const [charCount, setCharCount] = useState<number>(0);
+  const [charCount, setCharCount] = useState<number>(
+    (value as string)?.length || (defaultValue as string)?.length || 0
+  );
 
   const handleValidation = (value: string) => {
     let validationError = null;
@@ -32,13 +41,13 @@ const Textarea: React.FC<TextareaProps> = ({ validate, onValidation, maxLength, 
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setCharCount(value.length);
-    handleValidation(value);
+  const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    const newValue = e.currentTarget.value;
+    setCharCount(newValue.length); // Update character count live
+    handleValidation(newValue);
 
-    if (props.onChange) {
-      props.onChange(e);
+    if (props.onInput) {
+      props.onInput(e);
     }
   };
 
@@ -47,7 +56,9 @@ const Textarea: React.FC<TextareaProps> = ({ validate, onValidation, maxLength, 
       <textarea
         className={cx("form__textarea")}
         maxLength={maxLength}
-        onChange={handleChange}
+        onInput={handleInput} // Use onInput for live updates
+        value={value} // Ensure controlled behavior
+        defaultValue={defaultValue} // Fallback for uncontrolled behavior
         {...props}
       />
       <div className={styles.form__charCount}>

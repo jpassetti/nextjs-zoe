@@ -1,10 +1,11 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
+import Checkbox from "@/components/html/Form/Checkbox";
 
 interface Question {
   label: string;
@@ -94,48 +95,46 @@ export default function QuestionnaireForm({
 }: QuestionnaireFormProps) {
   const formRef = useRef<HTMLFormElement>(null);
 
-  const [formErrors, setFormErrors] = useState<{ [key: string]: string | null }>({});
-  const [formValues, setFormValues] = useState<{ [key: string]: string | string[] | null }>({});
-  const [isFormValid, setIsFormValid] = useState(true);
+  const [checkboxState, setCheckboxState] = useState<Record<string, { name: string; checked: boolean }[]>>({});
 
-  const updateFormValidity = (
-    updatedErrors: { [key: string]: string | null },
-    updatedValues: { [key: string]: string | string[] | null }
-  ) => {
-    const allFieldsFilled = Object.values(updatedValues).every(
-      (value) =>
-        value !== null &&
-        (Array.isArray(value) ? value.length > 0 : value !== "")
-    );
-    const noValidationErrors = Object.values(updatedErrors).every((error) => error === null);
-    setIsFormValid(allFieldsFilled && noValidationErrors);
-  };
+  useEffect(() => {
+    // Initialize checkbox state for each question
+    const initialState: Record<string, { name: string; checked: boolean }[]> = {};
+    questionnaire.steps[step]?.questions.forEach((q) => {
+      if (q.type === "checkbox" && q.options) {
+        initialState[q.question] = q.options.map((option) => ({ name: option, checked: false }));
+      }
+    });
+    setCheckboxState(initialState);
+  }, [step, questionnaire]);
 
-  const handleValidation = (name: string, error: string | null) => {
-    setFormErrors((prevErrors) => {
-      const updatedErrors = { ...prevErrors, [name]: error };
-      updateFormValidity(updatedErrors, formValues);
-      return updatedErrors;
+  const updateCheckStatus = (question: string, index: number) => {
+    setCheckboxState((prevState) => {
+      const updatedQuestionState = prevState[question].map((item, currentIndex) =>
+        currentIndex === index ? { ...item, checked: !item.checked } : item
+      );
+
+      // Trigger state update only after user interaction
+      setTimeout(() => {
+        handleInputChange(
+          question,
+          updatedQuestionState.filter((item) => item.checked).map((item) => item.name),
+          "checkbox"
+        );
+      }, 0);
+
+      return { ...prevState, [question]: updatedQuestionState };
     });
   };
 
-  const handleValueChange = (name: string, value: string | string[] | null) => {
-    setFormValues((prevValues) => {
-      const updatedValues = { ...prevValues, [name]: value };
-      updateFormValidity(formErrors, updatedValues);
-      return updatedValues;
-    });
-  };
   return (
     <Form
       ref={formRef}
       onSubmit={(e) => {
         handleSubmit(e);
-        // Track form completion on submit
         trackFormCompletion(questionnaire.title);
       }}
     >
-      {/* Step Heading */}
       <Heading level={2} marginBottom={1} marginTop={3} color="black">
         {questionnaire.steps[step]?.title || "Untitled Step"}
       </Heading>
@@ -145,141 +144,114 @@ export default function QuestionnaireForm({
         </Paragraph>
       )}
 
-      {/* Questions */}
       {questionnaire.steps[step]?.questions.map((q, index) => (
         <Form.Group key={`step-${step}-question-${index}`}>
           <Heading level={3} marginBottom={1} color="black">
-            {q.label} {q.required && <span style={{ color: "red" }}>*</span>}
+            {q.label}
           </Heading>
           {q.helperText && <Paragraph color="gray">{q.helperText}</Paragraph>}
 
-          {/* Standard inputs */}
-          {["text", "email", "tel", "password", "number", "date"].includes(q.type) && (
+          {q.type === "text" && (
             <Form.Input
-              type={q.type as "text" | "email" | "tel" | "password" | "number" | "date"}
+              type="text"
               placeholder={q.placeholder || ""}
-              maxLength={100} // Set maximum character limit
-              value={typeof responses[q.question] === "string" ? responses[q.question] : ""}
+              value={responses[q.question]?.[0] || ""}
               name={q.question}
               required={q.required}
-              validate={(value) => {
-                if (
-                  q.required &&
-                  (!value ||
-                    (typeof value === "string" && value.trim() === "") ||
-                    (typeof value !== "string" && String(value).trim() === ""))
-                ) {
-                  return "This field is required";
-                }
-                if (typeof value === "string" && value.length > 100) {
-                  return "Maximum 100 characters allowed";
-                }
-                if (q.type === "email" && value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(value))) {
-                  return "Invalid email address";
-                }
-                if (q.type === "tel" && value && !/^\(\d{3}\) \d{3}-\d{4}$/.test(String(value))) {
-                  return "Invalid phone number. Format: (###) ###-####";
-                }
-
-                return null;
-              }}
-              onValidation={(error) => handleValidation(q.question, error)}
               onChange={(e) => {
-                handleValueChange(q.question, e.target.value);
-                handleInputChange(q.question, e.target.value);
+                handleInputChange(q.question, e.target.value, "text");
               }}
             />
           )}
 
-          {/* Textarea */}
+          {q.type === "email" && (
+            <Form.Input
+              type="email"
+              placeholder={q.placeholder || ""}
+              value={responses[q.question]?.[0] || ""}
+              name={q.question}
+              required={q.required}
+              onChange={(e) => {
+                handleInputChange(q.question, e.target.value, "email");
+              }}
+            />
+          )}
+
+          {q.type === "tel" && (
+            <Form.Input
+              type="tel"
+              placeholder={q.placeholder || ""}
+              maxLength={14} // Adjusted for formatted phone number length
+              value={responses[q.question]?.[0] || ""}
+              name={q.question}
+              required={q.required}
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\D/g, "");
+                const formattedValue = rawValue.replace(
+                  /^(\d{0,3})(\d{0,3})(\d{0,4})$/,
+                  (match, p1, p2, p3) => {
+                    let result = "";
+                    if (p1) result += `(${p1}`;
+                    if (p2) result += `) ${p2}`;
+                    if (p3) result += `-${p3}`;
+                    return result;
+                  }
+                );
+                handleInputChange(q.question, formattedValue, "tel");
+              }}
+            />
+          )}
+
           {q.type === "textarea" && (
             <Form.Textarea
               placeholder={q.placeholder || ""}
               maxLength={500}
-              value={typeof responses[q.question] === "string" ? responses[q.question] : ""}
+              value={responses[q.question]?.[0] || ""}
               name={q.question}
               required={q.required}
-              validate={(value) => {
-                if (q.required && (!value || value.trim() === "")) {
-                  return "This field is required";
-                }
-                if (value.length > 500) {
-                  return "Maximum 500 characters allowed";
-                }
-                return null;
-              }}              //onValidation={(error) => handleValidation(q.question, error)}
               onChange={(e) => {
-                handleValueChange(q.question, e.target.value);
-                handleInputChange(q.question, e.target.value);
+                handleInputChange(q.question, e.target.value, "textarea");
               }}
             />
           )}
 
-          {/* Radio group */}
-          {q.type === "radio" &&
+          {q.type === "radio" && (
             q.options?.map((option, i) => (
               <Form.Label key={`radio-${step}-${q.question}-${i}`}>
                 <Form.Input
                   type="radio"
                   name={q.question}
-                  required={q.required}
                   value={option}
-                  checked={responses[q.question] === option}
+                  checked={responses[q.question]?.[0] === option}
                   onChange={(e) => {
-                    handleValueChange(q.question, e.target.value);
-                    handleInputChange(q.question, e.target.value);
+                    handleInputChange(q.question, e.target.value, "radio");
                   }}
                 />
                 {option}
               </Form.Label>
-            ))}
+            ))
+          )}
 
-          {/* Checkbox group */}
-        {q.type === "checkbox" && (
-  <Form.CheckboxGroup>
-    {q.options?.map((option, i) => (
-      <Form.Label key={`checkbox-${step}-${q.question}-${i}`}>
-        <Form.Input
-          type="checkbox"
-          name={q.question} // Use the same name for all checkboxes in the group
-          value={option}
-          checked={
-            Array.isArray(responses[q.question])
-              ? responses[q.question].includes(option)
-              : false
-          }
-          onChange={(e) => {
-            const checked = e.target.checked;
-
-            // Ensure responses[q.question] is an array
-            const currentValues: string[] = Array.isArray(responses[q.question])
-              ? responses[q.question] as string[]
-              : [];
-
-            // Update the array based on whether the checkbox is checked or unchecked
-            const updatedValues = checked
-              ? [...currentValues, option]
-              : currentValues.filter((val) => val !== option);
-
-            // Update the state with the new array
-            handleValueChange(q.question, updatedValues);
-            handleInputChange(q.question, updatedValues, "checkbox");
-          }}
-        />
-        {option}
-      </Form.Label>
-    ))}
-    {/* Group-level validation */}
-    {q.required && Array.isArray(responses[q.question]) && responses[q.question].length === 0 && (
-      <span style={{ color: "red" }}>Please select at least one option</span>
-    )}
-  </Form.CheckboxGroup>
-)}
-
+          {q.type === "checkbox" && (
+            <Form.CheckboxGroup>
+              {checkboxState[q.question]?.map((item, i) => (
+                <Checkbox
+                  key={`checkbox-${step}-${q.question}-${i}`}
+                  name={q.question}
+                  value={item.name}
+                  checked={item.checked}
+                  onChange={() => updateCheckStatus(q.question, i)}
+                  label={item.name}
+                />
+              ))}
+              {q.required && checkboxState[q.question]?.every((item) => !item.checked) && (
+                <span style={{ color: "red" }}>Please select at least one option</span>
+              )}
+            </Form.CheckboxGroup>
+          )}
         </Form.Group>
       ))}
 
-      {/* Navigation Buttons */}
       <Button.Group justifyContent="space-between" borderTop={1}>
         {step > 0 && (
           <Button.Step
@@ -297,7 +269,6 @@ export default function QuestionnaireForm({
             label="Next"
             variant="primary"
             buttonType="button"
-            disabled={!isFormValid}
             clickHandler={() => {
               if (formRef.current?.checkValidity()) {
                 setStep(step + 1);
@@ -314,11 +285,9 @@ export default function QuestionnaireForm({
             label="Submit"
             variant="primary"
             actionType="submit"
-            disabled={!isFormValid}
           />
         )}
       </Button.Group>
-
     </Form>
   );
 }
