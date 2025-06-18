@@ -82,37 +82,35 @@ const Group: React.FC<GroupProps> = ({
 
 const UI: React.FC<UIProps> = ({
  backgroundColor,
+ disabled = false,
  iconProps,
  label,
- type, // ✅ Used for styling
- buttonType = "button", // ✅ Used for the HTML attribute
+ type, // Optional type for styling
+ buttonType = "button", // Default HTML button attribute
  clickHandler,
 }) => {
  const uiClasses = cx({
   [`button--ui`]: true,
-  [`type--${type}`]: type, // ✅ Used for styling only
+  [`type--${type}`]: type, // Apply type class only if provided
   [`background-color--${backgroundColor}`]: backgroundColor,
  });
 
- const iconName = type === "primary" ? "menu" : iconProps?.name ? iconProps.name : type; // Map `primary` to a valid icon name
-
- if (!icons[iconName as keyof typeof icons]) {
-  console.error(`Invalid icon name: ${iconName}`);
-  return null;
- }
+ const iconName = type === "primary" ? "menu" : iconProps?.name || undefined; // Use iconProps or undefined if no type
 
  return (
-  <button className={uiClasses} type={buttonType} onClick={clickHandler}>
-   {label ? label : ""}
-   <Icon
-    name={iconName as keyof typeof icons} // Ensure `name` is a valid key
-    color={
-      (iconProps?.color as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange" | undefined) ||
-      ((backgroundColor === "black" || backgroundColor === "accent"
-        ? "white"
-        : "black") as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange")
-    }
-   />
+  <button className={uiClasses} type={buttonType} onClick={clickHandler} disabled={disabled}>
+   {label && <span>{label}</span>} {/* Render label if provided */}
+   {iconName && (
+     <Icon
+       name={iconName as keyof typeof icons} // Ensure `name` is a valid key
+       color={
+         (iconProps?.color as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange" | undefined) ||
+         ((backgroundColor === "black" || backgroundColor === "accent"
+           ? "white"
+           : "black") as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange")
+       }
+     />
+   )}
   </button>
  );
 };

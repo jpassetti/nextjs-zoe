@@ -34,7 +34,7 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 
       setIsInitialized(true); // Mark as initialized
     }
-  }, [responses, question, isInitialized]);
+  }, [responses, question, handleInputChange, isInitialized]); // Add handleInputChange to dependency array
 
   const handleOptionChange = (value: string) => {
     const isOther = value.toLowerCase() === "other";

@@ -220,6 +220,7 @@ export interface StepProps {
 
 export interface UIProps {
     backgroundColor?: "black" | "accent" | "white";
+    disabled?: boolean;
     type?: "next" | "previous" | "primary" | "menu" | "close";
     buttonType?: "button" | "submit" | "reset";
    iconProps?: {
@@ -227,5 +228,5 @@ export interface UIProps {
     color?: string;
    };
     label?: string;
-    clickHandler?: () => void;
+    clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }

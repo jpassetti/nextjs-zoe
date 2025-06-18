@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
@@ -99,9 +99,8 @@ export default function QuestionnaireForm({
 
   const [checkboxState, setCheckboxState] = useState<Record<string, { name: string; checked: boolean }[]>>({});
   const [recaptchaVerified, setRecaptchaVerified] = useState(false);
-  const [otherOptionState, setOtherOptionState] = useState<Record<string, boolean>>({});
 
-  const isStepValid = () => {
+  const isStepValid = useCallback(() => {
     return questionnaire.steps[step]?.questions.every((q) => {
       if (q.type === "checkbox" && q.required) {
         return checkboxState[q.question]?.some((item) => item.checked);
@@ -114,7 +113,7 @@ export default function QuestionnaireForm({
       }
       return true; // Other input types rely on native validation
     });
-  };
+  }, [questionnaire, step, checkboxState, responses]); // Wrap isStepValid in useCallback
 
   const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(!isStepValid()); // Initialize after isStepValid is defined
 
@@ -133,13 +132,7 @@ export default function QuestionnaireForm({
 
   useEffect(() => {
     setIsNextButtonDisabled(!isStepValid()); // Update button state based on step validity
-  }, [responses, checkboxState]);
-
-  // useEffect for console logging otherOptionState on update
-  useEffect(() => {
-    console.log("Other option state updated:", otherOptionState); // Debugging log
-  }, [otherOptionState]);
-
+  }, [responses, checkboxState, isStepValid]); // Add isStepValid to dependency array
 
   const updateCheckStatus = (question: string, index: number) => {
     setCheckboxState((prevState) => {
@@ -162,26 +155,6 @@ export default function QuestionnaireForm({
 
   const handleRecaptchaChange = (value: string | null) => {
     setRecaptchaVerified(!!value);
-  };
-
-  const handleOtherOptionChange = (question: string, value: string) => {
-    console.log("Other option selected:", { question, value }); // Debugging log
-    setOtherOptionState((prevState) => {
-      const newValue = value === "other";
-      if (prevState[question] === newValue) {
-        console.log("State unchanged, skipping update."); // Debugging log for unchanged state
-        return prevState; // Skip state update if value is unchanged
-      }
-      const updatedState = { ...prevState, [question]: newValue };
-      console.log("Updated otherOptionState:", updatedState); // Debugging log for state
-      return updatedState;
-    });
-    handleInputChange(question, value === "other" ? "" : value, "radio");
-  };
-
-  const handleOtherInputChange = (question: string, value: string) => {
-    console.log("Other input value:", { question, value }); // Debugging log
-    handleInputChange(question, value, "text");
   };
 
   return (
@@ -337,16 +310,13 @@ export default function QuestionnaireForm({
           />
         )}
         {step === questionnaire.steps.length - 1 && (
-          <>
-           
-            <Button
-              _type="button"
-              label="Submit"
-              variant={!isStepValid() || !recaptchaVerified ? "disabled" : "primary"} // Use variant to style disabled state
-              actionType="submit"
-              disabled={!isStepValid() || !recaptchaVerified} // Ensure button is disabled
-            />
-          </>
+          <Button
+            _type="button"
+            label="Submit"
+            variant={!isStepValid() || !recaptchaVerified ? "disabled" : "primary"} // Use variant to style disabled state
+            actionType="submit"
+            disabled={!isStepValid() || !recaptchaVerified} // Ensure button is disabled
+          />
         )}
       </Button.Group>
     </Form>
