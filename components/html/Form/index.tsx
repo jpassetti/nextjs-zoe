@@ -5,13 +5,11 @@ import HelperText from "./HelperText";
 import ValidationError from "./ValidationError";
 import OtherInput from "./OtherInput";
 import Group from "./Group";
-import CheckboxGroup from "./CheckboxGroup";
 import Label from "./Label";
 
 // 🔹 Extend the main Form type with all subcomponents
 type FormComponent = typeof FormBase & {
   Group: typeof Group;
-  CheckboxGroup: typeof CheckboxGroup;
   Label: typeof Label;
   Input: typeof Input;
   Textarea: typeof Textarea;
@@ -23,7 +21,6 @@ type FormComponent = typeof FormBase & {
 // 🔹 Merge base + subcomponents
 const Form = Object.assign(FormBase, {
   Group,
-  CheckboxGroup,
   Label,
   Input,
   Textarea,
@@ -33,4 +30,4 @@ const Form = Object.assign(FormBase, {
 }) as FormComponent;
 
 export default Form;
-export { Input, Textarea, FormBase, HelperText, ValidationError, OtherInput, Group, CheckboxGroup, Label };
+export { Input, Textarea, FormBase, HelperText, ValidationError, OtherInput, Group, Label };

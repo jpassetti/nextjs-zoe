@@ -29,7 +29,7 @@ export interface ButtonProps {
     internalPage?: { slug: { current: string } };
     externalUrl?: string;
     size?: "small" | "medium" | "large";
-    variant?: string;
+    variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white" | "disabled";
     type?: "button" | "submit" | "reset";
     actionType?: "button" | "submit" | "reset";
     href?: string;

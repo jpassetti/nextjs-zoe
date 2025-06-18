@@ -6,6 +6,8 @@ import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
 import Checkbox from "@/components/html/Form/Checkbox";
+import ReCAPTCHA from "react-google-recaptcha";
+import RadioGroup from "@/components/html/Form/RadioGroup";
 
 interface Question {
   label: string;
@@ -96,17 +98,48 @@ export default function QuestionnaireForm({
   const formRef = useRef<HTMLFormElement>(null);
 
   const [checkboxState, setCheckboxState] = useState<Record<string, { name: string; checked: boolean }[]>>({});
+  const [recaptchaVerified, setRecaptchaVerified] = useState(false);
+  const [otherOptionState, setOtherOptionState] = useState<Record<string, boolean>>({});
+
+  const isStepValid = () => {
+    return questionnaire.steps[step]?.questions.every((q) => {
+      if (q.type === "checkbox" && q.required) {
+        return checkboxState[q.question]?.some((item) => item.checked);
+      }
+      if (q.type === "radio" && q.required) {
+        return responses[q.question]?.[0] !== undefined;
+      }
+      if (["text", "email", "tel", "textarea"].includes(q.type) && q.required) {
+        return responses[q.question]?.[0]?.trim() !== "";
+      }
+      return true; // Other input types rely on native validation
+    });
+  };
+
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(!isStepValid()); // Initialize after isStepValid is defined
 
   useEffect(() => {
-    // Initialize checkbox state for each question
     const initialState: Record<string, { name: string; checked: boolean }[]> = {};
     questionnaire.steps[step]?.questions.forEach((q) => {
       if (q.type === "checkbox" && q.options) {
-        initialState[q.question] = q.options.map((option) => ({ name: option, checked: false }));
+        initialState[q.question] = q.options.map((option) => ({
+          name: option,
+          checked: responses[q.question]?.includes(option) || false, // Persist checked state from responses
+        }));
       }
     });
     setCheckboxState(initialState);
-  }, [step, questionnaire]);
+  }, [step, questionnaire, responses]);
+
+  useEffect(() => {
+    setIsNextButtonDisabled(!isStepValid()); // Update button state based on step validity
+  }, [responses, checkboxState]);
+
+  // useEffect for console logging otherOptionState on update
+  useEffect(() => {
+    console.log("Other option state updated:", otherOptionState); // Debugging log
+  }, [otherOptionState]);
+
 
   const updateCheckStatus = (question: string, index: number) => {
     setCheckboxState((prevState) => {
@@ -125,6 +158,30 @@ export default function QuestionnaireForm({
 
       return { ...prevState, [question]: updatedQuestionState };
     });
+  };
+
+  const handleRecaptchaChange = (value: string | null) => {
+    setRecaptchaVerified(!!value);
+  };
+
+  const handleOtherOptionChange = (question: string, value: string) => {
+    console.log("Other option selected:", { question, value }); // Debugging log
+    setOtherOptionState((prevState) => {
+      const newValue = value === "other";
+      if (prevState[question] === newValue) {
+        console.log("State unchanged, skipping update."); // Debugging log for unchanged state
+        return prevState; // Skip state update if value is unchanged
+      }
+      const updatedState = { ...prevState, [question]: newValue };
+      console.log("Updated otherOptionState:", updatedState); // Debugging log for state
+      return updatedState;
+    });
+    handleInputChange(question, value === "other" ? "" : value, "radio");
+  };
+
+  const handleOtherInputChange = (question: string, value: string) => {
+    console.log("Other input value:", { question, value }); // Debugging log
+    handleInputChange(question, value, "text");
   };
 
   return (
@@ -158,6 +215,7 @@ export default function QuestionnaireForm({
               value={responses[q.question]?.[0] || ""}
               name={q.question}
               required={q.required}
+              autoComplete="name" // Correct casing for React
               onChange={(e) => {
                 handleInputChange(q.question, e.target.value, "text");
               }}
@@ -216,25 +274,16 @@ export default function QuestionnaireForm({
           )}
 
           {q.type === "radio" && (
-            q.options?.map((option, i) => (
-              <Form.Label key={`radio-${step}-${q.question}-${i}`}>
-                <Form.Input
-                  type="radio"
-                  name={q.question}
-                  value={option}
-                  checked={responses[q.question]?.[0] === option}
-                  onChange={(e) => {
-                    handleInputChange(q.question, e.target.value, "radio");
-                  }}
-                />
-                {option}
-              </Form.Label>
-            ))
+            <RadioGroup
+              question={q.question}
+              options={q.options || []}
+              responses={responses}
+              handleInputChange={handleInputChange}
+              required={q.required}
+            />
           )}
 
-          {q.type === "checkbox" && (
-            <Form.CheckboxGroup>
-              {checkboxState[q.question]?.map((item, i) => (
+          {q.type === "checkbox" && checkboxState[q.question]?.map((item, i) => (
                 <Checkbox
                   key={`checkbox-${step}-${q.question}-${i}`}
                   name={q.question}
@@ -247,10 +296,17 @@ export default function QuestionnaireForm({
               {q.required && checkboxState[q.question]?.every((item) => !item.checked) && (
                 <span style={{ color: "red" }}>Please select at least one option</span>
               )}
-            </Form.CheckboxGroup>
-          )}
-        </Form.Group>
-      ))}
+            </Form.Group>
+          ))}
+
+      {step === questionnaire.steps.length - 1 && (
+        <Button.Group justifyContent="space-between" borderTop={1}>
+          <ReCAPTCHA
+            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || "your-default-site-key"} // Provide fallback for site key
+            onChange={handleRecaptchaChange}
+          />
+        </Button.Group>
+      )}
 
       <Button.Group justifyContent="space-between" borderTop={1}>
         {step > 0 && (
@@ -269,6 +325,7 @@ export default function QuestionnaireForm({
             label="Next"
             variant="primary"
             buttonType="button"
+            disabled={isNextButtonDisabled} // Use state to control button disabled state
             clickHandler={() => {
               if (formRef.current?.checkValidity()) {
                 setStep(step + 1);
@@ -280,12 +337,16 @@ export default function QuestionnaireForm({
           />
         )}
         {step === questionnaire.steps.length - 1 && (
-          <Button
-            _type="button"
-            label="Submit"
-            variant="primary"
-            actionType="submit"
-          />
+          <>
+           
+            <Button
+              _type="button"
+              label="Submit"
+              variant={!isStepValid() || !recaptchaVerified ? "disabled" : "primary"} // Use variant to style disabled state
+              actionType="submit"
+              disabled={!isStepValid() || !recaptchaVerified} // Ensure button is disabled
+            />
+          </>
         )}
       </Button.Group>
     </Form>

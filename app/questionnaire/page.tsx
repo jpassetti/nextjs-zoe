@@ -59,7 +59,7 @@ export default function QuestionnaireLandingPage() {
   };
 
   if (submitting) return <Loading />;
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!questionnaire) return <p>No questionnaire found.</p>;
 

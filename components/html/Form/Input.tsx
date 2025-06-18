@@ -8,6 +8,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   validate?: (value: string | number | boolean) => string | null;
   onValidation?: (error: string | null) => void;
   maxLength?: number;
+  id?: string; // Added id to InputProps interface
 }
 
 const Input: React.FC<InputProps> = ({ type, validate, onValidation, maxLength, ...props }) => {
@@ -83,8 +84,6 @@ const Input: React.FC<InputProps> = ({ type, validate, onValidation, maxLength, 
       value = formatPhoneNumber(value);
       setFormattedValue(value);
     }
-
-    
 
     if (type === "checkbox") {
       const isChecked = e.target.checked; // Use checked state for checkboxes
