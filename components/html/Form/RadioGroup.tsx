@@ -25,7 +25,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
 
   useEffect(() => {
     if (!isInitialized) {
-      const isOther = responses[question]?.[0]?.toLowerCase() === "other";
+      const normalizedResponse = responses[question]?.[0]?.toLowerCase().split(" ")[0]; // Normalize the response
+      const isOther = normalizedResponse === "other";
       setIsOtherSelected(isOther); // Initialize state based on responses
 
       if (isOther && !responses[`${question}-other`]) {
@@ -37,7 +38,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   }, [responses, question, handleInputChange, isInitialized]); // Add handleInputChange to dependency array
 
   const handleOptionChange = (value: string) => {
-    const isOther = value.toLowerCase() === "other";
+    const normalizedValue = value.toLowerCase().split(" ")[0]; // Normalize the value
+    const isOther = normalizedValue === "other";
     setIsOtherSelected(isOther);
 
     if (isOther) {
@@ -51,6 +53,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   return (
     <>
       {options.map((option, i) => {
+        const normalizedOption = option.toLowerCase().split(" ")[0]; // Normalize the option
+        const isOtherOption = normalizedOption === "other";
         const radioId = `radio-${question}-${i}`;
         return (
           <Form.Label key={radioId} htmlFor={radioId}>
@@ -62,8 +66,8 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
               required={required}
               checked={
                 responses[question]?.[0] === option ||
-                (option.toLowerCase() === "other" && isOtherSelected)
-              } // Ensure "other" remains checked
+                (isOtherOption && isOtherSelected) // Ensure "other" remains checked
+              }
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 handleOptionChange(e.target.value);
               }}
