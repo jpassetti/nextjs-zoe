@@ -20,7 +20,7 @@ const MobileNav: React.FC<MobileNavProps> = ({ closeHandler }) => {
    transition={{ duration: 0.3 }} // Duration of the animation
   >
    <Button.UI
-    type="close"
+    iconProps={{ name: "close" }}
     clickHandler={closeHandler}
     backgroundColor="black"
    />

@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { draftMode } from "next/headers";
 
 import { getPage } from "@/lib/sanity/queries/getPage";
-import type { PageData } from "@/lib/interfaces"; // Import PageData
+import type { PageData, TestimonialBlockSection } from "@/lib/interfaces"; // Import PageData, TestimonialBlockSection
 import { notFound } from "next/navigation";
 
 import ColumnsSection from "@/components/custom/ColumnsSection";
@@ -11,6 +11,7 @@ import Showcase from "@/components/custom/Showcase";
 import CTA from "@/components/custom/CTA";
 import SanityPage from "@/components/custom/SanityPage";
 import PreviewBanner from "@/components/custom/PreviewBanner";
+import TestimonialBlock from "@/components/custom/TestimonialBlock";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug?: string }> }) {
   const { isEnabled: preview } = await draftMode();
@@ -58,6 +59,8 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
 
   const { sections, callToAction } = pageData;
   const bannedSlugs = ["about-me", "contact"];
+  // Ensure sections is defined before extending
+  const sectionsArray = sections ?? [];
 
   return (
     <Fragment>
@@ -65,14 +68,16 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
 
       {bannedSlugs.includes(slug || "") && pageData && <SanityPage page={pageData} />}
       {!bannedSlugs.includes(slug || "") &&
-        sections &&
-        sections.length > 0 &&
-        sections.map((section, index) => {
+        sectionsArray &&
+        sectionsArray.length > 0 &&
+        sectionsArray.map((section, index) => {
           switch (section._type) {
             case "showcaseSection":
               return <Showcase key={index} data={section} />;
             case "columnsSection":
               return <ColumnsSection key={index} data={section} />;
+            case "testimonialBlock":
+              return <TestimonialBlock key={index} testimonial={(section as TestimonialBlockSection).testimonial} />;
             default:
               return null;
           }

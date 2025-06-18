@@ -51,7 +51,7 @@ const Header: React.FC = () => {
 
         {!isLargeDesktop && (
           <Button.UI
-            type="menu"
+            iconProps={{ name: "menu" }}
             backgroundColor="accent"
             clickHandler={() => {
               setIsMenuOpen(true);

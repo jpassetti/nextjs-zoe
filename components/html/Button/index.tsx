@@ -91,11 +91,12 @@ const UI: React.FC<UIProps> = ({
 }) => {
  const uiClasses = cx({
   [`button--ui`]: true,
+  [`type--close`]: iconProps?.name === "close", // Specific styling for close button
   [`type--${type}`]: type, // Apply type class only if provided
   [`background-color--${backgroundColor}`]: backgroundColor,
  });
 
- const iconName = type === "primary" ? "menu" : iconProps?.name || undefined; // Use iconProps or undefined if no type
+ const iconName = iconProps?.name || undefined; // Use iconProps or undefined if no type
 
  return (
   <button className={uiClasses} type={buttonType} onClick={clickHandler} disabled={disabled}>

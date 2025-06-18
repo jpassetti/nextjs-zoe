@@ -117,6 +117,22 @@ export async function getPage(slug: string, preview: boolean = false) {
               }
             }
           }
+        },
+        _type == "testimonialBlock" => {
+          ...,
+          testimonial-> {
+            quote,
+            name,
+            jobTitle,
+            photo {
+              asset-> {
+                url
+              }
+            },
+            linkedinURL,
+            companyName,
+            companyURL
+          }
         }
       }
     }
