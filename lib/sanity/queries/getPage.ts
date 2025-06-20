@@ -129,9 +129,9 @@ export async function getPage(slug: string, preview: boolean = false) {
                 url
               }
             },
-            linkedinURL,
+            linkedinUrl,
             companyName,
-            companyURL
+            companyUrl
           }
         }
       }

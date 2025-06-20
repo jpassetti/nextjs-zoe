@@ -235,9 +235,9 @@ export interface Testimonial {
   name: string;
   jobTitle?: string;
   photo?: SanityImageValue;
-  linkedinURL?: string;
+  linkedinUrl?: string;
   companyName?: string;
-  companyURL?: string;
+  companyUrl?: string;
 }
 
 export interface TestimonialBlockSection {
