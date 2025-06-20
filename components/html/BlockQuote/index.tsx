@@ -32,21 +32,24 @@ const BlockQuote: React.FC<BlockQuoteProps> = ({
     photo,
 }) => {
     return (
-        <blockquote className={styles.blockquote}>
-            <p className={styles.quote}>&quot;{quote}&quot;</p>
-
+        <blockquote className={styles.blockquote} lang="en" itemProp="review">
+            <p className={styles.quote} itemProp="reviewBody">&quot;{quote}&quot;</p>
             <footer>
-                <cite className={styles.cite}>
+                <figure>
                     {photo?.asset?.url && (
                         <div className={styles.cite__photo}>
                             {linkedinUrl ? (
-                                <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
+                                <a
+                                    href={linkedinUrl}
+                                    target="_blank"
+                                    rel="author noopener noreferrer"
+                                    aria-label={`Visit ${name}'s LinkedIn profile`}
+                                >
                                     <Image
                                         src={photo.asset.url}
                                         alt={`${name}'s photo`}
                                         width={100}
                                         height={100}
-                                        className={styles.cite__photo}
                                     />
                                 </a>
                             ) : (
@@ -55,33 +58,64 @@ const BlockQuote: React.FC<BlockQuoteProps> = ({
                                     alt={`${name}'s photo`}
                                     width={100}
                                     height={100}
-                                    className={styles.cite__photo}
                                 />
                             )}
                         </div>
                     )}
-                    <span className={styles.cite__name}>{linkedinUrl ? (
-                        <a href={linkedinUrl} target="_blank" rel="noopener noreferrer">
-                            {name}
-                        </a>
-                    ) : (
-                        name
-                    )}</span><br />
-                    {jobTitle && <><span className={styles.cite__jobTitle}>{jobTitle}</span><br /></>}
-                    {companyName && (
-                        <span className={styles.cite__companyName}>
-                            {companyUrl ? (
-                                <a href={companyUrl} target="_blank" rel="noopener noreferrer">
-                                    {companyName}
+                    <figcaption>
+                        <cite className={styles.cite__name} itemProp="author">
+                            {linkedinUrl ? (
+                                <a
+                                    href={linkedinUrl}
+                                    target="_blank"
+                                    rel="author noopener noreferrer"
+                                    aria-label={`Visit ${name}'s LinkedIn profile`}
+                                >
+                                    {name}
                                 </a>
                             ) : (
-                                companyName
+                                name
                             )}
-                        </span>
-                    )}
-                </cite>
-
+                        </cite>
+                        {jobTitle && <div className={styles.cite__jobTitle}>{jobTitle}</div>}
+                        {companyName && (
+                            <div className={styles.cite__companyName}>
+                                {companyUrl ? (
+                                    <a
+                                        href={companyUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        aria-label={`Visit ${companyName}'s website`}
+                                    >
+                                        {companyName}
+                                    </a>
+                                ) : (
+                                    companyName
+                                )}
+                            </div>
+                        )}
+                    </figcaption>
+                </figure>
             </footer>
+            <script type="application/ld+json">
+                {JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Review",
+                    author: name,
+                    reviewBody: quote,
+                    publisher:
+                        companyName && {
+                            "@type": "Organization",
+                            name: companyName,
+                            url: companyUrl || undefined,
+                        },
+                    itemReviewed:
+                        jobTitle && {
+                            "@type": "CreativeWork",
+                            name: jobTitle,
+                        },
+                })}
+            </script>
         </blockquote>
     );
 };
