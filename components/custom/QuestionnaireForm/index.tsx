@@ -119,7 +119,7 @@ export default function QuestionnaireForm({
       }}
     >
       {title && (
-        <Heading level={1} marginBottom={2} color="black">
+        <Heading level={1} marginBottom={2} color="primary">
           {title}
         </Heading>
       )}
