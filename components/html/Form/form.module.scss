@@ -70,7 +70,7 @@
 
     &__checkbox_group {
         display: flex;
-        align-items: flex-start;
+        flex-direction:column;
         gap: 1rem;
         width: 100%;
     }

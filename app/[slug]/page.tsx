@@ -12,6 +12,7 @@ import CTA from "@/components/custom/CTA";
 import SanityPage from "@/components/custom/SanityPage";
 import PreviewBanner from "@/components/custom/PreviewBanner";
 import TestimonialBlock from "@/components/custom/TestimonialBlock";
+import QuestionnaireBlock from "@/components/custom/QuestionnaireBlock"; // Import QuestionnaireBlock
 
 export async function generateMetadata({ params }: { params: Promise<{ slug?: string }> }) {
   const { isEnabled: preview } = await draftMode();
@@ -77,7 +78,17 @@ export default async function Page({ params }: { params: Promise<{ slug?: string
             case "columnsSection":
               return <ColumnsSection key={index} data={section} />;
             case "testimonialBlock":
-              return <TestimonialBlock key={index} testimonial={(section as TestimonialBlockSection).testimonial} />;
+              return <TestimonialBlock 
+              key={index} 
+              _type="testimonialBlock" 
+              testimonial={(section as TestimonialBlockSection).testimonial} 
+              />;
+              case "questionnaireBlock":
+              // Assuming you have a QuestionnaireBlock component
+              return <QuestionnaireBlock 
+              key={index} 
+              _type="questionnaireBlock"
+              questionnaire={section.questionnaire} />;
             default:
               return null;
           }

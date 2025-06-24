@@ -93,7 +93,11 @@ const Input: React.FC<InputProps> = ({ type, validate, onValidation, maxLength, 
     handleValidation(value); // Trigger validation on every change
 
     if (props.onChange) {
-      props.onChange(e); // Pass the original event object without modification
+      // Pass the formatted value and type to the parent component
+      props.onChange({
+        ...e,
+        target: { ...e.target, value, type },
+      } as React.ChangeEvent<HTMLInputElement>);
     }
   };
 

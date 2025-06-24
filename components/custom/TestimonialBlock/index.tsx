@@ -1,16 +1,13 @@
 import React from "react";
-import type { Testimonial } from "@/lib/interfaces";
 import Col from "@/components/layout/Col";
 import Container from "@/components/layout/Container";
 import Row from "@/components/layout/Row";
 import Section from "@/components/layout/Section";
 import BlockQuote from "@/components/html/BlockQuote";
 
-interface TestimonialBlockProps {
-  testimonial: Testimonial;
-}
+import type {TestimonialBlockSection} from "@/lib/interfaces";
 
-const TestimonialBlock: React.FC<TestimonialBlockProps> = ({ testimonial }) => {
+const TestimonialBlock: React.FC<TestimonialBlockSection> = ({ testimonial }) => {
   return (
     <Section paddingTop="large" paddingBottom="large">
       <Container>

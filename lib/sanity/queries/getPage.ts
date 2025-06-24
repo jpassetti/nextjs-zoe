@@ -133,6 +133,29 @@ export async function getPage(slug: string, preview: boolean = false) {
             companyName,
             companyUrl
           }
+        },
+        _type == "questionnaireBlock" => {
+          ...,
+          questionnaire-> {
+            title,
+            slug {
+              current,
+            },
+            description,
+            steps[] {
+              title,
+              description,
+              questions[] {
+                label,
+                question,
+                type,
+                placeholder,
+                helperText,
+                required,
+                options
+              }
+            }
+          }
         }
       }
     }

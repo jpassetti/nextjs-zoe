@@ -3,14 +3,14 @@ import classNames from "classnames/bind";
 import Icon, { icons } from "@/components/html/Icon";
 import Link from "next/link";
 import styles from "./button.module.scss";
-import { ButtonProps, GroupProps, UIProps, StepProps } from "@/lib/interfaces";
+import { ButtonProps, GroupProps, UIProps, StepButtonProps } from "@/lib/interfaces";
 
 const cx = classNames.bind(styles);
 
 const Button: React.FC<ButtonProps> & {
   Group: React.FC<GroupProps>;
   UI: React.FC<UIProps>;
-  Step: React.FC<StepProps>;
+  Step: React.FC<StepButtonProps>;
 } = ({
   disabled =false,
   label,
@@ -57,7 +57,11 @@ const Button: React.FC<ButtonProps> & {
   }
 
   return (
-    <button className={buttonClasses} type={actionType}>
+    <button 
+    className={buttonClasses} 
+    type={actionType}
+    disabled={disabled} // Ensure the disabled prop is applied
+>
       {content}
     </button>
   );
@@ -116,7 +120,7 @@ const UI: React.FC<UIProps> = ({
  );
 };
 
-const Step: React.FC<StepProps> = ({
+const Step: React.FC<StepButtonProps> = ({
  disabled = false,
  type = "next", // ✅ Used for styling
  buttonType = "button", // ✅ Used for HTML button attribute

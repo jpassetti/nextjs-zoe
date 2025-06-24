@@ -41,6 +41,22 @@ export interface CallToActionProps {
     buttons?: ButtonBlockProps;
 }
 
+export interface CheckboxProps {
+    name: string;
+    value: string;
+    label: string;
+    checked: boolean;
+    onChange: (isChecked: boolean) => void;
+}
+
+export interface CheckboxGroupProps {
+    question: string;
+    options: string[];
+    required?: boolean;
+    responses: Record<string, string | string[]>;
+    onChange: (question: string, selectedValues: string[]) => void;
+}
+
 export interface ColumnsSectionProps {
     data: {
         rows: Array<{
@@ -120,9 +136,9 @@ export interface IconBlockProps {
     size?: "small" | "medium" | "large";
 }
 export interface LinkMark {
- _type: "link";
- href: string;
- isButton?: boolean;
+    _type: "link";
+    href: string;
+    isButton?: boolean;
 };
 
 export interface Package {
@@ -167,6 +183,68 @@ export interface ParagraphBlockProps {
     text: string;
 }
 
+export interface Question {
+    label: string;
+    question: string;
+    type:
+    | "text"
+    | "email"
+    | "tel"
+    | "password"
+    | "number"
+    | "date"
+    | "textarea"
+    | "radio"
+    | "checkbox";
+    placeholder?: string;
+    helperText?: string;
+    required?: boolean;
+    options?: string[];
+}
+
+export interface StepProps {
+    title: string;
+    description?: string;
+    questions: Question[];
+}
+export interface StepButtonProps {
+    disabled?: boolean; // Whether the button is disabled
+    type?: "next" | "previous" | "submit"; // Type of the button for styling purposes
+    buttonType?: "button" | "submit" | "reset"; // HTML button type attribute
+    label: string; // The text label displayed on the button
+    clickHandler?: () => void; // Optional click handler function
+    variant?: "primary" | "secondary" | "inverted" | "disabled" | string; // Variant for styling
+}
+
+export interface Questionnaire {
+    title: string;
+    slug: { current: string };
+    description?: string;
+    steps: StepProps[];
+}
+
+export interface QuestionnaireBlock {
+    _type: "questionnaireBlock";
+    questionnaire: Questionnaire;
+    title?: string;
+    description?: string;
+}
+
+export interface QuestionnaireFormProps {
+    questionnaire: Questionnaire;
+    slug: {
+        current: string;
+    };
+    step: number;
+    setStep: (step: number) => void;
+    title: string;
+    description?: string;
+    onSuccess?: (responseId: string) => void;
+    onError?: (error: Error) => void;
+    responses: Record<string, string | string[]>;
+    setResponses: (responses: Record<string, string | string[]>) => void;
+}
+
 export interface RichTextChild {
     _type: "span" | "paragraph" | "ul" | "li";
     text?: string;
@@ -174,16 +252,16 @@ export interface RichTextChild {
 }
 
 export interface SanityImageValue {
- asset: {
-  url: string;
-  metadata?: {
-   dimensions?: {
-    width?: number;
-    height?: number;
-   };
-  };
- };
- alt?: string;
+    asset: {
+        url: string;
+        metadata?: {
+            dimensions?: {
+                width?: number;
+                height?: number;
+            };
+        };
+    };
+    alt?: string;
 };
 
 export interface SEOImageProps {
@@ -208,87 +286,84 @@ export interface SEOProps {
     noIndex?: boolean;
 }
 
-export interface StepProps {
-    disabled?: boolean;
-    variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
-    label: string;
-    type?: "next" | "previous";
-    buttonType?: "button" | "submit" | "reset";
-    clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
-}
-
 export interface UIProps {
     backgroundColor?: "black" | "accent" | "white";
     disabled?: boolean;
     type?: "next" | "previous" | "primary" | "menu" | "close";
     buttonType?: "button" | "submit" | "reset";
-   iconProps?: {
-    name?: string;
-    color?: string;
-   };
+    iconProps?: {
+        name?: string;
+        color?: string;
+    };
     label?: string;
     clickHandler: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 export interface Testimonial {
-  quote: string;
-  name: string;
-  jobTitle?: string;
-  photo?: SanityImageValue;
-  linkedinUrl?: string;
-  companyName?: string;
-  companyUrl?: string;
+    quote: string;
+    name: string;
+    jobTitle?: string;
+    photo?: SanityImageValue;
+    linkedinUrl?: string;
+    companyName?: string;
+    companyUrl?: string;
 }
+
 
 export interface TestimonialBlockSection {
-  _type: "testimonialBlock";
-  testimonial: Testimonial;
+    _type: "testimonialBlock";
+    testimonial: Testimonial;
 }
 
+
 export interface SanityReference {
-  _ref: string;
-  _type: string;
+    _ref: string;
+    _type: string;
 }
 
 export interface SanityImage {
-  asset?: {
-    _ref: string;
-    _type: string;
-  };
-  alt?: string;
-  [key: string]: unknown; // Added index signature to ensure compatibility
+    asset?: {
+        _ref: string;
+        _type: string;
+    };
+    alt?: string;
+    [key: string]: unknown; // Added index signature to ensure compatibility
 }
 
 export interface ShowcaseSection {
-  _type: "showcaseSection";
-  title: string;
-  description?: string;
-  backgroundImage?: SanityImage;
-  buttons?: Array<{
-    label: string;
-    linkType: "internal" | "external";
-    internalPage?: { slug: { current: string } };
-    externalUrl?: string;
-    variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
-  }>;
+    _type: "showcaseSection";
+    title: string;
+    description?: string;
+    backgroundImage?: SanityImage;
+    buttons?: Array<{
+        label: string;
+        linkType: "internal" | "external";
+        internalPage?: { slug: { current: string } };
+        externalUrl?: string;
+        variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
+    }>;
 }
 
 export interface ColumnsSection {
-  _type: "columnsSection";
-  rows: Array<{
-    columns: Array<{
-      title: string;
-      content: string;
-      width?: {
-        xs?: number;
-        sm?: number;
-        md?: number;
-        lg?: number;
-        xl?: number;
-      };
+    _type: "columnsSection";
+    rows: Array<{
+        columns: Array<{
+            title: string;
+            content: string;
+            width?: {
+                xs?: number;
+                sm?: number;
+                md?: number;
+                lg?: number;
+                xl?: number;
+            };
+        }>;
+        backgroundColor?: string;
     }>;
-    backgroundColor?: string;
-  }>;
 }
 
-export type Section = ColumnsSection | ShowcaseSection | TestimonialBlockSection;
+
+
+export type Section = ColumnsSection | ShowcaseSection | TestimonialBlockSection | QuestionnaireBlock;
+
+
