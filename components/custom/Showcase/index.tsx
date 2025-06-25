@@ -1,9 +1,19 @@
+"use client";
+
+import { useViewport } from "@/lib/context/ViewportContext"; // Adjust path if needed
+
 import Button from "@/components/html/Button";
+
+import Col from "@/components/layout/Col";
+import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
-import { urlFor } from "@/lib/sanity";
+
+import Row from "@/components/layout/Row";
 import styles from "./showcase.module.scss";
 import { Image as SanityImage } from "@sanity/types";
 import Image from "next/image";
+
+import { urlFor } from "@/lib/sanity";
 
 interface ShowcaseProps {
   data: {
@@ -23,9 +33,54 @@ interface ShowcaseProps {
 }
 
 const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
+  const { isDesktop } = useViewport();
   const { backgroundImage, title, description, buttons } = data;
 
-  //console.log("Showcase buttons data:", buttons);
+  const showcaseContent = (
+    <>
+      {title && (
+        <Heading
+          level={1}
+          color={isDesktop ? "white" : "black"}
+          textAlign={isDesktop ? "center" : "left"} // Center text for desktop, left for non-desktop
+          textShadow={isDesktop ? true : false} // Apply text shadow for desktop
+          marginTop={isDesktop ? 0 : 3} // Add marginTop for non-desktop
+          marginBottom={isDesktop ? 0 : 2} // Add marginBottom for non-desktop
+        >
+          {title}
+        </Heading>
+      )}
+      {description && (
+        <p className={styles.showcase_description}>
+          {description}
+        </p>
+      )}
+      {buttons && (
+        <Button.Group justifyContent="flex-start">
+          {buttons.map((button, index) => {
+            const resolvedVariant = !isDesktop && button.variant === "inverted-white" ? "inverted" : button.variant; // Force variant to "inverted" if isDesktop is true and variant is "inverted-white"
+
+            return (
+              <Button
+                _type="button"
+                key={index}
+                linkType={button.linkType}
+                internalPage={
+                  button.internalPage?.slug?.current
+                    ? { slug: { current: button.internalPage.slug.current } }
+                    : undefined
+                }
+                externalUrl={button.externalUrl || ""}
+                size="medium"
+                label={button.label}
+                variant={resolvedVariant} // Use resolved variant
+              />
+            );
+          })}
+        </Button.Group>
+      )}
+    </>
+  );
 
   return (
     <div
@@ -41,35 +96,16 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
         />
       )}
       <div className={styles.showcase_content}>
-        {title && (
-          <Heading level={1} color="white" marginBottom={2}>
-            {title}
-          </Heading>
-        )}
-        {description && (
-          <p className={styles.showcase_description}>
-            {description}
-          </p>
-        )}
-        {buttons && (
-          <Button.Group justifyContent="center">
-            {buttons.map((button, index) => (
-              <Button
-                _type="button"
-                key={index}
-                linkType={button.linkType}
-                internalPage={
-                  button.internalPage?.slug?.current
-                    ? { slug: { current: button.internalPage.slug.current } }
-                    : undefined
-                }
-                externalUrl={button.externalUrl || ""}
-                size="medium"
-                label={button.label}
-                variant={button.variant || "primary"}
-              />
-            ))}
-          </Button.Group>
+        {isDesktop ? (
+          showcaseContent
+        ) : (
+          <Container>
+            <Row justifyContent="center">
+              <Col xs={12} sm={10} md={8} marginBottom={0}>
+                {showcaseContent}
+              </Col>
+            </Row>
+          </Container>
         )}
       </div>
     </div>

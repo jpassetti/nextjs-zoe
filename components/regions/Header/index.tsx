@@ -14,64 +14,64 @@ import styles from "./header.module.scss";
 
 // Define the types for the component props if needed
 const Header: React.FC = () => {
- // Destructure isDesktop from the viewport context
- const { isLargeDesktop } = useViewport();
+  // Destructure isDesktop from the viewport context
+  const { isLargeDesktop } = useViewport();
 
- // State for controlling the mobile menu
- const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  // State for controlling the mobile menu
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
- return (
-  <Fragment>
-  <header className={styles.header}>
-   <Link href="/">
-    <Wordmark />
-   </Link>
+  return (
+    <Fragment>
+      <header className={styles.header}>
+        <Link href="/">
+          <Wordmark />
+        </Link>
 
-   {isLargeDesktop && (
-    <Row alignItems="center" gap={3} className={styles.header_desktop_nav}>
-     <Nav />
+        {isLargeDesktop && (
+          <Row alignItems="center" gap={3} className={styles.header_desktop_nav}>
+            <Nav />
 
-     <Button
-        _type="button"
-      label="Schedule a consultation"
-      variant="accent"
-      size="medium"
-      linkType="internal"
-      actionType="button"
-      internalPage={
-        {
-          slug: {
-          current: "consultation",
-          },
-        }
-      }
-     />
-    </Row>
-   )}
+            <Button
+              _type="button"
+              label="Schedule a consultation"
+              variant="accent"
+              size="medium"
+              linkType="internal"
+              actionType="button"
+              internalPage={
+                {
+                  slug: {
+                    current: "consultation",
+                  },
+                }
+              }
+            />
+          </Row>
+        )}
 
-   {!isLargeDesktop && (
-    <Button.UI
-     type="menu"
-     backgroundColor="accent"
-     clickHandler={() => {
-      setIsMenuOpen(true);
-     }}
-    />
-   )}
+        {!isLargeDesktop && (
+          <Button.UI
+            iconProps={{ name: "menu" }}
+            backgroundColor="accent"
+            clickHandler={() => {
+              setIsMenuOpen(true);
+            }}
+          />
+        )}
 
-   
-  </header>
-  <AnimatePresence>
-    {isMenuOpen && (
-     <MobileNav
-      closeHandler={() => {
-       setIsMenuOpen(false);
-      }}
-     />
-    )}
-   </AnimatePresence>
-   </Fragment>
- );
+
+      </header>
+      <AnimatePresence>
+        {isMenuOpen && (
+          <MobileNav
+            closeHandler={() => {
+              setIsMenuOpen(false);
+            }}
+          />
+        )}
+      </AnimatePresence>
+    </Fragment>
+  );
 };
 
 export default Header;

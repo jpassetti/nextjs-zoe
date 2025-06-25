@@ -1,18 +1,35 @@
 import { groq } from "next-sanity";
 import { sanityClient } from "../client";
 
-export async function getComparisonTableData(featureRefs: { _ref: string }[]) {
-  const ids = featureRefs.map((ref) => ref._ref);
+export async function getComparisonTableData(preview: boolean = false) {
+  console.log(`getComparisonTableData called with preview: ${preview}`);
+
   const query = groq`
-    *[_type == "feature" && _id in $ids] {
-      _id,
-      label
+    *[_type == "comparisonTable"] {
+      title,
+      description,
+      rows[] {
+        title,
+        cells[] {
+          value,
+          isHighlighted
+        }
+      }
     }
   `;
-  const fetchedFeatures = await sanityClient.fetch(query, { ids });
 
-  // Sort the features to match the order of the `_ref` values
-  return ids.map((id) =>
-    fetchedFeatures.find((feature: { _id: string }) => feature._id === id)
-  );
+  if (preview) {
+    // Use token and disable CDN for draft mode
+    return await sanityClient.withConfig({
+      token: process.env.SANITY_API_WRITE_TOKEN,
+      useCdn: false,
+      perspective: "drafts",
+    }).fetch(query);
+  } else {
+    // Use CDN for published mode (no token)
+    return await sanityClient.withConfig({
+      token: undefined,
+      useCdn: true,
+    }).fetch(query);
+  }
 }

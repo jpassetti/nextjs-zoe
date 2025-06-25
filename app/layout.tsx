@@ -1,29 +1,9 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { ViewportProvider } from "@/lib/context/ViewportContext"; // Adjust path if needed
 import Header from "@/components/regions/Header";
 import Footer from "@/components/regions/Footer";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
-import { Montserrat, Playfair, Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
-
-// Theme 1 Fonts
-const montserrat = Montserrat({
- subsets: ["latin"],
- weight: ["400", "700"],
- style: ["normal", "italic"],
- variable: "--font-primary",
- display: "swap",
-});
-
-const playfair = Playfair({
- subsets: ["latin"],
- weight: ["400", "700"],
- style: ["normal", "italic"],
- variable: "--font-secondary",
- display: "swap",
-});
+import { Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
 
 // Theme 2 Fonts
 const lora = Lora({
@@ -44,22 +24,22 @@ const poppins = Poppins({
 
 import "@/sass/global.scss";
 
+export const metadata = {
+  title: 'Transform with Irini',
+  description: 'Guiding human systems through growth and change.',
+  icons: {
+    icon: '/favicon.ico',
+  },
+};
+
 export default function RootLayout({
  children,
 }: Readonly<{ children: React.ReactNode }>) {
- const [theme, setTheme] = useState<string>("theme1");
-
- useEffect(() => {
-  const savedTheme = localStorage.getItem("theme") || "theme1";
-  setTheme(savedTheme);
-  document.documentElement.setAttribute("data-theme", savedTheme);
- }, []);
 
  return (
   <html
    lang="en"
-   className={`p-0 m-0 ${theme === "theme1" ? montserrat.variable + " " + playfair.variable : lora.variable + " " + poppins.variable}`}
-   data-theme={theme}
+   className={`p-0 m-0 ${lora.variable + " " + poppins.variable}`}
   >
    <body className="p-0 m-0">
     <GoogleAnalytics />    

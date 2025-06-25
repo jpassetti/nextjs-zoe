@@ -15,11 +15,11 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: Request) {
   try {
-    const { questionnaireId, responses } = await req.json();
+    const { slug, responses } = await req.json();
 
-    if (!questionnaireId || !responses) {
+    if (!slug || !responses) {
       return NextResponse.json(
-        { error: "Missing questionnaire ID or responses" },
+        { error: "Missing questionnaire slug or responses" },
         { status: 400 }
       );
     }
@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     const newResponse = await sanityClient.create({
       _type: "responses",
       title: submittedName,
-      questionnaireId: { _ref: questionnaireId, _type: "reference" },
+      slug,
       submittedAt: new Date().toISOString(),
       data: formattedResponses,
     });
@@ -51,7 +51,7 @@ export async function POST(req: Request) {
       from: "notifications@irini.io",
       to: "zoe@irini.io",
       subject: "New Questionnaire Submission",
-      html: `<p>New submission for questionnaire ID: ${questionnaireId}</p>
+      html: `<p>New submission for questionnaire slug: ${slug}</p>
              <pre>${JSON.stringify(responses, null, 2)}</pre>`,
     });
 

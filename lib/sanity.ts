@@ -2,55 +2,7 @@ import { sanityClient } from "@/lib/sanity/client";
 import { groq } from "next-sanity";
 import { Questionnaire } from "@/lib/types/questionnaire";
 import imageUrlBuilder from "@sanity/image-url";
-
-// Define types for Sanity data structures
-export interface SanityReference {
-  _ref: string;
-  _type: string;
-}
-
-export interface SanityImage {
-  asset?: {
-    _ref: string;
-    _type: string;
-  };
-  alt?: string;
-  [key: string]: unknown; // Added index signature to ensure compatibility
-}
-
-export interface ShowcaseSection {
-  _type: "showcaseSection";
-  title: string;
-  description?: string;
-  backgroundImage?: SanityImage;
-  buttons?: Array<{
-    label: string;
-    linkType: "internal" | "external";
-    internalPage?: { slug: { current: string } };
-    externalUrl?: string;
-    variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
-  }>;
-}
-
-export interface ColumnsSection {
-  _type: "columnsSection";
-  rows: Array<{
-    columns: Array<{
-      title: string;
-      content: string;
-      width?: {
-        xs?: number;
-        sm?: number;
-        md?: number;
-        lg?: number;
-        xl?: number;
-      };
-    }>;
-    backgroundColor?: string;
-  }>;
-}
-
-export type Section = ShowcaseSection | ColumnsSection;
+import type { SanityImage } from "@/lib/interfaces";
 
 // Update the `urlFor` function to use proper typing
 const urlFor = (source: SanityImage) => imageUrlBuilder(sanityClient).image(source);

@@ -18,11 +18,18 @@ h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, div, body, html {
   --color-text: #2c2c2c;
   --color-text-inverse: #fff;
   --color-gray: #bbb;
+  --color-orange: #D9915C;
+  --color-black: #2c2c2c;
   --font-primary: "Lora", serif;
   --font-secondary: "Poppins", sans-serif;
   --font-headlines: "Poppins", sans-serif;
   --font-buttons: "Poppins", sans-serif;
   --font-navigation: "Poppins", sans-serif;
+  --header-height:  6rem;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 html,

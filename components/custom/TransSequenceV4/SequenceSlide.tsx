@@ -26,7 +26,7 @@ const SequenceSlide: React.FC<SequenceSlideProps> = ({ slide, ref }) => {
     ref={ref}
     className={styles.sequence_slide}
   >
-    <Heading level={2} marginBottom={2}>
+    <Heading level={2} marginBottom={2} color="primary">
       {slide.title}
     </Heading>
     {slide.subheadline && (

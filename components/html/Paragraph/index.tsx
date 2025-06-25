@@ -18,6 +18,7 @@ interface ParagraphProps {
  marginTop?: number; // Optional margin at the top
  textAlign?: "left" | "center" | "right" | "justify"; // Text alignment (optional)
  fontWeight?: "normal" | "bold" | "lighter" | string; // Font weight (optional)
+ fontStyle?: "normal" | "italic"; // Font style (optional)
 }
 
 const Paragraph: React.FC<ParagraphProps> = ({
@@ -32,6 +33,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
  marginTop,
  textAlign,
  fontWeight,
+ fontStyle
 }) => {
  // Generate the dynamic class names based on props
  const paragraphClasses = cx({
@@ -43,6 +45,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
   diminish: diminish,
   [`text-align-${textAlign}`]: textAlign,
   [`font-weight-${fontWeight}`]: fontWeight,
+  [`font-style-${fontStyle}`]: fontStyle,
   [`font-color-${color}`]: color,
   condensed: condensed,
   caps: caps,

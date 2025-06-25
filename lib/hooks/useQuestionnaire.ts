@@ -1,11 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
 import { getQuestionnaire } from "@/lib/sanity/queries/getQuestionnaire";
-import { Questionnaire, Responses } from "@/lib/types/questionnaire";
+import { Questionnaire } from "@/lib/types/questionnaire";
 import { validationPatterns } from "@/lib/validationPatterns";
 
 export function useQuestionnaire(slug: string) {
  const [step, setStep] = useState<number>(0);
- const [responses, setResponses] = useState<Responses>({});
+ const [responses, setResponses] = useState<Record<string, string[]>>({}); // All responses stored as arrays
  const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
  const [loading, setLoading] = useState(true);
  const [error, setError] = useState<string | null>(null);
@@ -33,18 +33,25 @@ export function useQuestionnaire(slug: string) {
   type?: string
  ) => {
   setResponses((prev) => {
+   const currentValues = prev[question] || [];
+
    if (type === "checkbox") {
-    const prevAnswers = Array.isArray(prev[question])
-     ? (prev[question] as string[])
-     : [];
+    const updatedValues = Array.isArray(value)
+     ? value
+     : currentValues.includes(value)
+     ? currentValues.filter((v) => v !== value)
+     : [...currentValues, value];
+
     return {
      ...prev,
-     [question]: prevAnswers.includes(value as string)
-      ? prevAnswers.filter((v) => v !== value)
-      : [...prevAnswers, value as string],
+     [question]: updatedValues,
     };
    }
-   return { ...prev, [question]: value };
+
+   return {
+    ...prev,
+    [question]: Array.isArray(value) ? value : [value], // Ensure single values are stored as arrays
+   };
   });
  };
 
@@ -56,16 +63,16 @@ export function useQuestionnaire(slug: string) {
   const newValidationErrors: Record<string, string> = {};
 
   currentStep.questions.forEach((q) => {
-   const response = responses[q.question] || "";
+   const response = responses[q.question] || [];
    const pattern = validationPatterns[q.type]?.pattern;
 
-   if (q.required && !response) {
+   if (q.required && response.length === 0) {
     newValidationErrors[q.question] = "This field is required.";
     isValid = false;
    } else if (
     pattern &&
-    typeof response === "string" &&
-    !new RegExp(pattern).test(response)
+    response.length > 0 &&
+    !response.every((r) => new RegExp(pattern).test(r))
    ) {
     newValidationErrors[q.question] = "Invalid format.";
     isValid = false;
@@ -81,12 +88,12 @@ export function useQuestionnaire(slug: string) {
 
   const currentStep = questionnaire.steps[step];
   return currentStep.questions.every((q) => {
-   const response = responses[q.question];
+   const response = responses[q.question] || [];
    const pattern = validationPatterns[q.type]?.pattern;
 
-   if (q.required && !response) return false;
-   if (pattern && typeof response === "string") {
-    return new RegExp(pattern).test(response);
+   if (q.required && response.length === 0) return false;
+   if (pattern) {
+    return response.every((r) => new RegExp(pattern).test(r));
    }
    return true;
   });

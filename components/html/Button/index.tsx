@@ -3,15 +3,16 @@ import classNames from "classnames/bind";
 import Icon, { icons } from "@/components/html/Icon";
 import Link from "next/link";
 import styles from "./button.module.scss";
-import { ButtonProps, GroupProps, UIProps, StepProps } from "@/lib/interfaces";
+import { ButtonProps, GroupProps, UIProps, StepButtonProps } from "@/lib/interfaces";
 
 const cx = classNames.bind(styles);
 
 const Button: React.FC<ButtonProps> & {
   Group: React.FC<GroupProps>;
   UI: React.FC<UIProps>;
-  Step: React.FC<StepProps>;
+  Step: React.FC<StepButtonProps>;
 } = ({
+  disabled =false,
   label,
   linkType,
   internalPage,
@@ -28,6 +29,7 @@ const Button: React.FC<ButtonProps> & {
     button: true,
     [`size--${size}`]: size,
     [`variant--${resolvedVariant}`]: resolvedVariant,
+    [`disabled`]: disabled,
   });
 
   const content = children || label;
@@ -55,7 +57,11 @@ const Button: React.FC<ButtonProps> & {
   }
 
   return (
-    <button className={buttonClasses} type={actionType}>
+    <button 
+    className={buttonClasses} 
+    type={actionType}
+    disabled={disabled} // Ensure the disabled prop is applied
+>
       {content}
     </button>
   );
@@ -80,40 +86,41 @@ const Group: React.FC<GroupProps> = ({
 
 const UI: React.FC<UIProps> = ({
  backgroundColor,
+ disabled = false,
+ iconProps,
  label,
- type = "primary", // ✅ Used for styling
- buttonType = "button", // ✅ Used for the HTML attribute
+ type, // Optional type for styling
+ buttonType = "button", // Default HTML button attribute
  clickHandler,
 }) => {
  const uiClasses = cx({
   [`button--ui`]: true,
-  [`type--${type}`]: type, // ✅ Used for styling only
+  [`type--close`]: iconProps?.name === "close", // Specific styling for close button
+  [`type--${type}`]: type, // Apply type class only if provided
   [`background-color--${backgroundColor}`]: backgroundColor,
  });
 
- const iconName = type === "primary" ? "menu" : type; // Map `primary` to a valid icon name
-
- if (!icons[iconName as keyof typeof icons]) {
-  console.error(`Invalid icon name: ${iconName}`);
-  return null;
- }
+ const iconName = iconProps?.name || undefined; // Use iconProps or undefined if no type
 
  return (
-  <button className={uiClasses} type={buttonType} onClick={clickHandler}>
-   {label ? label : ""}
-   <Icon
-    name={iconName as keyof typeof icons} // Ensure `name` is a valid key
-    color={
-     backgroundColor === "black" || backgroundColor === "accent"
-      ? "white"
-      : "black"
-    }
-   />
+  <button className={uiClasses} type={buttonType} onClick={clickHandler} disabled={disabled}>
+   {label && <span>{label}</span>} {/* Render label if provided */}
+   {iconName && (
+     <Icon
+       name={iconName as keyof typeof icons} // Ensure `name` is a valid key
+       color={
+         (iconProps?.color as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange" | undefined) ||
+         ((backgroundColor === "black" || backgroundColor === "accent"
+           ? "white"
+           : "black") as "black" | "accent" | "white" | "primary" | "secondary" | "gray" | "orange")
+       }
+     />
+   )}
   </button>
  );
 };
 
-const Step: React.FC<StepProps> = ({
+const Step: React.FC<StepButtonProps> = ({
  disabled = false,
  type = "next", // ✅ Used for styling
  buttonType = "button", // ✅ Used for HTML button attribute

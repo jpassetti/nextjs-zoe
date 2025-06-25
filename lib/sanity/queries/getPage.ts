@@ -117,6 +117,45 @@ export async function getPage(slug: string, preview: boolean = false) {
               }
             }
           }
+        },
+        _type == "testimonialBlock" => {
+          ...,
+          testimonial-> {
+            quote,
+            name,
+            jobTitle,
+            photo {
+              asset-> {
+                url
+              }
+            },
+            linkedinUrl,
+            companyName,
+            companyUrl
+          }
+        },
+        _type == "questionnaireBlock" => {
+          ...,
+          questionnaire-> {
+            title,
+            slug {
+              current,
+            },
+            description,
+            steps[] {
+              title,
+              description,
+              questions[] {
+                label,
+                question,
+                type,
+                placeholder,
+                helperText,
+                required,
+                options
+              }
+            }
+          }
         }
       }
     }

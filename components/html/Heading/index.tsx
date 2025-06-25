@@ -11,6 +11,7 @@ interface HeadingProps {
  children: ReactNode;
  className?: string;
  color?: string;
+ textShadow?: boolean; // Optional prop for drop shadow
  fontFamily?: string;
  fontStyle?: string;
  fontWeight?: string;
@@ -31,6 +32,7 @@ const Heading: React.FC<HeadingProps> = ({
  children,
  className,
  color,
+ textShadow = false, // Default to false if not provided
  fontFamily,
  fontStyle,
  fontWeight,
@@ -58,6 +60,7 @@ const Heading: React.FC<HeadingProps> = ({
   heading: true,
   [`heading--level-${level}`]: level,
   [`text-align-${textAlign}`]: textAlign,
+  [`text-shadow`]: textShadow,
   [`margin-top-${marginTop}`]: marginTop,
   [`margin-right-${marginRight}`]: marginRight,
   [`margin-bottom-${marginBottom}`]: marginBottom,

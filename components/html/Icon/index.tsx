@@ -6,7 +6,7 @@ const cx = classNames.bind(styles);
 // Define the types for the component props
 interface IconProps {
   name: keyof typeof icons; // Restrict `name` to valid keys in the `icons` object
-  color?: "black" | "white" | "primary" | "secondary" | "accent" | "gray"; // Extendable color options
+  color?: "black" | "white" | "primary" | "secondary" | "accent" | "gray" | "orange"; // Extendable color options
   alt?: string; // Alt text for accessibility
   size?: "small" | "medium" | "large"; // Optional size prop
 }
@@ -72,6 +72,10 @@ export const icons = {
   dash: {
     path: "M97.4,2.7c5.5,5.3,2.3,16.4-5.6,17.3H8C-2.9,18.1-2.6,1.3,8.5,0h82.9c1.9,0,4.7,1.4,6,2.7Z",
     viewBox: "0 0 100.2 20",
+  },
+  "double-chevron-down" : {
+    path: "M7.4.2c3.1-.6,6.8,0,9.4,1.9l53.4,53.4L124.1,1.7c10.6-6.1,21,5.5,13.4,15.4l-60.6,60.6c-3.1,2.6-7.7,3-11.3,1.3C43.6,58.9,23.1,37,1.8,16.1-2.2,10.8.8,1.6,7.4.2ZM1.8,75.9c21.3,20.9,41.8,42.9,63.8,63,3.7,1.7,8.2,1.2,11.3-1.3l60.6-60.6c7.6-9.9-2.8-21.5-13.4-15.4l-54,53.8L16.7,62c-2.6-1.9-6.3-2.5-9.4-1.9-6.5,1.3-9.6,10.5-5.6,15.8Z",
+    viewBox: "0 0 140.1 139.9",
   }
 };
 
