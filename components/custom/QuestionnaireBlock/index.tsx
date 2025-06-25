@@ -17,7 +17,7 @@ const QuestionnaireBlock: React.FC<QuestionnaireBlock> = ({ questionnaire }) => 
   const [responses, setResponses] = useState<Record<string, string | string[]>>({});
 
   return (
-    <Section paddingTop="large" paddingBottom="large">
+    <Section paddingTop="large" paddingBottom="large" backgroundColor="secondary-light">
       <Container>
         <Row justifyContent="center" alignItems="center">
           <Col xs={12} sm={10} md={8}>
