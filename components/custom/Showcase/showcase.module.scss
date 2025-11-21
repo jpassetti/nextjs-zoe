@@ -48,6 +48,14 @@
       }
    }
 
+   &_description__light {
+      color: white;
+   }
+
+   &_description__dark {
+      color: var(--color-text);
+   }
+
    &_content {
       width: 100%;
       position: relative;

@@ -44,12 +44,13 @@ const Button: React.FC<ButtonProps> & {
 
   if (linkType === "external") {
     //console.log("External URL: ", externalUrl);
+    const isAnchorLink = externalUrl?.startsWith("#");
     return (
       <a
         href={externalUrl}
         className={buttonClasses}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={isAnchorLink ? undefined : "_blank"}
+        rel={isAnchorLink ? undefined : "noopener noreferrer"}
       >
         {content}
       </a>

@@ -20,6 +20,7 @@ interface ShowcaseProps {
     backgroundImage?: SanityImage & {
       alt?: string;
     };
+    backgroundImageUrl?: string;
     title?: string;
     description?: string;
     buttons?: Array<{
@@ -29,19 +30,29 @@ interface ShowcaseProps {
       externalUrl?: string;
       variant?: "primary" | "secondary" | "accent" | "inverted" | "inverted-white";
     }>;
+    textTone?: "light" | "dark";
   };
 }
 
 const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
   const { isDesktop } = useViewport();
-  const { backgroundImage, title, description, buttons } = data;
+  const { backgroundImage, backgroundImageUrl, title, description, buttons, textTone } = data;
+
+  const backgroundUrl = backgroundImage?.asset ? urlFor(backgroundImage).url() : backgroundImageUrl;
+  const resolvedTone =
+    textTone ||
+    (backgroundUrl ? "light" : undefined) ||
+    (isDesktop ? "light" : "dark");
+  const headingColor = resolvedTone === "light" ? "white" : "black";
+  const descriptionToneClass =
+    resolvedTone === "light" ? styles.showcase_description__light : styles.showcase_description__dark;
 
   const showcaseContent = (
     <>
       {title && (
         <Heading
           level={1}
-          color={isDesktop ? "white" : "black"}
+          color={headingColor}
           textAlign={isDesktop ? "center" : "left"} // Center text for desktop, left for non-desktop
           textShadow={isDesktop ? true : false} // Apply text shadow for desktop
           marginTop={isDesktop ? 0 : 3} // Add marginTop for non-desktop
@@ -51,7 +62,7 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
         </Heading>
       )}
       {description && (
-        <p className={styles.showcase_description}>
+        <p className={`${styles.showcase_description} ${descriptionToneClass}`}>
           {description}
         </p>
       )}
@@ -86,10 +97,10 @@ const Showcase: React.FC<ShowcaseProps> = ({ data }) => {
     <div
       className={styles.showcase}
     >
-      {backgroundImage?.asset && (
+      {backgroundUrl && (
         <Image
-          src={urlFor(backgroundImage).url()}
-          alt={backgroundImage.alt || "Showcase Image"}
+          src={backgroundUrl}
+          alt={backgroundImage?.alt || "Showcase Image"}
           fill
           className={styles.showcase_image}
           priority

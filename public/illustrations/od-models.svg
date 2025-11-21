@@ -1,0 +1,35 @@
+<svg width="900" height="360" viewBox="0 0 900 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .ring { stroke: #A0A0A0; stroke-width: 8; fill: none; }
+    .circle-accent { stroke: #BB8588; stroke-width: 6; fill: none; }
+    .label { font-family: var(--font-primary, "Lora", "Times New Roman", serif); font-size: 16px; fill: #2c2c2c; text-anchor: middle; dominant-baseline: middle; }
+    .label-small { font-family: var(--font-primary, "Lora", "Times New Roman", serif); font-size: 14px; fill: #2c2c2c; text-anchor: middle; dominant-baseline: middle; }
+    .title { font-family: "Poppins", "Helvetica Neue", Arial, sans-serif; font-size: 28px; font-weight: 700; fill: #2c2c2c; text-anchor: middle; }
+  </style>
+
+  <!-- Graphic 1 -->
+  <g transform="translate(185 180)">
+    <circle class="ring" r="165" />
+    <circle class="circle-accent" cx="-50" cy="-20" r="80" />
+    <circle class="circle-accent" cx="50" cy="-20" r="80" />
+    <circle class="circle-accent" cx="0" cy="70" r="80" />
+    <text class="title" x="0" y="0">LEADERSHIP</text>
+    <text class="label" x="-45" y="-95">Human</text>
+    <text class="label" x="45" y="-95">Operations</text>
+    <text class="label" x="0" y="145">Situation</text>
+    <text class="label" x="110" y="40">Tech</text>
+  </g>
+
+  <!-- Graphic 2 -->
+  <g transform="translate(690 180)">
+    <circle class="ring" r="165" />
+    <circle class="circle-accent" cx="-50" cy="-20" r="85" />
+    <circle class="circle-accent" cx="50" cy="-20" r="85" />
+    <circle class="circle-accent" cx="0" cy="75" r="85" />
+    <text class="title" x="0" y="0">LEADERSHIP</text>
+    <text class="label" x="-60" y="-105">Organization</text>
+    <text class="label" x="60" y="-105">Teams</text>
+    <text class="label" x="0" y="155">Situation</text>
+    <text class="label" x="120" y="35">Individuals</text>
+  </g>
+</svg>
