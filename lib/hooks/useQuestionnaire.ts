@@ -7,25 +7,35 @@ export function useQuestionnaire(slug: string) {
  const [step, setStep] = useState<number>(0);
  const [responses, setResponses] = useState<Record<string, string[]>>({}); // All responses stored as arrays
  const [questionnaire, setQuestionnaire] = useState<Questionnaire | null>(null);
- const [loading, setLoading] = useState(true);
  const [error, setError] = useState<string | null>(null);
+ const [loadedSlug, setLoadedSlug] = useState<string | null>(null);
  const [validationErrors, setValidationErrors] = useState<
   Record<string, string>
  >({});
 
  useEffect(() => {
-  setLoading(true);
   getQuestionnaire(slug)
    .then((data) => {
     if (data && data.steps?.length > 0) {
      setQuestionnaire(data);
+     setError(null);
     } else {
+     setQuestionnaire(null);
      setError("No steps found.");
     }
+
+    setLoadedSlug(slug);
    })
-   .catch(() => setError("Error fetching questionnaire."))
-   .finally(() => setLoading(false));
+   .catch(() => {
+    setQuestionnaire(null);
+    setError("Error fetching questionnaire.");
+    setLoadedSlug(slug);
+   });
  }, [slug]);
+
+ const loading = loadedSlug !== slug;
+ const questionnaireForSlug = loadedSlug === slug ? questionnaire : null;
+ const errorForSlug = loadedSlug === slug ? error : null;
 
  const handleInputChange = (
   question: string,
@@ -56,9 +66,9 @@ export function useQuestionnaire(slug: string) {
  };
 
  const validateStep = (): boolean => {
-  if (!questionnaire) return false;
+  if (!questionnaireForSlug) return false;
 
-  const currentStep = questionnaire.steps[step];
+  const currentStep = questionnaireForSlug.steps[step];
   let isValid = true;
   const newValidationErrors: Record<string, string> = {};
 
@@ -84,9 +94,9 @@ export function useQuestionnaire(slug: string) {
  };
 
  const isStepValid = useMemo(() => {
-  if (!questionnaire) return false;
+  if (!questionnaireForSlug) return false;
 
-  const currentStep = questionnaire.steps[step];
+  const currentStep = questionnaireForSlug.steps[step];
   return currentStep.questions.every((q) => {
    const response = responses[q.question] || [];
    const pattern = validationPatterns[q.type]?.pattern;
@@ -97,7 +107,7 @@ export function useQuestionnaire(slug: string) {
    }
    return true;
   });
- }, [questionnaire, step, responses]);
+ }, [questionnaireForSlug, step, responses]);
 
  const nextStep = () => {
   if (validateStep()) {
@@ -114,9 +124,9 @@ export function useQuestionnaire(slug: string) {
   setStep,
   responses,
   setResponses,
-  questionnaire,
+  questionnaire: questionnaireForSlug,
   loading,
-  error,
+  error: errorForSlug,
   validationErrors,
   handleInputChange,
   validateStep,

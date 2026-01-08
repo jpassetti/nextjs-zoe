@@ -1,4 +1,4 @@
-import React, { ReactNode, ElementType } from "react";
+import React, { ReactNode, createElement } from "react";
 import classNames from "classnames/bind";
 import styles from "./heading.module.scss";
 
@@ -47,13 +47,12 @@ const Heading: React.FC<HeadingProps> = ({
  textTransform,
  size,
 }) => {
- // Mapping for valid heading levels
- function getTagLevel(level: number): ElementType {
-  return `h${level}` as ElementType;
- }
-
  // Ensure that the level is within the valid range and default to "h6" for out-of-bound values
- const Tag: ElementType = getTagLevel(level) || "h6"; // Explicitly cast to ElementType
+ type HeadingTagName = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+
+ const tagName: HeadingTagName = (level >= 1 && level <= 6
+   ? (`h${level}` as HeadingTagName)
+   : "h6");
 
  // Generate the dynamic class names
  const headingClasses = cx({
@@ -78,7 +77,7 @@ const Heading: React.FC<HeadingProps> = ({
  });
 
  // Render the heading tag with the calculated classes
- return <Tag className={headingClasses}>{children}</Tag>;
+ return createElement(tagName, { className: headingClasses }, children);
 };
 
 export default Heading;

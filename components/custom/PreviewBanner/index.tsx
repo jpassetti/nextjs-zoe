@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
 import Row from "@/components/layout/Row";
@@ -8,13 +8,13 @@ import styles from "./previewbanner.module.scss";
 import Button from "@/components/html/Button";
 
 const PreviewBanner = () => {
-    const [redirectPath, setRedirectPath] = useState("/");
-
-    useEffect(() => {
+    const [redirectPath] = useState(() => {
         if (typeof window !== "undefined") {
-            setRedirectPath(window.location.pathname);
+            return window.location.pathname;
         }
-    }, []);
+
+        return "/";
+    });
 
     return (
         <div className={styles.preview_banner}> 

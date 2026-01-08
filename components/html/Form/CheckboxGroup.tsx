@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import type { CheckboxGroupProps } from "@/lib/interfaces";
 import Checkbox from "./Checkbox";
 
@@ -18,7 +18,6 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
       ? [responses[question] as string]
       : []
   );
-  const [showValidationMessage, setShowValidationMessage] = useState(false);
 
   const handleCheckboxChange = (value: string, isChecked: boolean) => {
     const updatedValues = isChecked
@@ -27,19 +26,9 @@ const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
 
     setSelectedValues(updatedValues);
     onChange(question, updatedValues);
-
-    // Hide validation message when at least one checkbox is selected
-    if (updatedValues.length > 0) {
-      setShowValidationMessage(false);
-    }
   };
 
-  useEffect(() => {
-    // Show validation message if required and no checkbox is selected
-    if (required && selectedValues.length === 0) {
-      setShowValidationMessage(true);
-    }
-  }, [selectedValues, required]);
+  const showValidationMessage = required && selectedValues.length === 0;
 
   return (
     <div className={styles.form__checkbox_group}>

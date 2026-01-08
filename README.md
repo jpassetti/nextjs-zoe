@@ -13,7 +13,7 @@ This repository contains the frontend for the "Transform with Irini" project, bu
 
 ### Prerequisites
 
-- Node.js (v16 or later)
+- Node.js (v20.9.0 or later)
 - npm, yarn, or pnpm
 - Sanity CLI (for managing the Sanity Studio backend)
 

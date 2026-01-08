@@ -1,17 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const RESPONSES_PASSWORD = process.env.NEXT_PUBLIC_RESPONSES_PASSWORD;
 
 export function useResponsesAuth() {
-  const [authenticated, setAuthenticated] = useState(false);
+  const [authenticated, setAuthenticated] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("responsesAuthenticated") === "true";
+  });
   const [enteredPassword, setEnteredPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setAuthenticated(localStorage.getItem("responsesAuthenticated") === "true");
-    }
-  }, []);
 
   const checkPassword = () => {
     if (enteredPassword === RESPONSES_PASSWORD) {

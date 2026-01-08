@@ -1,11 +1,13 @@
 import { sanityClient } from "@/lib/sanity/client";
 import { groq } from "next-sanity";
 import { Questionnaire } from "@/lib/types/questionnaire";
-import imageUrlBuilder from "@sanity/image-url";
+import { createImageUrlBuilder } from "@sanity/image-url";
 import type { SanityImage } from "@/lib/interfaces";
 
 // Update the `urlFor` function to use proper typing
-const urlFor = (source: SanityImage) => imageUrlBuilder(sanityClient).image(source);
+const imageBuilder = createImageUrlBuilder(sanityClient);
+
+const urlFor = (source: SanityImage) => imageBuilder.image(source);
 
 export { urlFor };
 

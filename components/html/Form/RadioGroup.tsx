@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Form from "@/components/html/Form";
 
 interface RadioGroupProps {
@@ -20,28 +20,16 @@ const RadioGroup: React.FC<RadioGroupProps> = ({
   handleInputChange,
   required,
 }) => {
-  const [isOtherSelected, setIsOtherSelected] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false); // Track initialization
+  const selectedResponse = Array.isArray(responses[question])
+    ? responses[question][0]
+    : responses[question];
 
-  useEffect(() => {
-    if (!isInitialized) {
-      const normalizedResponse = responses[question]?.[0]?.toLowerCase().split(" ")[0]; // Normalize the response
-      const isOther = normalizedResponse === "other";
-      setIsOtherSelected(isOther); // Initialize state based on responses
-
-      if (isOther && !responses[`${question}-other`]) {
-        handleInputChange(`${question}-other`, "", "text"); // Ensure conditional text box value is initialized
-      }
-
-      setIsInitialized(true); // Mark as initialized
-    }
-  }, [responses, question, handleInputChange, isInitialized]); // Add handleInputChange to dependency array
+  const normalizedSelected = (selectedResponse ?? "").toLowerCase().split(" ")[0];
+  const isOtherSelected = normalizedSelected === "other";
 
   const handleOptionChange = (value: string) => {
     const normalizedValue = value.toLowerCase().split(" ")[0]; // Normalize the value
     const isOther = normalizedValue === "other";
-    setIsOtherSelected(isOther);
-
     if (isOther) {
       handleInputChange(question, "other", "radio"); // Add "other" answer to responses
       handleInputChange(`${question}-other`, "", "text"); // Initialize conditional text box value
