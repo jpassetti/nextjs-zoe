@@ -24,6 +24,7 @@ export interface ButtonProps {
     _type: "button";
     disabled?: boolean;
     label?: string;
+    clickHandler?: () => void;
     linkType?: "internal" | "external";
     internalPage?: { slug: { current: string } };
     externalUrl?: string;

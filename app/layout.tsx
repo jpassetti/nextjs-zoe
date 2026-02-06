@@ -1,6 +1,5 @@
 import { ViewportProvider } from "@/lib/context/ViewportContext"; // Adjust path if needed
-import Header from "@/components/regions/Header";
-import Footer from "@/components/regions/Footer";
+import AppShell from "@/components/regions/AppShell";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 
 import { Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
@@ -44,9 +43,7 @@ export default function RootLayout({
    <body className="p-0 m-0">
     <GoogleAnalytics />    
     <ViewportProvider>
-     <Header />
-     <main>{children}</main>
-     <Footer />
+     <AppShell>{children}</AppShell>
     </ViewportProvider>
    </body>
   </html>

@@ -6,18 +6,67 @@
   align-items: center;
   width: 100%;
 }
-.progress {
-  font-size: 0.95rem;
-  color: #374151;
-  margin-left: 1rem;
+
+.flowHeader {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 1.25rem;
 }
+
+.flowFooter {
+  width: 100%;
+  max-width: 720px;
+  margin: 2rem auto 0;
+  display: flex;
+  justify-content: center;
+}
+
+.matchCardWrap {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.matchCard {
+  background: #ffffff;
+  border: 1px solid #e6e6e6;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(20, 20, 20, 0.08);
+}
+
+.restartWrap {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto 1.25rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.9rem;
+  width: 100%;
+  max-width: 720px;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  background: var(--color-secondary);
+  border: 1px solid #e6e6e6;
+}
+
 .progress {
-  font-size: 0.95rem;
-  color: #374151;
-  margin-left: 1rem;
+  margin: 0;
+  opacity: 0.75;
 }
 .question {
-  margin: 0 0 0.5rem 0;
+  margin: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.progress {
+  text-align: center;
 }
 .card {
   background: #ffffff;
@@ -27,9 +76,6 @@
   box-shadow: 0 6px 18px rgba(20, 20, 20, 0.06);
   max-width: 720px;
   width: 100%;
-}
-.question {
-  margin: 0 0 1rem 0;
 }
 .card {
   margin-top: 0.5rem;
@@ -45,31 +91,71 @@
 .option {
   width: 100%;
 }
-.option label {
-  width: 100%;
-  box-sizing: border-box;
-}
-.option label {
+.optionLabel {
+  position: relative;
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  transition: background-color 0.12s ease, border-color 0.12s ease;
-  border: 1px solid transparent;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border-radius: 12px;
+  transition: background-color 0.12s ease, border-color 0.12s ease, transform 0.12s ease;
+  border: 1px solid #e6e6e6;
   cursor: pointer;
+  background: #fff;
 }
-.option input[type="radio"] {
-  margin-top: 4px;
+
+.optionLabel:hover {
+  background-color: var(--color-secondary);
+  border-color: color-mix(in srgb, var(--color-primary) 35%, #e6e6e6);
 }
-.option:hover label {
-  background-color: #fafafa;
-  border-color: #eee;
+
+.optionInput {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
 }
-/* highlight when selected using :has if supported */
-.option:has(input:checked) label {
-  background-color: #f8fafc;
-  border-color: #e2e8f0;
+
+.optionIndicator {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid var(--color-gray);
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+.optionContent {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+
+.optionText {
+  display: block;
+  font-size: 1.05rem;
+  line-height: 1.35;
+  color: var(--color-text);
+}
+
+/* Selected state */
+.optionLabel[data-checked='true'] {
+  border-color: var(--color-primary);
+  background-color: var(--color-secondary);
+}
+
+.optionLabel[data-checked='true'] .optionIndicator {
+  border-color: var(--color-primary);
+  background: radial-gradient(circle at center, var(--color-primary) 0 55%, transparent 56% 100%);
+}
+
+.optionLabel[data-checked='true'] .optionText {
+  font-weight: 600;
+}
+
+/* Focus ring */
+.optionLabel:focus-within {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 .controls {
   display: flex;
@@ -79,7 +165,27 @@
 }
 .result {
   padding: 1rem 0;
-  text-align: left;
+  text-align: center;
+}
+
+.reveal {
+  padding: 0.75rem 0.25rem;
+}
+
+.revealBar {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--color-secondary);
+  border: 1px solid #e6e6e6;
+  overflow: hidden;
+}
+
+.revealBarFill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left;
+  background: var(--color-primary);
 }
 
 @media (max-width: 640px) {

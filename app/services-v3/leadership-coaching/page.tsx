@@ -1,8 +1,15 @@
 import React from 'react'
 import Container from '@/components/layout/Container'
+import Section from '@/components/layout/Section'
+import Row from '@/components/layout/Row'
+import Col from '@/components/layout/Col'
 import Heading from '@/components/html/Heading'
 import Paragraph from '@/components/html/Paragraph'
 import CTA from '@/components/custom/CTA'
+import { Ul, Li } from '@/components/html/List'
+import FlowHeader from '@/components/custom/ServicesV3/FlowHeader'
+import FlowFooter from '@/components/custom/ServicesV3/FlowFooter'
+import ServiceMatchCard from '@/components/custom/ServicesV3/ServiceMatchCard'
 
 const pageCTA = {
   headline: 'Ready to ease and speed the change you need?',
@@ -25,25 +32,45 @@ const pageCTA = {
 export default function LeadershipCoachingPage() {
   return (
     <main>
-      <Container type="content">
-        <Heading level={1}>Leadership Coaching</Heading>
-        <Paragraph>
-          Twelve focused sessions that align how you lead with the outcomes your organization needs most. Each journey stays
-          grounded in perspective, integrity, and courage.
-        </Paragraph>
-        <Heading level={3}>Ideal for</Heading>
-        <ul>
-          <li>Leaders stepping into bigger roles or navigating a new mandate</li>
-          <li>Executives preparing for succession or post-merger integration</li>
-          <li>Founders who need clarity while the business evolves</li>
-        </ul>
-        <Heading level={3}>Outcomes</Heading>
-        <ul>
-          <li>Sharper decision-making anchored in strategy</li>
-          <li>Actionable growth commitments tied to stakeholder feedback</li>
-          <li>Greater confidence in navigating complex transitions</li>
-        </ul>
-      </Container>
+      <Section backgroundColor="secondary" paddingTop="large" paddingBottom="large">
+        <Container type="content">
+          <FlowHeader
+            title="Your Service Match"
+            subtitle="Based on your answers, here’s the service that best fits what you’re navigating right now."
+          />
+
+          <ServiceMatchCard
+            title="Leadership Coaching"
+            summary="Twelve focused sessions that align how you lead with the outcomes your organization needs most. Each journey stays grounded in perspective, integrity, and courage."
+          >
+            <Row alignItems="flex-start">
+              <Col xs={12} md={6} marginBottom={4}>
+                <Heading level={3} marginBottom={1} color="primary">
+                  Ideal for
+                </Heading>
+                <Ul>
+                  <Li>Leaders stepping into bigger roles or navigating a new mandate</Li>
+                  <Li>Executives preparing for succession or post-merger integration</Li>
+                  <Li>Founders who need clarity while the business evolves</Li>
+                </Ul>
+              </Col>
+
+              <Col xs={12} md={6} marginBottom={4}>
+                <Heading level={3} marginBottom={1} color="primary">
+                  Outcomes
+                </Heading>
+                <Ul>
+                  <Li>Sharper decision-making anchored in strategy</Li>
+                  <Li>Actionable growth commitments tied to stakeholder feedback</Li>
+                  <Li>Greater confidence in navigating complex transitions</Li>
+                </Ul>
+              </Col>
+            </Row>
+          </ServiceMatchCard>
+
+          <FlowFooter />
+        </Container>
+      </Section>
       <CTA headline={pageCTA.headline} paragraph={pageCTA.paragraph} buttons={pageCTA.buttons} />
     </main>
   )

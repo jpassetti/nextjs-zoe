@@ -1,8 +1,8 @@
 import React from 'react'
 import Quiz from '../../components/custom/ServicesV3'
 import Container from '@/components/layout/Container'
-import Heading from '@/components/html/Heading'
-import Paragraph from '@/components/html/Paragraph'
+import Section from '@/components/layout/Section'
+import FlowHeader from '@/components/custom/ServicesV3/FlowHeader'
 
 export const metadata = {
   title: 'Services Quiz',
@@ -12,17 +12,15 @@ export const metadata = {
 export default function ServicesV3Page() {
   return (
     <main>
-      <Container type="content">
-        <div style={{maxWidth:900,margin:'0 auto',padding:'2.5rem 1rem',textAlign:'center'}}>
-          <Heading level={1} marginBottom={1} textAlign="center">
-            Find the Right Service for You
-          </Heading>
-          <Paragraph marginBottom={2} textAlign="center">
-            Answer a few quick questions and we&apos;ll recommend the best service.
-          </Paragraph>
+      <Section backgroundColor="white" paddingTop="large" paddingBottom="large">
+        <Container type="content">
+          <FlowHeader
+            title="Find the Right Service for You"
+            subtitle="Answer a few quick questions and we’ll recommend the best service."
+          />
           <Quiz />
-        </div>
-      </Container>
+        </Container>
+      </Section>
     </main>
   )
 }

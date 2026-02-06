@@ -14,6 +14,7 @@ const Button: React.FC<ButtonProps> & {
 } = ({
   disabled =false,
   label,
+  clickHandler,
   linkType,
   internalPage,
   externalUrl,
@@ -62,6 +63,7 @@ const Button: React.FC<ButtonProps> & {
     className={buttonClasses} 
     type={actionType}
     disabled={disabled} // Ensure the disabled prop is applied
+    onClick={clickHandler}
 >
       {content}
     </button>
