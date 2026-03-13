@@ -1,0 +1,278 @@
+.immersive {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  color: #f3f4f8;
+}
+
+.backgroundLayer {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(255, 205, 138, 0.32), transparent 34%),
+    radial-gradient(circle at 90% 100%, rgba(120, 182, 255, 0.3), transparent 40%),
+    linear-gradient(120deg, var(--accent-1), var(--accent-2));
+  transform: scale(1.06);
+}
+
+.backgroundLayer::before,
+.backgroundLayer::after {
+  content: "";
+  position: absolute;
+  border-radius: 1.4rem;
+}
+
+.backgroundLayer::before {
+  width: 42vw;
+  min-width: 280px;
+  max-width: 520px;
+  height: 58%;
+  right: 7%;
+  top: 14%;
+  background: linear-gradient(130deg, rgba(255, 255, 255, 0.34), rgba(255, 255, 255, 0.06));
+  border: 1px solid rgba(255, 255, 255, 0.48);
+}
+
+.backgroundLayer::after {
+  width: 28vw;
+  min-width: 220px;
+  max-width: 360px;
+  height: 36%;
+  left: 9%;
+  bottom: 12%;
+  background: linear-gradient(145deg, rgba(16, 26, 39, 0.36), rgba(255, 255, 255, 0.08));
+  border: 1px solid rgba(19, 26, 36, 0.34);
+}
+
+.backdropVeil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(8, 12, 18, 0.22), rgba(8, 12, 18, 0.68) 58%, rgba(8, 12, 18, 0.84)),
+    radial-gradient(circle at 10% 22%, rgba(12, 17, 26, 0.22), transparent 56%);
+}
+
+.viewport {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 1rem;
+  padding: clamp(1.3rem, 3vw, 2.6rem) 0 clamp(1.1rem, 2.5vw, 1.8rem);
+}
+
+.header {
+  display: grid;
+  gap: 0.7rem;
+  max-width: 78ch;
+}
+
+.kicker {
+  h4 {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #dbe8ff;
+  }
+}
+
+.title {
+  width: 100%;
+  max-width: 42ch;
+
+  h1 {
+    margin: 0;
+    font-size: clamp(1.3rem, 3.1vw, 2.7rem);
+    line-height: 0.95;
+    text-wrap: balance;
+  }
+}
+
+@media (min-width: 1000px) {
+  .title {
+    width: 78%;
+    max-width: none;
+  }
+}
+
+.story {
+  align-self: center;
+  max-width: 94ch;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.metaLine {
+  p {
+    margin: 0;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #d1ddf7;
+  }
+}
+
+.momentTitle {
+  width: 100%;
+  max-width: none;
+
+  h2 {
+    margin: 0;
+    font-size: clamp(1.3rem, 2.8vw, 2.3rem);
+    line-height: 1.02;
+  }
+}
+
+.narrativeFlow {
+  display: grid;
+  gap: 1rem;
+}
+
+.label {
+  p {
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.69rem;
+    font-weight: 700;
+    color: #d4e2ff;
+  }
+}
+
+.copy {
+  margin-top: 0.35rem;
+  max-width: 64ch;
+
+  p {
+    margin: 0;
+    color: #f0f4fe;
+    font-size: clamp(1.03rem, 1.8vw, 1.2rem);
+    line-height: 1.58;
+  }
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.35rem;
+}
+
+.bottomBar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.controls {
+  display: flex;
+  gap: 0.55rem;
+}
+
+.arrow {
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  background: rgba(255, 255, 255, 0.08);
+  color: #f2f5ff;
+  border-radius: 999px;
+  padding: 0.42rem 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.arrow:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.62);
+}
+
+.timeline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.dot {
+  min-width: 2.05rem;
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  background: transparent;
+  color: rgba(243, 246, 255, 0.86);
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+}
+
+.dotActive {
+  background: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+@media (max-width: 760px) {
+  .viewport {
+    padding: 1rem 0 1.15rem;
+    gap: 0.8rem;
+  }
+
+  .header {
+    max-width: none;
+  }
+
+  .title {
+    width: 100%;
+    max-width: none;
+  }
+
+  .title h1 {
+    font-size: clamp(1.2rem, 5.5vw, 1.8rem);
+    line-height: 1.02;
+  }
+
+  .story {
+    max-width: none;
+    gap: 0.85rem;
+  }
+
+  .momentTitle h2 {
+    font-size: clamp(1.08rem, 4.9vw, 1.55rem);
+  }
+
+  .copy {
+    max-width: none;
+  }
+
+  .bottomBar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .timeline {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    padding-bottom: 0.2rem;
+  }
+
+  .dot {
+    flex-shrink: 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  .narrativeFlow {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.15rem;
+  }
+
+  .copy {
+    max-width: 30ch;
+  }
+}

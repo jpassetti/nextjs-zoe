@@ -8,6 +8,7 @@ const cx = classnames.bind(styles);
 // Define types for the component props
 interface ContainerProps {
  alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"; // Possible values for alignItems
+ align?: "default" | "wide" | "full";
  children: React.ReactNode; // The content inside the container (required)
  justifyContent?:
   | "flex-start"
@@ -24,6 +25,7 @@ interface ContainerProps {
 
 const Container: React.FC<ContainerProps> = ({
  alignItems,
+ align = "default",
  children,
  height,
  justifyContent,
@@ -37,6 +39,7 @@ const Container: React.FC<ContainerProps> = ({
   [`container__${type}`]: type, // Add class based on the 'type' if provided
   [`height--${height}`]: height, // Add class based on the 'height' if provided
   [`width--${width}`]: width, // Add class based on the 'width' if provided
+    [`align--${align}`]: align,
   [`justify-content--${justifyContent}`]: justifyContent, // Add class based on the 'justifyContent' prop
   [`align-items--${alignItems}`]: alignItems, // Add class based on the 'alignItems' prop
   [`no-padding`]: noPadding,

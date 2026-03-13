@@ -28,6 +28,30 @@
  &.width--full {
   width: 100%;
  }
+
+ &.align--default {
+ }
+
+ &.align--wide {
+  width: 100%;
+  @include mixins.breakpoint(sm) {
+   width: min(94vw, 900px);
+  }
+  @include mixins.breakpoint(md) {
+   width: min(94vw, 1180px);
+  }
+  @include mixins.breakpoint(lg) {
+   width: min(94vw, 1320px);
+  }
+ }
+
+ &.align--full {
+  width: 100vw;
+  max-width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+ }
+
  &.height--full {
   min-height: 100vh;
  }

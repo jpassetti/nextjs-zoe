@@ -1,0 +1,301 @@
+.showcaseExperiment {
+  --bg: #f4f3ef;
+  --surface: #fdfcf8;
+  --ink: #1b1e22;
+  --muted: #60646b;
+  --line: rgba(27, 30, 34, 0.12);
+
+  min-height: 100dvh;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(194, 163, 127, 0.22), transparent 38%),
+    radial-gradient(circle at 95% 100%, rgba(55, 98, 144, 0.16), transparent 44%),
+    var(--bg);
+  color: var(--ink);
+  padding: clamp(2.5rem, 4vw, 4rem) clamp(1.1rem, 3vw, 3rem) clamp(3.25rem, 5vw, 5rem);
+}
+
+.inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: grid;
+  gap: clamp(1.6rem, 2.8vw, 2.4rem);
+}
+
+.header {
+  display: grid;
+  gap: 1rem;
+  max-width: 72ch;
+}
+
+.kicker {
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #39597f;
+  margin: 0;
+}
+
+.title {
+  margin: 0;
+  font-family: "Iowan Old Style", "Baskerville", "Times New Roman", serif;
+  font-weight: 500;
+  font-size: clamp(2rem, 6vw, 4.25rem);
+  line-height: 1.03;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.subtitle {
+  margin: 0;
+  max-width: 70ch;
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.storyLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.storyNav {
+  border: 1px solid var(--line);
+  border-radius: 1.1rem;
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(6px);
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.momentButton {
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 0.85rem;
+  width: 100%;
+  text-align: left;
+  padding: 0.75rem 0.8rem;
+  cursor: pointer;
+  transition: border-color 220ms ease, background-color 220ms ease, transform 220ms ease;
+}
+
+.momentButton:hover {
+  border-color: rgba(27, 30, 34, 0.16);
+  background: rgba(255, 255, 255, 0.75);
+  transform: translateY(-1px);
+}
+
+.momentButtonActive {
+  border-color: rgba(34, 68, 109, 0.35);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.momentButtonEyebrow {
+  display: block;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-size: 0.67rem;
+  color: #4b5f7b;
+  margin-bottom: 0.28rem;
+}
+
+.momentButtonTitle {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+}
+
+.storyCard {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  border-radius: 1.2rem;
+  overflow: hidden;
+  box-shadow: 0 14px 48px rgba(31, 39, 52, 0.08);
+  animation: reveal 460ms ease;
+}
+
+.visual {
+  min-height: clamp(200px, 32vw, 290px);
+  position: relative;
+  background: linear-gradient(120deg, var(--accent-1), var(--accent-2));
+}
+
+.storyBody {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1.2rem, 2vw, 1.8rem);
+}
+
+.storyMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: #214872;
+  font-weight: 700;
+}
+
+.storyTitle {
+  margin: 0;
+  font-size: clamp(1.35rem, 3vw, 2.25rem);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+.sectionGrid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.block {
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  padding: 0.9rem 1rem;
+  background: white;
+}
+
+.blockLabel {
+  margin: 0 0 0.35rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #3f546d;
+}
+
+.blockText {
+  margin: 0;
+  color: #2b3138;
+  line-height: 1.6;
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  padding-top: 0.35rem;
+}
+
+.footerActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding-top: 0.15rem;
+}
+
+.slideControls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.navArrow {
+  border: 1px solid rgba(27, 30, 34, 0.24);
+  background: #ffffff;
+  color: #1b1e22;
+  border-radius: 999px;
+  padding: 0.38rem 0.72rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease;
+}
+
+.navArrow:hover {
+  transform: translateY(-1px);
+  border-color: rgba(27, 30, 34, 0.42);
+}
+
+.progressRail {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.progressDot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 50%;
+  background: rgba(27, 30, 34, 0.2);
+  transition: width 220ms ease, background-color 220ms ease;
+}
+
+.progressDotActive {
+  width: 1.35rem;
+  border-radius: 999px;
+  background: #214872;
+}
+
+@media (max-width: 720px) {
+  .showcaseExperiment {
+    padding: 1.9rem 0.85rem 2.4rem;
+  }
+
+  .title {
+    max-width: none;
+    font-size: clamp(1.5rem, 8.2vw, 2.35rem);
+  }
+
+  .subtitle {
+    max-width: none;
+  }
+
+  .visual {
+    min-height: 175px;
+  }
+
+  .storyBody {
+    padding: 0.95rem;
+  }
+
+  .footerActions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .progressRail {
+    width: 100%;
+  }
+}
+
+@media (min-width: 960px) {
+  .storyLayout {
+    grid-template-columns: minmax(280px, 330px) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .storyNav {
+    position: sticky;
+    top: 1.5rem;
+  }
+
+  .sectionGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
