@@ -10,6 +10,16 @@
  position: relative;
  z-index: 1;
 }
+
+.header_overlay {
+ background: transparent;
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ z-index: 20;
+}
+
 .wordmark {
  color: var(--text-color);
  font-family: var(--font-primary);

@@ -1,8 +1,12 @@
 import { ViewportProvider } from "@/lib/context/ViewportContext"; // Adjust path if needed
 import AppShell from "@/components/regions/AppShell";
 import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
 
 import { Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
+
+config.autoAddCss = false;
 
 // Theme 2 Fonts
 const lora = Lora({

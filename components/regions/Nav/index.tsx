@@ -11,6 +11,7 @@ interface NavProps {
  closeHandler?: () => void; // Make closeHandler optional
  flexDirection?: "row" | "column"; // Allow for "row" or "column" as valid values for flexDirection
  size?: "small" | "medium" | "large"; // Allow for "small", "medium", or "large" as valid values for size
+ tone?: "default" | "light";
 }
 
 const navLinks = [
@@ -25,12 +26,14 @@ const Nav: React.FC<NavProps> = ({
  closeHandler,
  flexDirection = "row",
  size,
+ tone = "default",
 }) => {
  // Generate dynamic class names based on flexDirection
  const navListClasses = cx({
   nav__list: true,
   [`flex-direction--${flexDirection}`]: flexDirection,
   [`size--${size}`]: size,
+    [`tone--${tone}`]: tone,
  });
 
  // If closeHandler exists, pass it to the links, otherwise, just render links normally

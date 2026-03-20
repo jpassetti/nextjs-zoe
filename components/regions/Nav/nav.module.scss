@@ -22,6 +22,16 @@
   &.size--large {
    font-size: 2rem;
   }
+    &.tone--light {
+     li {
+        a {
+         color: #f2f5fb;
+         &:hover {
+            color: #ffffff;
+         }
+        }
+     }
+    }
   li {
    a {
     font-family: var(--font-navigation);

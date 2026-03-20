@@ -7,7 +7,7 @@ const cx = classNames.bind(styles);
 
 // Define types for the component props
 interface ParagraphProps {
- type?: "intro" | "caption"; // Type of paragraph (optional)
+ type?: "intro" | "caption" | "lede"; // Type of paragraph (optional)
  caps?: boolean; // Whether the text is capitalized
  children: React.ReactNode; // The content of the paragraph (required)
  className?: string; // Optional additional class names
@@ -40,6 +40,7 @@ const Paragraph: React.FC<ParagraphProps> = ({
   paragraph: true,
   intro: type === "intro",
   caption: type === "caption",
+    lede: type === "lede",
   [`margin-bottom-${marginBottom}`]: marginBottom,
   [`margin-top-${marginTop}`]: marginTop,
   diminish: diminish,

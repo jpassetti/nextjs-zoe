@@ -12,24 +12,28 @@ import Wordmark from "@/components/brand/Wordmark";
 
 import styles from "./header.module.scss";
 
-// Define the types for the component props if needed
-const Header: React.FC = () => {
+type HeaderProps = {
+  variant?: "default" | "overlay";
+};
+
+const Header: React.FC<HeaderProps> = ({ variant = "default" }) => {
   // Destructure isDesktop from the viewport context
   const { isLargeDesktop } = useViewport();
 
   // State for controlling the mobile menu
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const isOverlay = variant === "overlay";
 
   return (
     <Fragment>
-      <header className={styles.header}>
+      <header className={`${styles.header} ${isOverlay ? styles.header_overlay : ""}`}>
         <Link href="/">
-          <Wordmark />
+          <Wordmark variant={isOverlay ? "whiteText" : "default"} />
         </Link>
 
         {isLargeDesktop && (
           <Row alignItems="center" gap={3} className={styles.header_desktop_nav}>
-            <Nav />
+            <Nav tone={isOverlay ? "light" : "default"} />
 
             <Button
               _type="button"

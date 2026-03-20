@@ -21,7 +21,7 @@ export type ShowcaseItem = {
 export const showcaseMoments: ShowcaseItem[] = [
   {
     id: "founder-shift",
-    title: "Former Technical Founder Stepping Into the CEO Role",
+    title: "I was the technical founder. Now I'm the CEO.",
     hook:
       "You can feel the company outgrowing your old operating style. You are still pulled into product details while decisions stack up around you and the team is waiting for direction.",
     pitch:
@@ -43,7 +43,7 @@ export const showcaseMoments: ShowcaseItem[] = [
   },
   {
     id: "first-time-manager",
-    title: "First-Time Manager Overwhelmed by New Complexity",
+    title: "I was promoted to manager, and now everything feels heavier.",
     hook:
       "You were promoted because you are exceptional at execution, but now every week feels heavier: people issues, competing priorities, and decisions with bigger consequences.",
     pitch:
@@ -65,7 +65,7 @@ export const showcaseMoments: ShowcaseItem[] = [
   },
   {
     id: "team-misalignment",
-    title: "Leadership Team Outgrowing Its Operating Structure",
+    title: "We keep revisiting the same leadership issues.",
     hook:
       "You keep having the same executive conversations, but alignment does not hold. Cross-functional friction increases and strategic momentum keeps slipping.",
     pitch:
@@ -87,7 +87,7 @@ export const showcaseMoments: ShowcaseItem[] = [
   },
   {
     id: "executive-departures",
-    title: "Key Executive Departures Creating Instability",
+    title: "After key departures, leadership feels unstable.",
     hook:
       "After key departures, you are carrying instability on top of normal growth pressure. Accountability feels blurry, confidence drops, and everyone is watching leadership for signals.",
     pitch:
@@ -109,7 +109,7 @@ export const showcaseMoments: ShowcaseItem[] = [
   },
   {
     id: "technical-expert",
-    title: "Technical Expert Seeking Wider Leadership Influence",
+    title: "I'm known for technical depth, but I want broader influence.",
     hook:
       "You are respected for technical depth, but you want broader influence across budget, sales, and strategic decisions. Role changes and organizational churn have made that path unclear.",
     pitch:

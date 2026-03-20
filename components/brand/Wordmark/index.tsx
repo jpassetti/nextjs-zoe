@@ -1,10 +1,19 @@
 import Image from "next/image";
 import styles from "./wordmark.module.scss";
 
-const Wordmark = () => {
+type WordmarkProps = {
+    variant?: "default" | "whiteText";
+};
+
+const Wordmark = ({ variant = "default" }: WordmarkProps) => {
+ const src =
+    variant === "whiteText"
+     ? "/brand/complete-wordmark-white-text.svg"
+     : "/brand/complete-wordmark-2.svg";
+
  return (
   <Image
-   src="/brand/complete-wordmark-2.svg"
+     src={src}
    alt="Transform with Irini"
    width={664}
    height={113}

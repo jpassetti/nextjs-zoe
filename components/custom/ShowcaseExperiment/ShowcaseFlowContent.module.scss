@@ -1,0 +1,292 @@
+.anchor {
+  scroll-margin-top: 1.5rem;
+}
+
+.introHeader {
+  max-width: 72ch;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.kicker {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #6f7b90;
+}
+
+.title {
+  h2 {
+    margin: 0;
+    line-height: 1.03;
+    text-wrap: balance;
+    font-size: clamp(1.4rem, 3vw, 2.35rem);
+  }
+}
+
+.subtitle {
+  p {
+    margin: 0;
+    max-width: 66ch;
+    color: #283447;
+    font-size: 1.05rem;
+    line-height: 1.62;
+  }
+}
+
+.processGrid {
+  margin-top: 1.4rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.processCard {
+  border-radius: 1rem;
+  border: 1px solid #dbe3f0;
+  background: #f6f9ff;
+  padding: 1rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.processTitle {
+  display: grid;
+  gap: 0.65rem;
+
+  h3 {
+    margin: 0;
+    color: #1f2d45;
+    font-size: 1.04rem;
+    line-height: 1.15;
+  }
+}
+
+.processText {
+  margin: 0;
+  color: #31425d;
+  line-height: 1.58;
+}
+
+.sectionActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.1rem;
+}
+
+.sectionHeader {
+  max-width: 66ch;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.sectionTitle {
+  h2,
+  h3 {
+    margin: 0;
+    font-size: clamp(1.25rem, 2.7vw, 2rem);
+    line-height: 1.08;
+    color: #1c2840;
+  }
+}
+
+.sectionText {
+  p {
+    margin: 0;
+    color: #2b3851;
+    line-height: 1.62;
+  }
+}
+
+.servicesGrid {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.serviceCard {
+  border-radius: 1rem;
+  border: 1px solid #dce4ef;
+  background: #ffffff;
+  padding: 1rem;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.serviceTitle {
+  display: grid;
+  gap: 0.65rem;
+
+  h3 {
+    margin: 0;
+    color: #1e2b41;
+    font-size: 1.16rem;
+    line-height: 1.14;
+  }
+}
+
+.serviceText {
+  p {
+    margin: 0;
+    color: #30425f;
+    line-height: 1.58;
+  }
+}
+
+.serviceLevel {
+  margin: 0;
+  color: #5a6d8b;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.pathGrid {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.pathCard {
+  border-radius: 1rem;
+  background: #f2f6fc;
+  border: 1px solid #dbe3f0;
+  padding: 1rem;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.pathTitle {
+  display: grid;
+  gap: 0.65rem;
+
+  h3 {
+    margin: 0;
+    color: #20304a;
+    font-size: 1.08rem;
+    line-height: 1.14;
+  }
+}
+
+.pathText {
+  margin: 0;
+  color: #2d3f5b;
+  line-height: 1.6;
+}
+
+.highlightList {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.highlightList li {
+  margin: 0;
+  color: #344662;
+  line-height: 1.5;
+}
+
+.sectionIcon {
+  color: var(--color-accent);
+  font-size: 3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.pathArrow {
+  color: var(--color-accent);
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.pathButtonContent {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.outcomesGrid {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.outcomeCard {
+  border-radius: 1rem;
+  background: #f8fbff;
+  border: 1px solid #dce5f2;
+  padding: 1rem;
+}
+
+.outcomeLabel {
+  display: grid;
+  gap: 0.65rem;
+  margin: 0 0 0.65rem;
+  color: #20304a;
+  font-weight: 700;
+}
+
+.outcomeIcon {
+  color: var(--color-accent);
+  font-size: 3rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.ctaBand {
+  border-radius: 1.2rem;
+  background:
+    radial-gradient(circle at 10% 16%, rgba(255, 255, 255, 0.2), transparent 42%),
+    linear-gradient(132deg, #213d67, #4f6f9c);
+  padding: clamp(1.25rem, 3vw, 2.15rem);
+  color: #f6f8fe;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.ctaTitle {
+  h2 {
+    margin: 0;
+    color: #f7f9ff;
+    line-height: 1.03;
+    font-size: clamp(1.35rem, 3.2vw, 2.35rem);
+  }
+}
+
+.ctaText {
+  p {
+    margin: 0;
+    max-width: 62ch;
+    color: #ebeffa;
+    line-height: 1.62;
+  }
+}
+
+.ctaActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.2rem;
+}
+
+@media (min-width: 880px) {
+  .processGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .servicesGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .pathGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .outcomesGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
