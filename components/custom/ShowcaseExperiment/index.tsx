@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
@@ -30,7 +30,6 @@ const panelVariants = {
 
 export default function ShowcaseExperiment() {
   const [[activeIndex, direction], setSlide] = useState<[number, number]>([0, 0]);
-  const [isRandomized, setIsRandomized] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   const goTo = (next: number) => {
@@ -45,15 +44,6 @@ export default function ShowcaseExperiment() {
       delta,
     ]);
   };
-
-  useEffect(() => {
-    if (isRandomized || showcaseMoments.length === 0) {
-      return;
-    }
-
-    setSlide([Math.floor(Math.random() * showcaseMoments.length), 1]);
-    setIsRandomized(true);
-  }, [isRandomized]);
 
   const activeItem = useMemo(() => showcaseMoments[activeIndex], [activeIndex]);
   const visualStyle = {

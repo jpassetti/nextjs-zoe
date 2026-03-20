@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Paragraph from "@/components/html/Paragraph";
@@ -11,10 +11,6 @@ import styles from "./ShowcaseExperimentBasic.module.scss";
 
 export default function ShowcaseExperimentBasic() {
   const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    setActiveIndex(Math.floor(Math.random() * showcaseMoments.length));
-  }, []);
 
   const activeItem = useMemo(() => showcaseMoments[activeIndex], [activeIndex]);
   const visualStyle = {

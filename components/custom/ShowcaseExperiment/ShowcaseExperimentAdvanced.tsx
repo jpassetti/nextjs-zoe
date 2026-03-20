@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import type { Variants } from "framer-motion";
 import Button from "@/components/html/Button";
 import Heading from "@/components/html/Heading";
 import Icon from "@/components/html/Icon";
@@ -12,7 +13,7 @@ import ScrollDown from "@/components/lotties/ScrollDown";
 import { showcaseMoments } from "./moments";
 import styles from "./ShowcaseExperimentAdvanced.module.scss";
 
-const slideVariants = {
+const slideVariants: Variants = {
   enter: (direction: number) => ({
     opacity: 0,
     y: direction >= 0 ? 24 : -24,
@@ -30,7 +31,7 @@ const slideVariants = {
   }),
 };
 
-const chapterTextGroupVariants = {
+const chapterTextGroupVariants: Variants = {
   hidden: {},
   show: {
     transition: {
@@ -40,7 +41,7 @@ const chapterTextGroupVariants = {
   },
 };
 
-const connectorRevealVariants = {
+const connectorRevealVariants: Variants = {
   hidden: {
     scaleY: 0,
     opacity: 0.45,
@@ -56,7 +57,7 @@ const connectorRevealVariants = {
   },
 };
 
-const connectorDotVariants = {
+const connectorDotVariants: Variants = {
   hidden: {
     opacity: 0,
     scale: 0.72,
@@ -72,7 +73,7 @@ const connectorDotVariants = {
   },
 };
 
-const connectorPulseVariants = {
+const connectorPulseVariants: Variants = {
   hidden: {
     opacity: 0,
     scale: 1,
@@ -89,7 +90,7 @@ const connectorPulseVariants = {
   },
 };
 
-const chapterTextItemVariants = {
+const chapterTextItemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 18,
@@ -106,7 +107,7 @@ const chapterTextItemVariants = {
   },
 };
 
-const introFragmentsContainerVariants = {
+const introFragmentsContainerVariants: Variants = {
   hidden: {},
   show: {
     transition: {
@@ -116,7 +117,7 @@ const introFragmentsContainerVariants = {
   },
 };
 
-const introFragmentItemVariants = {
+const introFragmentItemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 18,
@@ -131,7 +132,7 @@ const introFragmentItemVariants = {
   },
 };
 
-const expansionFlowVariants = {
+const expansionFlowVariants: Variants = {
   hidden: {},
   show: {
     transition: {
@@ -141,7 +142,7 @@ const expansionFlowVariants = {
   },
 };
 
-const expansionItemVariants = {
+const expansionItemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 14,
