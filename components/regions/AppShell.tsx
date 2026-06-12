@@ -12,7 +12,7 @@ type AppShellProps = {
 
 export default function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
-  const hideChrome = pathname?.startsWith("/services-v4");
+  const hideChrome = pathname?.startsWith("/services-v4") || pathname?.startsWith("/home-v2");
   const useOverlayHeader = pathname?.startsWith("/showcase-test-advanced");
 
   return (

@@ -1,0 +1,252 @@
+ .homeV2 {
+  --olive-stroke: 2.5;
+  --bg-1: #f4efe4;
+  --bg-2: #e5f0e8;
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-border: rgba(43, 66, 54, 0.16);
+  --text: #1d2c24;
+  --muted: #3c4f44;
+  --accent: #557a5d;
+
+  width: 100%;
+  color: var(--text);
+  position: relative;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(145, 181, 119, 0.35), transparent 42%),
+    radial-gradient(circle at 82% 72%, rgba(204, 228, 166, 0.35), transparent 40%),
+    linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 100%);
+}
+
+.verticalSlides {
+  display: grid;
+}
+
+.intro {
+  min-height: 100vh;
+  padding: clamp(1.4rem, 4vw, 3rem) clamp(1.1rem, 3vw, 3rem) clamp(1.8rem, 5vw, 3.5rem);
+  display: grid;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.introCard {
+  width: min(100%, 720px);
+  margin: 0 auto;
+  display: grid;
+  gap: 0.95rem;
+  justify-items: center;
+}
+
+.introBrand {
+  display: grid;
+  gap: 0.85rem;
+  justify-items: center;
+}
+
+.introBrandMark {
+  width: clamp(4rem, 8vw, 5.5rem);
+  height: auto;
+}
+
+.introWordmark {
+  width: min(100%, 28rem);
+  height: auto;
+}
+
+.introCopy {
+  margin: 0;
+  max-width: 36ch;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 0.98rem;
+  text-align: center;
+}
+
+.introHint {
+  margin: 0;
+  font-size: 0.82rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  text-align: center;
+}
+
+.slide {
+  display: grid;
+  align-items: start;
+  padding: clamp(1.5rem, 4vw, 4rem) clamp(1.1rem, 3vw, 3rem);
+  position: relative;
+  z-index: 1;
+}
+
+.slideIntro {
+  align-items: start;
+  padding-top: clamp(2rem, 6vw, 4.5rem);
+}
+
+.slideVisual,
+.slideBody {
+  position: relative;
+  z-index: 1;
+}
+
+.slideVisual {
+  width: min(100%, 980px);
+  margin: 0 auto;
+  display: grid;
+  place-items: center;
+}
+
+.slideVisualIntro {
+  width: min(100%, 1520px);
+  margin-bottom: clamp(1.2rem, 4vw, 2.4rem);
+}
+
+.slideVisualBranch {
+  width: min(100%, 560px);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+.slideVisualTree {
+  width: min(100%, 620px);
+  margin: 0 auto clamp(1rem, 3vw, 2rem);
+}
+
+.slideVisualLeaf {
+  width: min(100%, 860px);
+  margin: 0 auto clamp(1rem, 3vw, 2rem);
+}
+
+.slideVisualRoad {
+  width: min(100%, 420px);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+.slideBody {
+  width: min(100%, 760px);
+  margin: 0 auto;
+  display: grid;
+  gap: 0.88rem;
+  align-content: start;
+  justify-items: center;
+}
+
+.oliveSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.treeSvg svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.leafSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.roadSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.oliveSvgIntro {
+  max-height: 220px;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.85rem, 3.5vw, 3.35rem);
+  line-height: 1.04;
+  max-width: 100%;
+  text-align: center;
+}
+
+.subhead {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: var(--muted);
+  font-weight: 600;
+  text-align: center;
+}
+
+.narrative {
+  display: grid;
+  gap: 0.62rem;
+  justify-items: center;
+}
+
+.bridge {
+  margin: 0;
+  color: #203128;
+  line-height: 1.5;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.pitch {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.5;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.ctaIntro {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.5;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.ctaRow {
+  display: flex;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+  margin-top: -0.1rem;
+  justify-content: center;
+}
+
+.grinnell {
+  margin: 0;
+  font-size: 0.83rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@media (max-width: 980px) {
+  .intro {
+    align-items: center;
+  }
+
+  .slide {
+    padding: clamp(1.2rem, 4vw, 2rem) 1rem;
+  }
+
+  .slideVisualIntro {
+    margin-bottom: 1.1rem;
+  }
+
+  .slideVisual,
+  .slideBody {
+    width: min(100%, 680px);
+  }
+
+  .oliveSvgIntro {
+    max-height: 180px;
+  }
+
+  .slideVisualTree {
+    width: min(100%, 520px);
+  }
+}
