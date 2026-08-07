@@ -1,0 +1,15 @@
+.scene {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.greenhouseIllustration {
+  display: block;
+  height: clamp(320px, 50vw, 520px);
+  object-fit: contain;
+  width: clamp(320px, 50vw, 520px);
+}

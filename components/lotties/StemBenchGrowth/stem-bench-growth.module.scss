@@ -1,0 +1,15 @@
+.scene {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.hierarchyIllustration {
+  display: block;
+  height: clamp(360px, 56vw, 560px);
+  object-fit: contain;
+  width: clamp(360px, 56vw, 560px);
+}

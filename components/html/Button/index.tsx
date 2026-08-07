@@ -18,6 +18,7 @@ const Button: React.FC<ButtonProps> & {
   linkType,
   internalPage,
   externalUrl,
+  href,
   size = "medium",
   variant,
   type,
@@ -34,6 +35,30 @@ const Button: React.FC<ButtonProps> & {
   });
 
   const content = children || label;
+
+  if (href) {
+    const isInternalPath = href.startsWith("/");
+    const isAnchorLink = href.startsWith("#");
+
+    if (isInternalPath) {
+      return (
+        <Link href={href} className={buttonClasses}>
+          {content}
+        </Link>
+      );
+    }
+
+    return (
+      <a
+        href={href}
+        className={buttonClasses}
+        target={isAnchorLink ? undefined : "_blank"}
+        rel={isAnchorLink ? undefined : "noopener noreferrer"}
+      >
+        {content}
+      </a>
+    );
+  }
 
   if (linkType === "internal" && internalPage?.slug?.current) {
     return (

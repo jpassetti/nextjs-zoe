@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Container from "@/components/layout/Container";
 import Heading from "@/components/html/Heading";
 import Row from "@/components/layout/Row";
@@ -8,13 +8,7 @@ import styles from "./previewbanner.module.scss";
 import Button from "@/components/html/Button";
 
 const PreviewBanner = () => {
-    const [redirectPath] = useState(() => {
-        if (typeof window !== "undefined") {
-            return window.location.pathname;
-        }
-
-        return "/";
-    });
+    const pathname = usePathname() ?? "/";
 
     return (
         <div className={styles.preview_banner}> 
@@ -30,7 +24,7 @@ const PreviewBanner = () => {
                         linkType="internal"
                         internalPage={{
                             slug: {
-                                current: `api/exit-preview?redirect=${encodeURIComponent(redirectPath)}`
+                                current: `api/exit-preview?redirect=${encodeURIComponent(pathname)}`
                             }
                         }}
                         variant="primary"

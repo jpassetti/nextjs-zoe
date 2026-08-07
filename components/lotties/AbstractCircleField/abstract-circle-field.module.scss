@@ -1,0 +1,102 @@
+.scene {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.network {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.linkFlow {
+  animation-delay: var(--flow-delay), var(--group-delay, 0s);
+  animation-duration: var(--flow-duration), 8s;
+  animation-iteration-count: infinite, infinite;
+  animation-name: dataFlow, connectionWindow;
+  animation-timing-function: linear, ease-in-out;
+  opacity: 0;
+  stroke: color-mix(in srgb, var(--color-accent) 88%, white);
+  stroke-linecap: round;
+  stroke-width: 2.6;
+}
+
+.nodeHalo {
+  animation: nodePulse 2.5s ease-in-out infinite;
+  animation-delay: var(--pulse-delay);
+  fill: color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+
+.node {
+  animation: nodeGlow 2.5s ease-in-out infinite;
+  animation-delay: var(--pulse-delay);
+  fill: color-mix(in srgb, var(--color-accent) 46%, white);
+}
+
+.nodeActive {
+  animation-delay: var(--group-delay, 0s);
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
+  animation-name: nodeActiveWindow;
+  animation-timing-function: ease-in-out;
+  fill: color-mix(in srgb, var(--color-accent) 92%, white);
+  opacity: 0;
+}
+
+@keyframes dataFlow {
+  0% {
+    stroke-dashoffset: var(--flow-offset, 40);
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes connectionWindow {
+  0%,
+  22% {
+    opacity: 0.98;
+  }
+  30%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes nodeActiveWindow {
+  0%,
+  22% {
+    opacity: 1;
+  }
+  30%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes nodePulse {
+  0%,
+  100% {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0.55;
+    transform: scale(0.88);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes nodeGlow {
+  0%,
+  100% {
+    transform-box: fill-box;
+    transform-origin: center;
+    opacity: 0.78;
+  }
+  50% {
+    opacity: 1;
+  }
+}

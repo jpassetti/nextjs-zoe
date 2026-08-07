@@ -21,7 +21,7 @@ export interface ButtonGroupBlockProps {
 }
 
 export interface ButtonProps {
-    _type: "button";
+    _type?: "button";
     disabled?: boolean;
     label?: string;
     clickHandler?: () => void;
@@ -243,7 +243,7 @@ export interface QuestionnaireFormProps {
     onSuccess?: (responseId: string) => void;
     onError?: (error: Error) => void;
     responses: Record<string, string | string[]>;
-    setResponses: (responses: Record<string, string | string[]>) => void;
+    setResponses: React.Dispatch<React.SetStateAction<Record<string, string | string[]>>>;
 }
 
 export interface RichTextChild {

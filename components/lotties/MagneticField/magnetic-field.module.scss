@@ -1,0 +1,57 @@
+.field {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+  transform-origin: 50% 50%;
+  width: 100%;
+}
+
+.plantIllustration {
+  display: block;
+  height: clamp(320px, 46vw, 480px);
+  object-fit: contain;
+  width: clamp(320px, 46vw, 480px);
+}
+
+.ambientMotion {
+  animation: magneticDrift 4.2s ease-in-out infinite;
+}
+
+.subtleMotion {
+  animation: magneticDriftSubtle 5.4s ease-in-out infinite;
+}
+
+@keyframes magneticDrift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  25% {
+    transform: translate(2px, -2px) rotate(0.25deg);
+  }
+  50% {
+    transform: translate(-1px, 1px) rotate(-0.2deg);
+  }
+  75% {
+    transform: translate(2px, 1px) rotate(0.18deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@keyframes magneticDriftSubtle {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  33% {
+    transform: translate(1px, -1px) rotate(0.12deg);
+  }
+  66% {
+    transform: translate(-1px, 1px) rotate(-0.1deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}

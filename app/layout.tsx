@@ -4,28 +4,14 @@ import GoogleAnalytics from "@/components/analytics/GoogleAnalytics";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 
-import { Lora, Poppins } from "next/font/google"; // ✅ Import additional fonts
-
 config.autoAddCss = false;
 
-// Theme 2 Fonts
-const lora = Lora({
- subsets: ["latin"],
- weight: ["400", "700"],
- style: ["normal", "italic"],
- variable: "--font-primary-alt",
- display: "swap",
-});
-
-const poppins = Poppins({
- subsets: ["latin"],
- weight: ["400", "700"],
- style: ["normal", "italic"],
- variable: "--font-secondary-alt",
- display: "swap",
-});
-
 import "@/sass/global.scss";
+
+const fontVariables = {
+  "--font-primary-alt": "Georgia, 'Times New Roman', serif",
+  "--font-secondary-alt": "'Helvetica Neue', Helvetica, Arial, sans-serif",
+} as React.CSSProperties;
 
 export const metadata = {
   title: 'Transform with Irini',
@@ -42,7 +28,8 @@ export default function RootLayout({
  return (
   <html
    lang="en"
-   className={`p-0 m-0 ${lora.variable + " " + poppins.variable}`}
+   className="p-0 m-0"
+   style={fontVariables}
   >
    <body className="p-0 m-0">
     <GoogleAnalytics />    

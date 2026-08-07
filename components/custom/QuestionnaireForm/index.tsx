@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useRef, useState, useCallback } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter
 import Form from "@/components/html/Form";
 import Button from "@/components/html/Button";
@@ -44,12 +44,7 @@ export default function QuestionnaireForm({
     });
   }, [questionnaire, step, responses]); // Wrap isStepValid in useCallback
 
-  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(!isStepValid()); // Initialize after isStepValid is defined
-
-
-  useEffect(() => {
-    setIsNextButtonDisabled(!isStepValid()); // Update button state based on step validity
-  }, [responses, isStepValid]); // Add isStepValid to dependency array
+  const isNextButtonDisabled = !isStepValid();
 
 
   const handleRecaptchaChange = (value: string | null) => {
@@ -57,16 +52,15 @@ export default function QuestionnaireForm({
   };
 
   const handleInputChange = (question: string, value: string | string[]) => {
-    // @ts-expect-error TypeScript is unable to infer the correct type for `prev`
     setResponses((prev) => {
-    // Ensure the state is updated immutably
-    const updatedResponses: Record<string, string | string[]> = {
-      ...prev,
-      [question]: Array.isArray(value) ? value : [value], // Ensure value is always an array
-    };
-    return updatedResponses;
-  });
-};
+      // Ensure the state is updated immutably
+      const updatedResponses: Record<string, string | string[]> = {
+        ...prev,
+        [question]: Array.isArray(value) ? value : [value], // Ensure value is always an array
+      };
+      return updatedResponses;
+    });
+  };
   const onSuccess = (responseId: string) => {
     const slugString = typeof slug === "string" ? slug : slug?.current; // Extract slug if it's an object
     if (!slugString) {

@@ -20,11 +20,11 @@ h1, h2, h3, h4, h5, h6, p, a, span, li, ul, ol, div, body, html {
   --color-gray: #bbb;
   --color-orange: #D9915C;
   --color-black: #2c2c2c;
-  --font-primary: "Lora", serif;
-  --font-secondary: "Poppins", sans-serif;
-  --font-headlines: "Poppins", sans-serif;
-  --font-buttons: "Poppins", sans-serif;
-  --font-navigation: "Poppins", sans-serif;
+  --font-primary: var(--font-primary-alt, Georgia, "Times New Roman", serif);
+  --font-secondary: var(--font-secondary-alt, "Helvetica Neue", Helvetica, Arial, sans-serif);
+  --font-headlines: var(--font-secondary-alt, "Helvetica Neue", Helvetica, Arial, sans-serif);
+  --font-buttons: var(--font-secondary-alt, "Helvetica Neue", Helvetica, Arial, sans-serif);
+  --font-navigation: var(--font-secondary-alt, "Helvetica Neue", Helvetica, Arial, sans-serif);
   --header-height:  6rem;
 }
 

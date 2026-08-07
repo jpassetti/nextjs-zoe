@@ -1,0 +1,27 @@
+.scene {
+  align-items: center;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+.singlePlant {
+  align-items: center;
+  display: flex;
+  height: clamp(320px, 46vw, 480px);
+  justify-content: center;
+  position: relative;
+  width: clamp(320px, 46vw, 480px);
+}
+
+.plantAsset {
+  display: block;
+  height: auto;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  width: auto;
+}
+

@@ -13,6 +13,7 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 const Textarea: React.FC<TextareaProps> = ({
   validate,
   onValidation,
+  onInput,
   maxLength,
   value,
   defaultValue,
@@ -41,13 +42,13 @@ const Textarea: React.FC<TextareaProps> = ({
     }
   };
 
-  const handleInput = (e: React.FormEvent<HTMLTextAreaElement>) => {
+  const handleInput = (e: Parameters<NonNullable<TextareaProps["onInput"]>>[0]) => {
     const newValue = e.currentTarget.value;
     setCharCount(newValue.length); // Update character count live
     handleValidation(newValue);
 
-    if (props.onInput) {
-      props.onInput(e);
+    if (onInput) {
+      onInput(e);
     }
   };
 
@@ -56,10 +57,10 @@ const Textarea: React.FC<TextareaProps> = ({
       <textarea
         className={cx("form__textarea")}
         maxLength={maxLength}
+          {...props}
         onInput={handleInput} // Use onInput for live updates
         value={value} // Ensure controlled behavior
         defaultValue={defaultValue} // Fallback for uncontrolled behavior
-        {...props}
       />
       <div className={styles.form__charCount}>
         {maxLength && (

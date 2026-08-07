@@ -1,0 +1,276 @@
+.scene {
+  height: 100%;
+  position: relative;
+  width: 100%;
+}
+
+.partnerLayer,
+.fusionGlow,
+.spark {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.partnerLayer {
+  height: clamp(200px, 34vw, 330px);
+  width: clamp(300px, 48vw, 520px);
+}
+
+.circle {
+  border-radius: 50%;
+  height: clamp(94px, 15vw, 156px);
+  position: absolute;
+  top: 50%;
+  width: clamp(94px, 15vw, 156px);
+}
+
+.circleLeft {
+  animation: partnerDriftLeft 5.2s ease-in-out infinite;
+  background: radial-gradient(
+    circle at 62% 44%,
+    color-mix(in srgb, var(--color-accent) 38%, white),
+    color-mix(in srgb, var(--color-accent) 58%, white)
+  );
+  left: 50%;
+  opacity: 0.5;
+  transform: translate(calc(-50% - 104px), -50%);
+}
+
+.circleRight {
+  animation: partnerDriftRight 5.2s ease-in-out infinite;
+  background: radial-gradient(
+    circle at 38% 58%,
+    color-mix(in srgb, var(--color-accent) 34%, white),
+    color-mix(in srgb, var(--color-accent) 54%, white)
+  );
+  left: 50%;
+  mix-blend-mode: multiply;
+  opacity: 0.48;
+  transform: translate(calc(-50% + 104px), -50%);
+}
+
+.bridgeLayer {
+  animation: bridgeIntensity 5.2s ease-in-out infinite;
+  height: clamp(160px, 26vw, 250px);
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(280px, 45vw, 460px);
+}
+
+.bridgeFlow {
+  animation: dataFlow 2.1s linear infinite;
+  opacity: 0.95;
+  stroke: color-mix(in srgb, var(--color-accent) 92%, white);
+  stroke-linecap: round;
+  stroke-width: 2.8;
+}
+
+.bridgeFlowLong {
+  animation-duration: 2.4s;
+  stroke-dasharray: 58 40;
+}
+
+.bridgeFlowMedium {
+  animation-duration: 2.05s;
+  animation-delay: 140ms;
+  stroke-dasharray: 16 34;
+}
+
+.bridgeFlowShort {
+  animation-duration: 1.8s;
+  animation-delay: 80ms;
+  stroke-dasharray: 12 46;
+}
+
+.fusionGlow {
+  animation: fusionPulse 5.2s ease-in-out infinite;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-accent) 28%, transparent) 0%, transparent 72%);
+  border-radius: 50%;
+  height: clamp(140px, 22vw, 245px);
+  z-index: 1;
+  width: clamp(140px, 22vw, 245px);
+}
+
+.coreMark {
+  animation: coreFuseScale 5.2s ease-in-out infinite;
+  z-index: 3;
+}
+
+.spark {
+  background: color-mix(in srgb, var(--color-accent) 84%, white);
+  border-radius: 50%;
+  height: clamp(8px, 1.3vw, 14px);
+  opacity: 0;
+  width: clamp(8px, 1.3vw, 14px);
+}
+
+.sparkOne {
+  animation: sparkOrbitOne 3.6s ease-in-out infinite;
+}
+
+.sparkTwo {
+  animation: sparkOrbitTwo 4s ease-in-out infinite 160ms;
+}
+
+.sparkThree {
+  animation: sparkOrbitThree 3.8s ease-in-out infinite 240ms;
+}
+
+.sparkFour {
+  animation: sparkOrbitFour 4.2s ease-in-out infinite 320ms;
+}
+
+@keyframes fuseDrift {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+}
+
+@keyframes partnerDriftLeft {
+  0%,
+  100% {
+    transform: translate(calc(-50% - 104px), -50%);
+  }
+  50% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes partnerDriftRight {
+  0%,
+  100% {
+    transform: translate(calc(-50% + 104px), -50%);
+  }
+  50% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes bridgeIntensity {
+  0%,
+  100% {
+    opacity: 0.52;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes dataFlow {
+  0% {
+    opacity: 0.3;
+    stroke-dashoffset: 98;
+  }
+  100% {
+    opacity: 0.36;
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fusionPulse {
+  0%,
+  100% {
+    opacity: 0.26;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  50% {
+    opacity: 0.68;
+    transform: translate(-50%, -50%) scale(1.12);
+  }
+}
+
+@keyframes coreFuseScale {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+}
+
+@keyframes settleRotate {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  32% {
+    transform: translate(-50%, -50%) rotate(4deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  82% {
+    transform: translate(-50%, -50%) rotate(-4deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
+@keyframes sparkOrbitOne {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-56px, -8px) scale(0.7);
+  }
+  50% {
+    opacity: 0.95;
+    transform: translate(0px, -48px) scale(1);
+  }
+}
+
+@keyframes sparkOrbitTwo {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(56px, 6px) scale(0.7);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(0px, 44px) scale(1);
+  }
+}
+
+@keyframes sparkOrbitThree {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(-34px, 30px) scale(0.68);
+  }
+  50% {
+    opacity: 0.92;
+    transform: translate(34px, -30px) scale(1);
+  }
+}
+
+@keyframes sparkOrbitFour {
+  0%,
+  100% {
+    opacity: 0;
+    transform: translate(30px, -34px) scale(0.68);
+  }
+  50% {
+    opacity: 0.92;
+    transform: translate(-30px, 34px) scale(1);
+  }
+}
+
+@media (max-width: 960px) {
+  .circle {
+    height: clamp(80px, 20vw, 118px);
+    width: clamp(80px, 20vw, 118px);
+  }
+
+  .circleLeft {
+    transform: translate(calc(-50% - 74px), -50%);
+  }
+
+  .circleRight {
+    transform: translate(calc(-50% + 74px), -50%);
+  }
+}
